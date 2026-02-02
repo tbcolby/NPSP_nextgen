@@ -1,0 +1,50 @@
+name: Apex Tests
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'force-app/**/*.cls'
+      - 'force-app/**/*.trigger'
+      - 'force-app/**/*.xml'
+
+jobs:
+  apex-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install CumulusCI
+        run: pip install cumulusci
+
+      - name: Setup SFDX
+        uses: sfdx-actions/setup-sfdx@v1
+
+      - name: Authenticate DevHub
+        run: |
+          echo "${{ secrets.DEVHUB_SFDX_AUTH_URL }}" > sfdx_auth.txt
+          sfdx auth:sfdxurl:store -f sfdx_auth.txt -d -a DevHub
+          rm sfdx_auth.txt
+
+      - name: Create Scratch Org
+        run: cci org scratch dev pr_test --days 1
+
+      - name: Deploy Source
+        run: cci flow run dev_org --org pr_test
+
+      - name: Run Apex Tests
+        run: |
+          cci task run run_tests --org pr_test \
+            -o retry_failures True \
+            -o retry_always True \
+            -o required_org_code_coverage_percent 85
+
+      - name: Delete Scratch Org
+        if: always()
+        run: cci org scratch_delete pr_test || true

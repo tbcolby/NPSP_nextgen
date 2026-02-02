@@ -1,0 +1,119 @@
+name: Bug Report
+description: Report a bug in NPSP
+title: "[BUG]: "
+labels: ["bug", "triage"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a bug! Please fill out the form below.
+
+  - type: dropdown
+    id: feature-area
+    attributes:
+      label: Feature Area
+      description: Which NPSP feature is affected?
+      options:
+        - Recurring Donations (RD2)
+        - Customizable Rollups (CRLP)
+        - Gift Entry / Batch Gift Entry
+        - Batch Data Import (BDI)
+        - Allocations
+        - Households
+        - Relationships
+        - Payments
+        - Settings/Configuration
+        - Other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: component-type
+    attributes:
+      label: Component Type
+      description: What type of component is affected?
+      options:
+        - Apex (Backend Logic)
+        - Lightning Web Component (LWC)
+        - Aura Component
+        - Visualforce Page
+        - Trigger/Automation
+        - Report/Dashboard
+        - Unknown
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Bug Description
+      description: A clear and concise description of the bug
+      placeholder: What happened?
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to Reproduce
+      description: Steps to reproduce the behavior
+      placeholder: |
+        1. Go to '...'
+        2. Click on '...'
+        3. See error
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Behavior
+      description: What did you expect to happen?
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual Behavior
+      description: What actually happened?
+    validations:
+      required: true
+
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Severity
+      options:
+        - Critical - Data loss or security issue
+        - High - Feature completely broken
+        - Medium - Feature partially broken, workaround exists
+        - Low - Minor issue, cosmetic
+    validations:
+      required: true
+
+  - type: input
+    id: npsp-version
+    attributes:
+      label: NPSP Version
+      description: What version of NPSP are you using?
+      placeholder: "e.g., 3.228"
+
+  - type: dropdown
+    id: org-type
+    attributes:
+      label: Org Type
+      options:
+        - Production
+        - Sandbox
+        - Scratch Org
+        - Developer Edition
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Error Logs
+      description: Any error messages or debug logs
+      render: shell

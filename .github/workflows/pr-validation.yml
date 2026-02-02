@@ -1,0 +1,124 @@
+name: PR Validation
+
+on:
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened]
+
+concurrency:
+  group: pr-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  # Lightweight checks that run fast
+  lint:
+    name: Lint & Format
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'yarn'
+
+      - run: yarn install --frozen-lockfile
+
+      - name: Prettier Check
+        run: npx prettier --check "force-app/**/*.{js,html,css}"
+
+      - name: ESLint
+        run: npm run lint:lwc
+
+  # Jest tests for LWC
+  jest:
+    name: LWC Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'yarn'
+
+      - run: yarn install --frozen-lockfile
+
+      - name: Run Jest Tests
+        run: npm run test:unit -- --coverage
+
+      - name: Upload Coverage
+        uses: actions/upload-artifact@v4
+        with:
+          name: jest-coverage
+          path: coverage/
+
+  # Apex tests - requires DevHub
+  apex:
+    name: Apex Tests
+    runs-on: ubuntu-latest
+    if: |
+      contains(github.event.pull_request.labels.*.name, 'apex') ||
+      github.event.pull_request.changed_files > 0
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install CumulusCI
+        run: pip install cumulusci
+
+      - name: Setup SFDX
+        uses: sfdx-actions/setup-sfdx@v1
+
+      - name: Authenticate DevHub
+        run: |
+          echo "${{ secrets.DEVHUB_SFDX_AUTH_URL }}" > sfdx_auth.txt
+          sfdx auth:sfdxurl:store -f sfdx_auth.txt -d -a DevHub
+          rm sfdx_auth.txt
+
+      - name: Run Apex Tests
+        run: |
+          cci org scratch dev pr_test --days 1
+          cci flow run dev_org --org pr_test
+          cci task run run_tests --org pr_test \
+            -o retry_failures True \
+            -o required_org_code_coverage_percent 85
+
+      - name: Cleanup
+        if: always()
+        run: cci org scratch_delete pr_test || true
+
+  # Security scanning
+  security:
+    name: Security Scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PMD
+        run: |
+          wget -q https://github.com/pmd/pmd/releases/download/pmd_releases%2F7.0.0/pmd-dist-7.0.0-bin.zip
+          unzip -q pmd-dist-7.0.0-bin.zip
+
+      - name: PMD Security Rules
+        run: |
+          ./pmd-bin-7.0.0/bin/pmd check \
+            --dir force-app/main/default/classes \
+            --rulesets category/apex/security.xml \
+            --format text \
+            --minimum-priority 2
+
+  # Summary job that requires all checks
+  validation-complete:
+    name: Validation Complete
+    needs: [lint, jest, security]
+    runs-on: ubuntu-latest
+    steps:
+      - name: All checks passed
+        run: echo "All validation checks passed!"

@@ -1,0 +1,137 @@
+name: Issue Triage
+
+on:
+  issues:
+    types: [opened, labeled]
+
+permissions:
+  issues: write
+
+jobs:
+  auto-label:
+    name: Auto-Label Issues
+    runs-on: ubuntu-latest
+    if: github.event.action == 'opened'
+    steps:
+      - name: Add domain labels based on feature area
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const issue = context.payload.issue;
+            const body = issue.body || '';
+            const title = issue.title || '';
+            const labels = [];
+
+            // Feature area to domain agent mapping
+            const featureAreaMapping = {
+              'Recurring Donations': ['domain:rd2', 'agent:apex'],
+              'Customizable Rollups': ['domain:crlp', 'agent:apex'],
+              'Gift Entry': ['domain:gift-entry', 'agent:lwc', 'agent:apex'],
+              'Batch Data Import': ['domain:bdi', 'agent:apex'],
+              'Allocations': ['domain:allo', 'agent:apex'],
+              'Households': ['domain:hh', 'agent:apex', 'agent:lwc'],
+              'Relationships': ['domain:rel', 'agent:apex'],
+              'Payments': ['domain:pmt', 'agent:apex', 'agent:security'],
+              'Settings': ['domain:stg', 'agent:apex'],
+              'DevOps': ['domain:devops', 'agent:devops'],
+              'Documentation': ['domain:docs', 'agent:documentation'],
+              'Testing': ['domain:testing', 'agent:testing']
+            };
+
+            // Component type to agent mapping
+            const componentMapping = {
+              'Apex': ['agent:apex'],
+              'Lightning Web Component': ['agent:lwc'],
+              'Aura Component': ['agent:lwc'],
+              'Visualforce': ['agent:apex'],
+              'Trigger': ['agent:apex', 'agent:testing']
+            };
+
+            // Parse feature area from body
+            for (const [feature, domainLabels] of Object.entries(featureAreaMapping)) {
+              if (body.includes(feature) || title.toLowerCase().includes(feature.toLowerCase())) {
+                labels.push(...domainLabels);
+              }
+            }
+
+            // Parse component type from body
+            for (const [component, agentLabels] of Object.entries(componentMapping)) {
+              if (body.includes(component)) {
+                labels.push(...agentLabels);
+              }
+            }
+
+            // Security issues always get security agent
+            if (title.includes('[SECURITY]') || body.toLowerCase().includes('security')) {
+              labels.push('agent:security');
+            }
+
+            // Add priority labels based on severity
+            if (body.includes('Critical')) {
+              labels.push('priority:critical');
+            } else if (body.includes('High')) {
+              labels.push('priority:high');
+            } else if (body.includes('Medium')) {
+              labels.push('priority:medium');
+            } else if (body.includes('Low')) {
+              labels.push('priority:low');
+            }
+
+            // Remove duplicates
+            const uniqueLabels = [...new Set(labels)];
+
+            if (uniqueLabels.length > 0) {
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issue.number,
+                labels: uniqueLabels
+              });
+            }
+
+  route-to-agent:
+    name: Route to Domain Agent
+    runs-on: ubuntu-latest
+    if: github.event.action == 'labeled'
+    steps:
+      - name: Add routing comment
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const label = context.payload.label.name;
+            const issue = context.payload.issue;
+
+            // Agent routing messages
+            const agentMessages = {
+              'agent:apex': '🔧 **Apex Agent** has been assigned to review this issue.\n\nThis issue will be analyzed for:\n- TDTM framework compatibility\n- Service layer patterns\n- CRUD/FLS compliance\n- Performance considerations',
+              'agent:lwc': '⚡ **LWC Agent** has been assigned to review this issue.\n\nThis issue will be analyzed for:\n- Component patterns and best practices\n- State management\n- Accessibility requirements\n- Aura migration needs',
+              'agent:testing': '🧪 **Testing Agent** has been assigned to review this issue.\n\nThis will include:\n- Test coverage analysis\n- Test pattern recommendations\n- Required test scenarios',
+              'agent:security': '🔒 **Security Agent** has been assigned to review this issue.\n\nSecurity review includes:\n- Sharing mode analysis\n- CRUD/FLS verification\n- Vulnerability assessment\n- Compliance check',
+              'agent:devops': '🚀 **DevOps Agent** has been assigned to review this issue.\n\nThis will cover:\n- CI/CD pipeline impact\n- Deployment considerations\n- Environment configuration',
+              'agent:documentation': '📚 **Documentation Agent** has been assigned to review this issue.\n\nDocumentation review includes:\n- ApexDoc/JSDoc requirements\n- Feature documentation needs\n- User guide updates'
+            };
+
+            if (agentMessages[label]) {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issue.number,
+                body: agentMessages[label]
+              });
+            }
+
+  priority-alert:
+    name: Priority Alert
+    runs-on: ubuntu-latest
+    if: contains(github.event.issue.labels.*.name, 'priority:critical')
+    steps:
+      - name: Add critical priority notice
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.issue.number,
+              body: '🚨 **CRITICAL PRIORITY**\n\nThis issue has been flagged as critical and requires immediate attention.\n\nExpected response time: 24 hours\n\n@tbcolby has been notified.'
+            });

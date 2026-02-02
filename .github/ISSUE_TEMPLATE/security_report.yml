@@ -1,0 +1,72 @@
+name: Security Report
+description: Report a security vulnerability (non-sensitive details only)
+title: "[SECURITY]: "
+labels: ["security", "triage", "priority-high"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ⚠️ **IMPORTANT**: Do not include sensitive information like credentials, PII, or exploit details here.
+
+        For critical security issues, email security@salesforce.com directly.
+
+  - type: dropdown
+    id: vulnerability-type
+    attributes:
+      label: Vulnerability Type
+      options:
+        - SOQL Injection
+        - CRUD/FLS Bypass
+        - Sharing Rule Bypass
+        - XSS (Cross-Site Scripting)
+        - Open Redirect
+        - Sensitive Data Exposure
+        - Authentication/Authorization Issue
+        - Other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Severity Assessment
+      options:
+        - Critical - Exploitable data breach risk
+        - High - Significant security risk
+        - Medium - Moderate risk with mitigations
+        - Low - Minor security improvement
+    validations:
+      required: true
+
+  - type: input
+    id: affected-area
+    attributes:
+      label: Affected Component/Area
+      description: General area without specific exploit details
+      placeholder: "e.g., Payment processing, User authentication"
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: General Description
+      description: Describe the vulnerability without providing exploit details
+    validations:
+      required: true
+
+  - type: textarea
+    id: impact
+    attributes:
+      label: Potential Impact
+      description: What could happen if this is exploited?
+    validations:
+      required: true
+
+  - type: textarea
+    id: recommendation
+    attributes:
+      label: Recommended Fix
+      description: Suggested remediation approach

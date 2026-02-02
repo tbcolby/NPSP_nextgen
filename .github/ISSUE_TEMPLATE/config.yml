@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: NPSP Community Hub
+    url: https://trailhead.salesforce.com/trailblazer-community/groups/0F94S000000GwVK
+    about: For questions and support, visit the Trailblazer Community
+  - name: NPSP Documentation
+    url: https://powerofus.force.com/s/article/NPSP-Documentation
+    about: Check documentation for common questions
+  - name: Critical Security Issue
+    url: mailto:security@salesforce.com
+    about: For critical security vulnerabilities, email directly

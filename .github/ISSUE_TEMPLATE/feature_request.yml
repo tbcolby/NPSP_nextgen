@@ -1,0 +1,101 @@
+name: Feature Request
+description: Suggest a new feature or enhancement
+title: "[FEATURE]: "
+labels: ["enhancement", "triage"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for suggesting a feature! Help us understand your needs.
+
+  - type: dropdown
+    id: feature-area
+    attributes:
+      label: Feature Area
+      description: Which area would this feature affect?
+      options:
+        - Recurring Donations (RD2)
+        - Customizable Rollups (CRLP)
+        - Gift Entry / Batch Gift Entry
+        - Batch Data Import (BDI)
+        - Allocations
+        - Households
+        - Relationships
+        - Payments
+        - Settings/Configuration
+        - New Feature Area
+        - DevOps/CI-CD
+        - Documentation
+        - Testing
+    validations:
+      required: true
+
+  - type: dropdown
+    id: request-type
+    attributes:
+      label: Request Type
+      options:
+        - New Feature
+        - Enhancement to Existing Feature
+        - Performance Improvement
+        - UI/UX Improvement
+        - Integration
+        - Automation
+        - Documentation
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem Statement
+      description: What problem does this feature solve?
+      placeholder: "As a [user type], I want to [action] so that [benefit]..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed Solution
+      description: Describe your proposed solution
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives Considered
+      description: Any alternative solutions you've considered?
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Business Priority
+      options:
+        - Critical - Blocking key workflows
+        - High - Significant productivity impact
+        - Medium - Nice to have, improves efficiency
+        - Low - Minor convenience improvement
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance Criteria
+      description: How will we know this feature is complete?
+      placeholder: |
+        - [ ] Criteria 1
+        - [ ] Criteria 2
+        - [ ] Criteria 3
+
+  - type: checkboxes
+    id: contribution
+    attributes:
+      label: Contribution
+      description: Are you willing to help implement this?
+      options:
+        - label: I would be willing to submit a PR for this feature

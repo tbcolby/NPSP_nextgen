@@ -1,36 +1,169 @@
-![Salesforce Nonprofit Success Pack](https://cloud.githubusercontent.com/assets/450473/18836784/15e1774a-83c7-11e6-8434-0521d4fbebc0.png "Salesforce Nonprofit Success Pack")
+![NPSP_nextgen](images/npsp_nextgen_logo.png "NPSP next_gen__c")
 
-## Important Note
+# NPSP_nextgen
 
-In 2023, Salesforce launched the Nonprofit Cloud which is at the foundation of Salesforce for Nonprofits. Nonprofit Cloud helps teams unify their data to work beyond silos and better collaborate, share, learn from, and use their data. Use Nonprofit Cloud as your a single solution to begin or continue in your digital transformation journey.  Read more about the [new Nonprofit Cloud](https://www.salesforce.com/blog/new-nonprofit-cloud/). Some key highlights:
+## An LLM-Assisted Community Fork of the Nonprofit Success Pack
 
-* Salesforce will to continue support our managed package products, including the Nonprofit Success Pack. Tens of thousands of customers use our current managed package products to achieve great results. 
-* Many of our ISV partners are building fantastic solutions for our managed packages as well as the new Nonprofit Cloud. We’re working with these partners to ensure that they understand our new product architecture, and are able to bring their years of experience and learnings to the new Nonprofit Cloud.
-* Salesforce remains deeply committed to nonprofit pricing. There are many new capabilities within the new Nonprofit Cloud and we work hard to maintain our nonprofit discounts across the new products. Our goals are to simplify access to nonprofit technology and make it easier for customers to get started.
-* Salesforce continues to grant free licenses with the Power of Us Program for the managed packages and Nonprofit Cloud. With Nonprofit Cloud, the Power of Us program also includes more features than ever to accelerate and deepen the nonprofit experience.
-* Take the new product for a test drive. Sign-up for a [Nonprofit Cloud Trial org](https://help.salesforce.com/s/articleView?id=sfdo.NPC_Create_Nonprofit_Cloud_Trial_Org.htm&type=5).
-* Visit the [Nonprofit Hub](https://trailhead.salesforce.com/trailblazer-community/groups/0F9300000001ocxCAA?tab=discussion&sort=LAST_MODIFIED_DATE_DESC) to chat with others about how nonprofits use Salesforce for social good.
+**NPSP_nextgen** is a community-driven fork of Salesforce's Nonprofit Success Pack (NPSP), enhanced and maintained with the assistance of large language models (LLMs). This project aims to bring continued support, bug fixes, and modern Salesforce standards to the many nonprofit organizations that continue to rely on NPSP.
 
 ---
-### For Nonprofit Success Pack Users and admins
 
-* Check out existing [Nonprofit feature and enhancement requests](https://ideas.salesforce.com/s/search#t=All&sort=relevancy&f:@sfcategoryfull=[Nonprofit%7CNonprofit%20Cloud,Nonprofit%7CNonprofit%20Success%20Pack%20(NPSP)%20-%20Managed%20Package]).
-* [Ask questions or get help with the Nonprofit Success Pack](https://trailhead.salesforce.com/trailblazer-community/groups/0F94S000000kHitSAE)
-* [Ask for support or questions with other Nonprofit Users and Partners](https://trailhead.salesforce.com/trailblazer-community/groups/0F9300000001ocxCAA)
-* [Nonprofit Success Pack (NPSP) Documentation](https://help.salesforce.com/s/articleView?id=sfdo.Nonprofit_Success_Pack.htm)
-* [Release Notes](https://sfdc.co/bnL4Cb)
-* [Known Issues](https://issues.salesforce.com/#f[sfcategoryfull]=Nonprofit%7CNonprofit%20Success%20Pack%20(NPSP)%20-%20Managed%20Package)
+## Important Disclaimers
 
-###  Try out the Nonprofit Success Pack
+### This Project is Provided "AS-IS"
 
-You can install NPSP utilizing our custom application installer into any Developer Edition, Sandbox or Enterprise Edition Salesforce org.
+**NPSP_nextgen IS NOT SPONSORED, ENDORSED, OR MAINTAINED BY SALESFORCE OR SALESFORCE.ORG.**
 
-* [NPSP Installer](https://install.salesforce.org/products/npsp)
+This is an independent community project. Use at your own risk.
 
-### Try out the New Nonprofit Cloud
+- **No Warranty**: This software is provided "as is" without warranty of any kind, express or implied
+- **No Support Guarantee**: Community support only - no SLAs or guaranteed response times
+- **No Liability**: The maintainers assume no liability for any damages resulting from use of this software
 
-* [Nonprofit Cloud Learning Org Signup](https://help.salesforce.com/s/articleView?id=sfdo.NPC_Create_Nonprofit_Cloud_Trial_Org.htm&type=5)
+### Always Test in a Sandbox First
 
-### Meta
+**Before deploying ANY changes from this project to a production org:**
 
-The Nonprofit Success Pack (“NPSP”) is an open-source package licensed by Salesforce.org (“SFDO”) under the BSD-3 Clause License, found at https://opensource.org/licenses/BSD-3-Clause. ANY MASTER SUBSCRIPTION AGREEMENT YOU OR YOUR ENTITY MAY HAVE WITH SFDO DOES NOT APPLY TO YOUR USE OF NPSP. NPSP IS PROVIDED “AS IS” AND AS AVAILABLE, AND SFDO MAKES NO WARRANTY OF ANY KIND REGARDING NPSP, WHETHER EXPRESS, IMPLIED, STATUTORY OR OTHERWISE, INCLUDING BUT NOT LIMITED TO ANY IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, FREEDOM FROM DEFECTS OR NON-INFRINGEMENT, TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW. SFDO WILL HAVE NO LIABILITY ARISING OUT OF OR RELATED TO YOUR USE OF NPSP FOR ANY DIRECT DAMAGES OR FOR ANY LOST PROFITS, REVENUES, GOODWILL OR INDIRECT, SPECIAL, INCIDENTAL, CONSEQUENTIAL, EXEMPLARY, COVER, BUSINESS INTERRUPTION OR PUNITIVE DAMAGES, WHETHER AN ACTION IS IN CONTRACT OR TORT AND REGARDLESS OF THE THEORY OF LIABILITY, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGES OR IF A REMEDY OTHERWISE FAILS OF ITS ESSENTIAL PURPOSE. THE FOREGOING DISCLAIMER WILL NOT APPLY TO THE EXTENT PROHIBITED BY LAW. SFDO DISCLAIMS ALL LIABILITY AND INDEMNIFICATION OBLIGATIONS FOR ANY HARM OR DAMAGES CAUSED BY ANY THIRD-PARTY HOSTING PROVIDERS.
+1. Deploy to a **full sandbox** or **developer sandbox** first
+2. Thoroughly test all affected functionality
+3. Verify data integrity and business processes
+4. Have a rollback plan ready
+5. Only then consider deploying to production
+
+**We cannot stress this enough: TEST EVERYTHING IN A SANDBOX FIRST.**
+
+---
+
+## Why NPSP_nextgen?
+
+With Salesforce's focus shifting to Nonprofit Cloud, many organizations on NPSP face uncertainty:
+
+- **Continued NPSP Usage**: Thousands of nonprofits continue to rely on NPSP and may not be ready or able to migrate to Nonprofit Cloud
+- **Modernization Gap**: NPSP contains legacy patterns (Visualforce, Aura, older Apex conventions) that could benefit from modernization
+- **Community Support**: This project provides a path for community-driven improvements and bug fixes
+- **Modern Standards**: Bringing NPSP closer to current Salesforce development best practices
+
+### Goals
+
+1. **Maintain Compatibility**: Keep NPSP functional on current Salesforce releases
+2. **Fix Bugs**: Address issues that may not be prioritized in the official package
+3. **Modernize Code**: Gradually update legacy patterns to modern standards (LWC, proper security patterns, etc.)
+4. **Improve Documentation**: Better documentation for admins and developers
+5. **Community Collaboration**: Open contribution model for the nonprofit Salesforce community
+
+---
+
+## LLM-Assisted Development
+
+This project leverages AI/LLM assistance for:
+
+- **Code Analysis**: Automated codebase review and pattern detection
+- **Documentation**: Generating and maintaining technical documentation
+- **Issue Triage**: Automated routing of issues to appropriate domain areas
+- **Code Review**: AI-assisted review of pull requests
+- **Test Generation**: Assistance in creating comprehensive test coverage
+
+The multi-agent system includes specialized agents for:
+- Apex backend development
+- Lightning Web Components
+- Testing and quality assurance
+- Security review
+- DevOps and CI/CD
+- Documentation
+
+See `.claude/agents/ARCHITECTURE.md` for details on the agent system.
+
+---
+
+## Installation
+
+### For Evaluation/Development
+
+```bash
+# Clone the repository
+git clone https://github.com/tbcolby/NPSP_nextgen.git
+cd NPSP_nextgen
+
+# Install dependencies
+yarn install
+
+# Set up CumulusCI (if not already installed)
+pip install cumulusci
+
+# Create a scratch org for testing
+cci org scratch dev my_dev_org
+
+# Deploy and configure
+cci flow run dev_org --org my_dev_org
+```
+
+### For Production Use
+
+**Remember: Always test in a sandbox first!**
+
+This project is intended primarily for:
+- Development and testing
+- Evaluation of improvements
+- Contributing back to the community
+
+If you choose to use in production, you assume all responsibility for testing and validation.
+
+---
+
+## Contributing
+
+We welcome contributions from the community! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+
+### Ways to Contribute
+
+- **Report Issues**: Use our issue templates for bugs, features, and security reports
+- **Submit PRs**: Code contributions are welcome
+- **Documentation**: Help improve docs and guides
+- **Testing**: Help test changes in different org configurations
+- **Feedback**: Share your experience and suggestions
+
+---
+
+## Project Structure
+
+```
+NPSP_nextgen/
+├── force-app/              # Main Salesforce source code
+│   ├── main/              # Core NPSP functionality
+│   ├── infrastructure/    # fflib framework
+│   └── tdtm/              # Trigger framework
+├── .claude/agents/        # LLM agent configurations
+├── .github/               # GitHub workflows and templates
+├── robot/                 # Robot Framework tests
+└── documentation/         # Project documentation
+```
+
+---
+
+## Resources
+
+### Original NPSP Resources
+- [NPSP Documentation](https://help.salesforce.com/s/articleView?id=sfdo.Nonprofit_Success_Pack.htm)
+- [Original NPSP Repository](https://github.com/SalesforceFoundation/NPSP)
+
+### Community
+- [Nonprofit Hub (Trailblazer Community)](https://trailhead.salesforce.com/trailblazer-community/groups/0F9300000001ocxCAA)
+- [Power of Us Hub](https://powerofus.force.com/)
+
+---
+
+## License
+
+This project is licensed under the BSD-3 Clause License - see the [LICENSE](LICENSE) file for details.
+
+The original Nonprofit Success Pack is open-source software licensed by Salesforce.org under the BSD-3 Clause License.
+
+---
+
+## Disclaimer (Full)
+
+NPSP_NEXTGEN IS AN INDEPENDENT COMMUNITY PROJECT AND IS NOT AFFILIATED WITH, SPONSORED BY, OR ENDORSED BY SALESFORCE, INC. OR SALESFORCE.ORG.
+
+THIS SOFTWARE IS PROVIDED "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+**ALWAYS TEST ALL CHANGES IN A SANDBOX ENVIRONMENT BEFORE DEPLOYING TO PRODUCTION.**

@@ -1,0 +1,69 @@
+name: Code Quality
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  eslint:
+    name: ESLint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'yarn'
+
+      - name: Install Dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Run ESLint
+        run: npm run lint:lwc
+        continue-on-error: true
+
+      - name: Upload ESLint Report
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: eslint-report
+          path: eslint-report.json
+
+  pmd:
+    name: PMD Static Analysis
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PMD
+        run: |
+          wget https://github.com/pmd/pmd/releases/download/pmd_releases%2F7.0.0/pmd-dist-7.0.0-bin.zip
+          unzip pmd-dist-7.0.0-bin.zip
+          echo "$PWD/pmd-bin-7.0.0/bin" >> $GITHUB_PATH
+
+      - name: Run PMD on Apex
+        run: |
+          pmd check \
+            --dir force-app/main/default/classes \
+            --rulesets category/apex/bestpractices.xml,category/apex/security.xml \
+            --format html \
+            --report-file pmd-report.html \
+            --no-fail-on-violation
+
+      - name: Upload PMD Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: pmd-report
+          path: pmd-report.html
+
+      - name: PMD Security Check
+        run: |
+          pmd check \
+            --dir force-app/main/default/classes \
+            --rulesets category/apex/security.xml \
+            --format text \
+            --minimum-priority 2
