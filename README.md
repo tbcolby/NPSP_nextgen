@@ -53,6 +53,44 @@ With Salesforce's focus shifting to Nonprofit Cloud, many organizations on NPSP 
 
 ---
 
+## Modernization Roadmap
+
+We're executing a comprehensive modernization plan across **8 quarterly releases** (Q1 2026 - Q4 2027). All changes are designed to be **backwards compatible** for existing orgs.
+
+### Release Schedule
+
+| Release | Target | Focus Areas | Status |
+|---------|--------|-------------|--------|
+| **v1.0** | Q1 2026 | Foundation + Critical Security | Planning |
+| **v1.1** | Q2 2026 | Security Hardening | Planning |
+| **v1.2** | Q3 2026 | Async Apex Modernization | Planning |
+| **v1.3** | Q4 2026 | Performance Optimization | Planning |
+| **v2.0** | Q1 2027 | Code Quality Standards | Planning |
+| **v2.1** | Q2 2027 | UI Modernization (Aura → LWC) | Planning |
+| **v2.2** | Q3 2027 | Configuration + Accessibility | Planning |
+| **v2.3** | Q4 2027 | Integration + Final Polish | Planning |
+
+### Key Modernization Areas
+
+| Area | Current State | Target | Items |
+|------|---------------|--------|-------|
+| **API Version** | 53.0 (Winter '22) | 60.0+ | 1 |
+| **@future → Queueable** | 13 legacy methods | Modern async | 13 |
+| **Batch Apex** | 45 classes | Finalizer pattern | 45 |
+| **Custom Settings → CMT** | 14 settings | Deployable metadata | 14 |
+| **Aura → LWC** | 35 components | Modern UI | 35 |
+| **Visualforce** | 79 pages | LWC (long-term) | 79 |
+| **Security** | Gaps identified | Full CRUD/FLS | 30+ |
+| **Governor Limits** | 23 issues | Optimized | 23 |
+
+### Progress Tracking
+
+**154 total items** identified | **0 completed** | **154 remaining**
+
+See [documentation/MODERNIZATION_BURNDOWN.md](documentation/MODERNIZATION_BURNDOWN.md) for the complete burndown list with detailed tasks, file references, and implementation guidance.
+
+---
+
 ## LLM-Assisted Development
 
 This project leverages AI/LLM assistance for:
