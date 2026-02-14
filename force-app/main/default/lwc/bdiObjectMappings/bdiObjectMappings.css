@@ -1,13 +1,14 @@
 .slds-button_extension-back {
     height: 40px;
-	color: var(--slds-g-color-accent-2, #006DCC);
-	font-family: "Salesforce Sans";
-	font-size: var(--slds-g-font-size-base, 13px);
+    color: var(--slds-g-color-accent-2, #006dcc);
+    font-family: "Salesforce Sans";
+    font-size: var(--slds-g-font-size-base, 13px);
     line-height: 40px;
     font-weight: normal;
 }
 
-.slds-text-heading_medium_extension, .slds-text-heading_small_extension {
+.slds-text-heading_medium_extension,
+.slds-text-heading_small_extension {
     font-weight: normal;
     font-family: "Salesforce Sans";
 }
@@ -39,11 +40,13 @@
     width: auto;
 }
 
-.custom-col_1, .custom-col_5 {
+.custom-col_1,
+.custom-col_5 {
     width: 20%;
 }
 
-.custom-col_3, .custom-col_7 {
+.custom-col_3,
+.custom-col_7 {
     width: 125px;
 }
 

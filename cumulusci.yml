@@ -1,15 +1,15 @@
-minimum_cumulusci_version: 3.74.0
+minimum_cumulusci_version: 4.6.0
 project:
-    name: Cumulus
+    name: NPSP_nextgen
     source_format: sfdx
     package:
-        name: Nonprofit Success Pack
-        namespace: npsp
-        api_version: 53.0
+        name: NPSP_nextgen
+        namespace: npsp2
+        api_version: "63.0"
         install_class: STG_InstallScript
         uninstall_class: STG_UninstallScript
     git:
-        repo_url: https://github.com/SalesforceFoundation/NPSP
+        repo_url: https://github.com/tbcolby/NPSP_nextgen
         prefix_beta: uat/
         prefix_release: rel/
         default_branch: main
@@ -22,9 +22,6 @@ project:
                     class_path: cumulusci.tasks.release_notes.parser.GithubLinesParser
                     title: Features Intended for Future Release
                 6:
-                    class_path: cumulusci.tasks.release_notes.parser.GithubLinesParser
-                    title: Features for Elevate Customers
-                7:
                     class_path: cumulusci.tasks.release_notes.parser.GithubLinesParser
                     title: New Metadata
                 8:
@@ -1012,17 +1009,6 @@ flows:
                 task: deploy
                 options:
                     path: unpackaged/config/crlp_testing
-            2:
-                task: update_admin_profile
-
-    deploy_ps_testing:
-        description: 'Deploys class for testing the Payment Service using the Apex Anon testing script.'
-        group: NPSP
-        steps:
-            1:
-                task: deploy
-                options:
-                    path: unpackaged/config/ps_testing
             2:
                 task: update_admin_profile
 

@@ -72,28 +72,6 @@ public inherited sharing class GiftBatch implements IGiftBatch {
     }
 
     @TestVisible
-    private ElevateBatchService elevateBatchService {
-        get {
-            if (elevateBatchService == null) {
-                elevateBatchService = new ElevateBatchService();
-            }
-            return elevateBatchService;
-        }
-        set;
-    }
-
-    @TestVisible
-    private PS_IntegrationServiceConfig paymentIntegrationServiceConfig {
-        get {
-            if (paymentIntegrationServiceConfig == null) {
-                paymentIntegrationServiceConfig = new PS_IntegrationServiceConfig();
-            }
-            return paymentIntegrationServiceConfig;
-        }
-        set;
-    }
-
-    @TestVisible
     private GiftBatch() {}
 
     public GiftBatch (DataImportBatch__c batch) {
@@ -160,19 +138,6 @@ public inherited sharing class GiftBatch implements IGiftBatch {
             }
         }
         return shouldPayFirstInstallment != null ? Boolean.valueOf(shouldPayFirstInstallment): false;
-    }
-
-    public Boolean hasElevateWidget() {
-        return this.giftTemplate.hasElevateWidget();
-    }
-
-    public void captureAuthorizedGifts() {
-        elevateBatchService.enqueuePaymentCaptureJobFor(id(), gifts?.elevateBatchIds());
-        gifts.authorizedToPaymentProcessingStatus();
-    }
-
-    public void failGiftsWithReason(Map<String, String> failReasonByElevateBatchId) {
-        gifts.failGiftsByElevateBatchIdWithReason(failReasonByElevateBatchId);
     }
 
     private void failGiftsWith(String failReason) {

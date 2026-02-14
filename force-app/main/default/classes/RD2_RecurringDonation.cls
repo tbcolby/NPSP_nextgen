@@ -618,25 +618,6 @@ public inherited sharing class RD2_RecurringDonation {
         return false;
     }
 
-    /***
-    * @description Checks if the Recurring Donation is originated in Elevate
-    */
-    public Boolean isElevateRecord() {
-       return RD2_ElevateIntegrationService.isIntegrationEnabled() && String.isNotBlank(rd.CommitmentId__c);
-    }
-
-    public Boolean hasValidRecurringDonationPaymentMethod() {
-        if (isElevateRecord()) {
-            return isValidElevatePaymentMethod();
-        }
-        return true;
-    }
-
-    private Boolean isValidElevatePaymentMethod() {
-        return paymentMethod() == RD2_Constants.PAYMENT_PICKLIST_VALUE_CARD ||
-               paymentMethod() == RD2_Constants.PAYMENT_PICKLIST_VALUE_ACH;
-    }
-
     /**
     * @description Return the value of the provided recurring donation field
     * @param rdField SObjectField to get the value for

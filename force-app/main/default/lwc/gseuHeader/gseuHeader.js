@@ -1,14 +1,14 @@
-import { LightningElement } from 'lwc';
-import gsVideoHeaderTitle from '@salesforce/label/c.gsVideoHeaderTitle';
-import CumulusStaticResources from '@salesforce/resourceUrl/CumulusStaticResources';
+import { LightningElement } from "lwc";
+import gsVideoHeaderTitle from "@salesforce/label/c.gsVideoHeaderTitle";
+import CumulusStaticResources from "@salesforce/resourceUrl/CumulusStaticResources";
 
 export default class GseuHeader extends LightningElement {
-    backgroundUrl = CumulusStaticResources + '/gsAssets/gseuHeader/GetStarted.svg';
+    backgroundUrl = CumulusStaticResources + "/gsAssets/gseuHeader/GetStarted.svg";
     /**
-    * Returns an Image URL to display in UI
-    * @return      the image at the specified URL
-    * @see         URL
-    */
+     * Returns an Image URL to display in UI
+     * @return      the image at the specified URL
+     * @see         URL
+     */
     get imgSrc() {
         return `background-image:url(${this.backgroundUrl});
                 background-size: cover;
@@ -20,5 +20,4 @@ export default class GseuHeader extends LightningElement {
     get title() {
         return gsVideoHeaderTitle;
     }
-
 }

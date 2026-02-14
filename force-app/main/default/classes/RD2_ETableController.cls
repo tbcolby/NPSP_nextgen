@@ -104,9 +104,9 @@ public with sharing class RD2_ETableController {
     * @return List<TableView> List of processed recurring donation records
     */
     @AuraEnabled(cacheable=false)
-    public static List<TableView> retrieveTableView(String elevateFilter) {
+    public static List<TableView> retrieveTableView() {
         try {
-            return controller.getTableViews(elevateFilter);
+            return controller.getTableViews();
         } catch (Exception ex) {
             throw new AuraHandledException(ex.getMessage());
         }
@@ -134,11 +134,11 @@ public with sharing class RD2_ETableController {
     * @description method to return Recurring Donation list.
     * @return List<RD2_ETableController.TableView> returns processed Recurring Donations.
     */
-    private List<RD2_ETableController.TableView> getTableViews(String elevateFilter) {
+    private List<RD2_ETableController.TableView> getTableViews() {
         List<RD2_ETableController.TableView> recurringDonations = new List<RD2_ETableController.TableView>();
         if(RD2_EnablementService.isRecurringDonations2Enabled) {
             if(controller.hasAccessToRecurringDonation()) {
-                recurringDonations = controller.getProcessedTableViews(selector.getRecurringDonations(elevateFilter));
+                recurringDonations = controller.getProcessedTableViews(selector.getRecurringDonations());
             } else {
                 throw new UTIL_Permissions.InsufficientPermissionException(Label.commonInsufficientPermissions);
             }
@@ -277,22 +277,7 @@ public with sharing class RD2_ETableController {
     * @return String returns the PaymentMethod string.
     */
     private String getPaymentMethod(npe03__Recurring_Donation__c recurringDonation) {
-        String paymentMethod = '';
-
-        if(GE_GiftEntryController.isElevateCustomer() && String.IsBlank(recurringDonation.CommitmentId__c) || !GE_GiftEntryController.isElevateCustomer()) {
-            //Non-Elevate RD
-            paymentMethod = recurringDonation.PaymentMethod__c;
-        
-        } else {
-            //Elevate RD
-            if(recurringDonation.PaymentMethod__c == RD2_Constants.PAYMENT_PICKLIST_VALUE_CARD) {
-                paymentMethod = String.format(System.Label.RD_creditCardElevatePayment, new List<String>{recurringDonation.PaymentMethod__c, recurringDonation.CardLast4__c, recurringDonation.CardExpirationMonth__c, recurringDonation.CardExpirationYear__c});
-            } else {
-                paymentMethod = String.format(System.Label.RD_achElevatePayment, new List<String>{recurringDonation.PaymentMethod__c, recurringDonation.ACH_Last_4__c});
-            }
-        }
-
-        return paymentMethod;
+        return recurringDonation.PaymentMethod__c;
     }
 
 
@@ -358,14 +343,6 @@ public with sharing class RD2_ETableController {
             npe03__Recurring_Donation__c.npe03__Next_Payment_Date__c
         };
 
-        if(GE_GiftEntryController.isElevateCustomer()) {
-            fields.add(npe03__Recurring_Donation__c.CommitmentId__c);
-            fields.add(npe03__Recurring_Donation__c.CardLast4__c);
-            fields.add(npe03__Recurring_Donation__c.CardExpirationYear__c);
-            fields.add(npe03__Recurring_Donation__c.CardExpirationMonth__c);
-            fields.add(npe03__Recurring_Donation__c.ACH_Last_4__c);
-        }
-        
         return permissions.canRead(npe03__Recurring_Donation__c.SObjectType, fields);
     }
 

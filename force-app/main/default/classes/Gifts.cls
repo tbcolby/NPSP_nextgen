@@ -35,7 +35,6 @@
 
 public with sharing class Gifts {
 
-    private Set<String> elevateBatchIds;
     @TestVisible private Map<Id, DataImport__c> dataImportsById = new Map<Id, DataImport__c>();
     @TestVisible private Map<Id, DataImport__c> giftsToUpdate = new Map<Id, DataImport__c>();
     @TestVisible private GiftSelector giftSelector;
@@ -43,17 +42,6 @@ public with sharing class Gifts {
     @TestVisible private Donations donations;
 
     public Gifts() {}
-
-    @TestVisible
-    private PS_IntegrationServiceConfig paymentIntegrationServiceConfig {
-        get {
-            if (paymentIntegrationServiceConfig == null) {
-                paymentIntegrationServiceConfig = new PS_IntegrationServiceConfig();
-            }
-            return paymentIntegrationServiceConfig;
-        }
-        set;
-    }
 
     public Gifts(List<DataImport__c> dataImports) {
         this.giftSelector = new GiftSelector();
@@ -74,9 +62,6 @@ public with sharing class Gifts {
     private void init(List<DataImport__c> dataImports) {
         populateDataImportsById(dataImports);
         populateDonationsFrom(dataImports);
-        if (GE_PaymentServices.getInstance().isElevateCustomer()) {
-            setElevateBatchIds(dataImports);
-        }
     }
 
     private void populateDonationsFrom(List<DataImport__c> dataImports) {
@@ -121,28 +106,10 @@ public with sharing class Gifts {
         return this.dataImportsById.values().size();
     }
 
-    public List<DataImport__c> authorizedGifts() {
-        List<DataImport__c> giftsToReturn = new List<DataImport__c>();
-        for (DataImport__c gift : dataImportsById.values()) {
-            if (gift.Payment_Status__c == ElevateTransactionStatus.AUTHORIZED.name()) {
-                giftsToReturn.add(gift);
-            }
-        }
-        return giftsToReturn;
-    }
-
     public void prepareForProcessing() {
         giftsToUpdate.clear();
 
         giftsToProcessingStatus();
-
-        Boolean paymentIntegrationUnavailable = !paymentIntegrationServiceConfig.isIntegrationEnabled();
-        if (paymentIntegrationUnavailable) {
-            String failReason = String.format(
-                Label.gePaymentServicesUnavailableFailureMessage,
-                new List<String> { Label.commonPaymentServices });
-            failGiftsWithAuthorizedPaymentsWith(failReason);
-        }
     }
 
     public void moveProcessableToProcessingStatus() {
@@ -173,36 +140,6 @@ public with sharing class Gifts {
         giftsToUpdate.clear();
     }
 
-    public Set<String> elevateBatchIds() {
-        return elevateBatchIds;
-    }
-
-    public void authorizedToPaymentProcessingStatus() {
-        for (DataImport__c gift : authorizedGifts()) {
-            gift.Payment_Status__c = ElevateTransactionStatus.PAYMENTPROCESSING.name();
-            giftsToUpdate.put(gift.Id, gift);
-        }
-    }
-
-    public void failGiftsByElevateBatchIdWithReason(Map<String, String> failReasonByElevateBatchId) {
-        for (String elevateBatchId : failReasonByElevateBatchId.keySet()) {
-            List<DataImport__c> giftsInElevateBatch = findGiftsByElevateBatchId(elevateBatchId);
-            String failReason = failReasonByElevateBatchId.get(elevateBatchId);
-            applyFailReasonToGiftsIn(giftsInElevateBatch, failReason);
-        }
-    }
-
-    public void failGiftsWithAuthorizedPaymentsWith(String failReason) {
-        for (DataImport__c gift : giftsToUpdate.values()) {
-            Gift currentGift = new Gift(gift);
-
-            if (currentGift.hasAuthorizedPayment()) {
-                gift.Status__c = BDI_DataImport_API.bdiFailed;
-                gift.FailureInformation__c = failReason;
-            }
-        }
-    }
-
     public void failWith(String failReason) {
         for (Gift gift : standardGiftsInProcessing()) {
             gift.asDataImport().Status__c = BDI_DataImport_API.bdiFailed;
@@ -220,7 +157,7 @@ public with sharing class Gifts {
         List<Gift> processingGifts = new List<Gift>();
         for (DataImport__c gift : dataImportsById.values()) {
             Gift currentGift = new Gift(gift);
-            if (currentGift.isProcessing() && !currentGift.isPaymentProcessing()) {
+            if (currentGift.isProcessing()) {
                 processingGifts.add(currentGift);
             }
         }
@@ -235,42 +172,6 @@ public with sharing class Gifts {
                 giftsToUpdate.put(dataImport.Id, dataImport);
             }
         }
-    }
-
-    private void applyFailReasonToGiftsIn(List<DataImport__c> giftsInElevateBatch, String failReason) {
-        for (DataImport__c gift : giftsInElevateBatch) {
-            gift.Payment_Status__c = ElevateTransactionStatus.RETRYABLEERROR.name();
-            gift.FailureInformation__c = failReason;
-            giftsToUpdate.put(gift.Id, gift);
-        }
-    }
-
-    private List<DataImport__c> findGiftsByElevateBatchId(String elevateBatchId) {
-        List<DataImport__c> giftsInElevateBatch = new List<DataImport__c>();
-        for (DataImport__c gift : dataImportsById.values()) {
-            if (gift.Payment_Elevate_Batch_ID__c == elevateBatchId) {
-                giftsInElevateBatch.add(gift);
-            }
-        }
-        return giftsInElevateBatch;
-    }
-
-    private void setElevateBatchIds(List<DataImport__c> dataImports) {
-        elevateBatchIds = new Set<String>();
-        for (DataImport__c dataImport : dataImportsById.values()) {
-            if (hasCapturableElevateBatchId(dataImport)) {
-                elevateBatchIds.add(dataImport.Payment_Elevate_Batch_ID__c);
-            }
-        }
-    }
-
-    private Boolean hasCapturableElevateBatchId(DataImport__c dataImport) {
-        if (dataImport == null) {
-            return false;
-        }
-        return dataImport?.Status__c == BDI_DataImport_API.bdiDryRunValidated
-            && (dataImport?.Payment_Status__c == ElevateTransactionStatus.AUTHORIZED.name() ||
-                dataImport?.Recurring_Donation_Elevate_Recurring_ID__c != null);
     }
 
     private void populateDataImportsById(List<DataImport__c> dataImports) {

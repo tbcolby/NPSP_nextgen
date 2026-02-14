@@ -318,14 +318,6 @@ public without sharing class RD2_OpportunityEvaluation_BATCH
             configValue = 50;
         }
 
-        if (RD2_ElevateIntegrationService.isIntegrationEnabled() &&
-            (rd2Settings.isStatusAutomationForClosedEnabled() || rd2Settings.isStatusAutomationForLapsedEnabled())
-        ) {
-            Decimal maxSize = RD2_UpdateCommitmentBulkService.MAXIMUM_API_CALL_PER_TRANSACTION
-                * RD2_UpdateCommitmentBulkService.REQUEST_SIZE;
-            configValue = (configValue > maxSize ) ? maxSize : configValue;
-        }
-
         return configValue.intValue();
     }
 

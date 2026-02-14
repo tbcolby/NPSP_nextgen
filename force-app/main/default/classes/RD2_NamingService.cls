@@ -173,16 +173,6 @@ public inherited sharing class RD2_NamingService {
     public void autogenerateNames(List<npe03__Recurring_Donation__c> rds) {
         if (isAutomaticNamingEnabled) {
             constructNames(rds);
-
-        } else if (RD2_EnablementService.isRecurringDonations2Enabled) {
-            // autogenerate names when Elevate RD Name is empty
-            List<npe03__Recurring_Donation__c> elevateRds = new List<npe03__Recurring_Donation__c>();
-            for (npe03__Recurring_Donation__c rd : rds) {
-                if (String.isNotBlank(rd.CommitmentId__c) && String.isBlank(rd.Name)) {
-                    elevateRds.add(rd);
-                }
-            }
-            constructNames(elevateRds);
         }
         //no special name handling for legacy RDs when auto-naming is not enabled
     }

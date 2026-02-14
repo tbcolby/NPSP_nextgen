@@ -46,7 +46,7 @@ private with sharing class ERR_LogService_TEST {
     @isTest
     private static void shouldCreateErrorLog() { 
         ERR_LogService.Logger logger = new ERR_LogService.Logger(
-            ERR_Handler_API.Context.Elevate,
+            ERR_Handler_API.Context.PMT,
             Contact.SObjectType
         );
 

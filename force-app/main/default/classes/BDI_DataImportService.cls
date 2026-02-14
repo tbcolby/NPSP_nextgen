@@ -49,7 +49,6 @@ global with sharing class BDI_DataImportService {
     }, '.');
     public static final String FM_HELP_TEXT = 'Help Text';
     public static final String FM_DATA_IMPORT_FIELD_MAPPING = 'Data Import Field Mapping';
-    public static final String ACH_PAYMENT_METHOD = 'ACH';
     public static final String DI_WITH_RD_FIELDS_NO_RD2 = System.label.RD2_DisabledRD2Error;
     public static final String DI_WITH_RD_FIELDS_NO_ADV_MAPPING = System.label.RD2_DisabledAdvancedMappingError;
 
@@ -814,8 +813,7 @@ global with sharing class BDI_DataImportService {
     }
 
     /**
-     * @description Checks if data import record meets the initial processing criteria of not having a payment status
-     *  or if the data import record is a successful Elevate transaction.
+     * @description Checks if data import record meets the initial processing criteria of not having a payment status.
      *
      * @param dataImport {DataImport__c}
      * @return Boolean
@@ -823,15 +821,7 @@ global with sharing class BDI_DataImportService {
     private Boolean isAllowableDataImport(DataImport__c dataImport) {
         String paymentStatus = dataImport.Payment_Status__c;
 
-        return String.isBlank(paymentStatus) ||
-            (dataImport.Payment_Status__c.equalsIgnoreCase(
-                ElevateTransactionStatus.CAPTURED.name()
-            ) ||
-            (isDryRun && dataImport.Payment_Status__c.equalsIgnoreCase(
-                ElevateTransactionStatus.AUTHORIZED.name()
-            ) ||
-            (dataImport.Payment_Method__c == ACH_PAYMENT_METHOD
-                && dataImport.Payment_Elevate_ID__c != null)));
+        return String.isBlank(paymentStatus);
     }
 
     /**

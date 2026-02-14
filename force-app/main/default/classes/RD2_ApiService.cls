@@ -80,7 +80,6 @@ public inherited sharing class RD2_ApiService {
     private String getRecurringDonationQuery() {
         Set<String> queryFields = new Set<String>{
             'Id',
-            'CommitmentId__c',
             'EndDate__c',
             'Status__c'
         };
@@ -467,7 +466,6 @@ public inherited sharing class RD2_ApiService {
         public void validatePauseData(Id rdId, RD2_RecurringDonation recurringDonation) {
             validateRecurringDonationId(rdId);
             validateStateShouldBeActive(recurringDonation);
-            validateRecurringDonationNotLinkedToElevate(recurringDonation);
 
             if (this.pause.unPause) {
                 validateUnPause();
@@ -493,16 +491,6 @@ public inherited sharing class RD2_ApiService {
 
             if (!recurringDonation.isActive()) {
                 pause.addError(System.Label.RD2_StatusMustBeActiveOrPause);
-            }
-        }
-
-        private void validateRecurringDonationNotLinkedToElevate(RD2_RecurringDonation recurringDonation) {
-            if (!pause.isSuccess) {
-                return;
-            }
-
-            if (recurringDonation.isElevateRecord()) {
-                pause.addError(System.Label.RD2_ElevateRDCannotBePaused);
             }
         }
 

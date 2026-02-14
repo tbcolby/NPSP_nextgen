@@ -2,9 +2,23 @@
   "packageDirectories": [
     {
       "path": "force-app",
-      "default": true
+      "default": true,
+      "package": "NPSP_nextgen",
+      "versionName": "Phase 0",
+      "versionNumber": "4.0.0.NEXT"
+    },
+    {
+      "path": "unpackaged/pre",
+      "default": false
+    },
+    {
+      "path": "unpackaged/post",
+      "default": false
     }
   ],
-  "namespace": "npsp",
-  "sourceApiVersion": "53.0"
+  "namespace": "npsp2",
+  "sourceApiVersion": "63.0",
+  "packageAliases": {
+    "NPSP_nextgen": "0Ho000000000000000"
+  }
 }

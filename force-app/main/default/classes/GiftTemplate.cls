@@ -35,7 +35,6 @@
 public with sharing class GiftTemplate {
 
     private GE_Template.Template template;
-    private static final String ELEVATE_WIDGET_COMPONENT_NAME = 'geFormWidgetTokenizeCard';
 
     public GiftTemplate() {
         this.template = defaultFormTemplate();
@@ -53,18 +52,6 @@ public with sharing class GiftTemplate {
 
     public List<String> giftFieldApiNames() {
         return this.template.giftFieldApiNames();
-    }
-
-    public Boolean hasElevateWidget() {
-        Boolean hasWidget = false;
-        for (GE_Template.Section section : template.layout.sections) {
-            for (GE_Template.Element element : section.elements) {
-                if (isElevateWidget(element)) {
-                    hasWidget = true;
-                }
-            }
-        }
-        return hasWidget;
     }
 
     private GE_Template.Template defaultFormTemplate() {
@@ -94,8 +81,4 @@ public with sharing class GiftTemplate {
         return giftEntryCustomSetting;
     }
 
-    private Boolean isElevateWidget(GE_Template.Element element) {
-        return element.componentName != null
-            && element.componentName == ELEVATE_WIDGET_COMPONENT_NAME;
-    }
 }

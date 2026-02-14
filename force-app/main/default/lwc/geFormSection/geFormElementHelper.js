@@ -1,5 +1,5 @@
-import GeFormService from 'c/geFormService';
-import { isNotEmpty } from 'c/utilCommon';
+import GeFormService from "c/geFormService";
+import { isNotEmpty } from "c/utilCommon";
 
 export default class GeFormElementHelper {
     element;

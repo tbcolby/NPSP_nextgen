@@ -1027,46 +1027,6 @@ public without sharing class RD2_ScheduleService {
         }
     }
 
-    /**
-     * Inner class to build Elevate specific pause schedules
-     *
-     */
-    public class ElevatePauseSchedule {
-        public Datetime startDate;
-        public Datetime endDate;
-        public String statusReason;
-        public Boolean shouldEditPause;
-        public ElevatePauseSchedule(List<RecurringDonationSchedule__c> donationSchedules,
-                RD2_PauseForm_CTRL.PauseData pause) {
-            this.startDate = pause.startDate;
-            this.endDate = calculateElevatePauseEndDate(pause.resumeAfterDate, donationSchedules);
-            this.statusReason = pause.pausedReason?.value;
-            this.shouldEditPause = shouldEditPause(donationSchedules);
-        }
-        private Datetime calculateElevatePauseEndDate (Date endDate,
-                List<RecurringDonationSchedule__c> donationSchedules) {
-            RD2_ScheduleService rd2ScheduleService = new RD2_ScheduleService();
-            Date nextDonationDate = rd2ScheduleService.getNextInstallment(
-                    endDate, donationSchedules
-            ).nextDonationDate;
-
-            return Datetime.newInstance(
-                    nextDonationDate.year(), nextDonationDate.month(), nextDonationDate.day()).addSeconds(-1);
-
-        }
-
-        private Boolean shouldEditPause (List<RecurringDonationSchedule__c> donationSchedules) {
-            Boolean shouldEdit = false;
-            for (RecurringDonationSchedule__c schedule : donationSchedules) {
-                if (schedule.IsPause__c && schedule.EndDate__c >= System.today()) {
-                    shouldEdit = true;
-                    break;
-                }
-            }
-            return shouldEdit;
-        }
-    }
-
     /***
     * @description Handles Pause Recurring Donation functionality
     */
@@ -1081,11 +1041,6 @@ public without sharing class RD2_ScheduleService {
                 EndDate__c = endDate
             );
         }
-
-        public ElevatePauseSchedule createElevatePauseSchedule (RD2_PauseForm_CTRL.PauseData pause, RD2_RecurringDonation rd) {
-            return new ElevatePauseSchedule(rd.getSObject().RecurringDonationSchedules__r, pause);
-        }
-
 
         /***
         * @description Indicates if the Recurring Donation has an active pause schedule
