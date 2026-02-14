@@ -58,19 +58,6 @@ public with sharing class RD2_PauseForm_CTRL {
         } set;
     }
 
-    /**
-    * @description Handles commitment request creation, response parsing and RD Commitment Id update
-    */
-    private static RD2_CommitmentService commitmentService {
-        get {
-            if (commitmentService == null) {
-                commitmentService = new RD2_CommitmentService();
-            }
-            return commitmentService;
-        }
-        set;
-    }
-
     private static RD2_ScheduleService scheduleService {
         get {
             if (scheduleService == null) {
@@ -112,9 +99,6 @@ public with sharing class RD2_PauseForm_CTRL {
             pause.rdId = rdId;
             pause.hasAccess = hasAccess();
             if (hasAccess()) {
-                pause.isElevateRecord = pause.hasAccess
-                    ? RD2_ElevateIntegrationService.isIntegrationEnabled() && rd.isElevateRecord()
-                    : false;
                 pause.isRDClosed = pause.hasAccess ? rd.isClosed() : false;
 
                 if (!pause.isRDClosed) {
@@ -188,8 +172,7 @@ public with sharing class RD2_PauseForm_CTRL {
             'npe03__Total_Paid_Installments__c',
             'EndDate__c',
             'npe03__Contact__c',
-            'npe03__Organization__c',
-            'CommitmentId__c'
+            'npe03__Organization__c'
         };
         if (UserInfo.isMultiCurrencyOrganization()) {
             queryFields.add('CurrencyIsoCode');
@@ -289,67 +272,14 @@ public with sharing class RD2_PauseForm_CTRL {
 
             PauseData pause = (PauseData) JSON.deserialize(jsonPauseData, PauseData.class);
 
-            RD2_RecurringDonation rd = getRecurringDonation(pause.rdId);
-
-            if (isOnlineRecurringDonationRecord(rd)) {
-                validatePause(pause);
-                UTIL_Http.Response response = pauseElevateRDsFor(pause);
-                if (commitmentService.isCommitmentSuccess(response)) {
-                    pauseHandler.savePauseSchedule(pause.rdId, buildPauseSchedule(pause));
-                    hasScheduleChanged = true;
-                } else {
-                    throwAuraHandledException(response.getErrorMessages());
-                }
-            } else {
-                pauseHandler.savePauseSchedule(pause.rdId, buildPauseSchedule(pause));
-                hasScheduleChanged = true;
-            }
+            pauseHandler.savePauseSchedule(pause.rdId, buildPauseSchedule(pause));
+            hasScheduleChanged = true;
 
             RD2_QueueableService.enqueueOppEvalService(pause.rdId, hasScheduleChanged);
 
         } catch (Exception e) {
             throwAuraHandledException(e.getMessage());
         }
-    }
-
-
-    private static void validatePause(PauseData pause) {
-        if (isPauseRemoved(pause)) return;
-
-        if (pause.startDate.addDays(-1).isSameDay(currentDate)
-            || pause.startDate.isSameDay(currentDate)) {
-            throw new PauseException(System.Label.RD2_ElevatePauseInstallmentDateErrorMessage);
-        }
-    }
-
-    private static Boolean isPauseRemoved (PauseData pause) {
-        return pause.startDate == null && pause.resumeAfterDate == null;
-    }
-
-    private static UTIL_Http.Response pauseElevateRDsFor(PauseData pause) {
-
-        try {
-            RD2_RecurringDonation rd = getRecurringDonation(pause.rdId);
-
-            UTIL_Http.Response response;
-            if (isPauseRemoved(pause)) {
-                response = commitmentService.handleRemoveCommitmentPause(rd);
-            } else {
-                response = commitmentService.handleCommitmentPause(
-                        pauseHandler.createElevatePauseSchedule(pause, rd), rd);
-            }
-
-            return response;
-
-        } catch (Exception ex) {
-            UTIL_AuraEnabledCommon.throwAuraHandledException(ex.getMessage());
-        }
-
-        return null;
-    }
-
-    private static Boolean isOnlineRecurringDonationRecord(RD2_RecurringDonation rd) {
-        return RD2_ElevateIntegrationService.isIntegrationEnabled() && rd.isElevateRecord();
     }
 
 
@@ -393,7 +323,6 @@ public with sharing class RD2_PauseForm_CTRL {
         public Id rdId;
         public Boolean hasAccess;
         public Boolean isRDClosed;
-        public Boolean isElevateRecord;
         public Date startDate;
         public Date resumeAfterDate;
         public PausedReason pausedReason;

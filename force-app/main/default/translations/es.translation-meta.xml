@@ -829,14 +829,6 @@
         <label>No puede cambiar la divisa de la oportunidad a una divisa diferente a la de la donación recurrente.</label>
     </customLabels>
     <customLabels>
-        <name>RD2_ElevatePaymentMethodChangeError</name>
-        <label>Los métodos de pago válidos para una Donación recurrente conectada con Elevate activa son Tarjeta de crédito o ACH.</label>
-    </customLabels>
-    <customLabels>
-        <name>RD2_ElevatePauseInstallmentDateErrorMessage</name>
-        <label>No podemos poner en pausa una Donación recurrente conectada con Elevate que esté menos de dos día antes de la fecha de abono.</label>
-    </customLabels>
-    <customLabels>
         <name>RD2_CurrencyChangeIsRestrictedOnRD</name>
         <label>No puede cambiar la divisa de la donación recurrente cuando hay una oportunidad cerrada relacionada.</label>
     </customLabels>
@@ -889,104 +881,12 @@
         <label>Próxima fecha de abono:</label>
     </customLabels>
     <customLabels>
-        <name>RD2_ElevateCancelInProgress</name>
-        <label>Cancelación de pago recurrente en progreso</label>
-    </customLabels>
-    <customLabels>
-        <name>RD2_ElevateDisableButtonLabel</name>
-        <label>No introduzca información de pago.</label>
-    </customLabels>
-    <customLabels>
-        <name>RD2_ElevateDisabledHeader</name>
-        <label>Elevate no está activado para su organización de Salesforce</label>
-    </customLabels>
-    <customLabels>
-        <name>RD2_ElevateDisabledMessage</name>
-        <label>No está introduciendo información de pago que Elevate procesará.</label>
-    </customLabels>
-    <customLabels>
-        <name>RD2_ElevateEnableButtonLabel</name>
-        <label>De forma alternativa, introduzca los detalles del pago ahora.</label>
-    </customLabels>
-    <customLabels>
-        <name>RD2_ElevateInformationHeader</name>
-        <label>Información de Elevate</label>
-    </customLabels>
-    <customLabels>
-        <name>RD2_ElevateInformationStatusSuccess</name>
-        <label>No hay errores</label>
-    </customLabels>
-    <customLabels>
         <name>RD2_ViewMoreDetails</name>
         <label>Ver más detalles</label>
     </customLabels>
     <customLabels>
         <name>RD2_ViewLessDetails</name>
         <label>Ver menos detalles</label>
-    </customLabels>
-    <customLabels>
-        <name>RD2_ElevateNotSupported</name>
-        <label>Esta función no se admite en estos momentos para Donaciones recurrentes generadas desde Servicios de pago de Elevate.</label>
-    </customLabels>
-    <customLabels>
-        <name>RD2_ElevatePendingStatus</name>
-        <label>Proceso de Elevate pendiente</label>
-    </customLabels>
-    <customLabels>
-        <name>RD2_ElevatePermissionRequired</name>
-        <label>Gestione esta donación recurrente en Elevate.</label>
-    </customLabels>
-    <customLabels>
-        <name>RD2_ElevateRDAmountMustBeValid</name>
-        <label>Introduzca un importe válido. El importe no puede ser inferior a 1.</label>
-    </customLabels>
-    <customLabels>
-        <name>RD2_ElevateRDCannotBePaused</name>
-        <label>No puede poner en pausa donaciones recurrentes conectadas de Elevate.</label>
-    </customLabels>
-    <customLabels>
-        <name>RD2_ElevateRDClosedStatusCannotBeChanged</name>
-        <label>No puede modificar el estado de una donación recurrente de Elevate conectada cuando Estado es Cerrado.</label>
-    </customLabels>
-    <customLabels>
-        <name>RD2_ElevateRDCannotBeFixedLength</name>
-        <label>Una donación recurrente conectada con Elevate no puede tener un Tipo de recurrencia como Fijo.</label>
-    </customLabels>
-    <customLabels>
-        <name>RD2_ElevateRDDayOfMonthCannotChange</name>
-        <label>No puede cambiar Día del mes para una Donación recurrente conectada con Elevate.</label>
-    </customLabels>
-    <customLabels>
-        <name>RD2_ElevateRDEffectiveDateMustBeValid</name>
-        <label>Introduzca una nueva Fecha efectiva. La Fecha efectiva para una Donación recurrente de Elevate no puede ser en el futuro.</label>
-    </customLabels>
-    <customLabels>
-        <name>RD2_ElevateRDCannotChangeElevateFields</name>
-        <label>No puede modificar los campos de donante, importe, programación o campaña en una Donación recurrente conectada de Elevate cerrada.</label>
-    </customLabels>
-    <customLabels>
-        <name>RD2_ElevateRDCampaignCannotUpdateToNull</name>
-        <label>No puede eliminar la campaña en una Donación recurrente conectada con Elevate activa. Para eliminar la campaña, cierre la Donación recurrente y cree una nueva.</label>
-    </customLabels>
-    <customLabels>
-        <name>RD2_ElevateRecordCreateFailed</name>
-        <label>No se pudo crear un pago recurrente de Elevate. Póngase en contacto con su administrador del sistema para obtener asistencia.</label>
-    </customLabels>
-    <customLabels>
-        <name>RD2_ElevateRDCancellingTitle</name>
-        <label>Se envió su solicitud de detener su donación recurrente.</label>
-    </customLabels>
-    <customLabels>
-        <name>RD2_ElevateRDCancellingMessage</name>
-        <label>Esto puede tardar algún tiempo. Actualice la página para comprobar el estado. Contáctenos si necesita ayuda.</label>
-    </customLabels>
-    <customLabels>
-        <name>RD2_ElevateRDStopDonationMessage</name>
-        <label>La organización sin ánimo de lucro no procesará donaciones futuras para esta donación recurrente.</label>
-    </customLabels>
-    <customLabels>
-        <name>RD2_NonElevateRDCancellingTitle</name>
-        <label>Se detuvo su donación recurrente.</label>
     </customLabels>
     <customLabels>
         <name>RD2_EnablementDisabledHeader</name>
@@ -1180,10 +1080,6 @@
         <label>Donaciones recurrentes mejoradas no está habilitada.</label>
     </customLabels>
     <customLabels>
-        <name>RD2_EndDateElevateCannotBeInFuture</name>
-        <label>La fecha de finalización no puede estar en el para donaciones recurrentes de Elevate conectadas.</label>
-    </customLabels>
-    <customLabels>
         <name>RD2_EntryFormCustomFieldsSectionHeader</name>
         <label>Campos personalizados</label>
     </customLabels>
@@ -1248,23 +1144,6 @@
         <label>Años</label>
     </customLabels>
     <customLabels>
-        <name>RD2_EntryFormSaveCommitmentMessage</name>
-        <label>Guardando pago recurrente de Elevate... Esta acción puede tardar unos minutos.</label>
-    </customLabels>
-    <customLabels>
-        <name>RD2_EntryFormSaveCommitmentFailedMessage</name>
-        <label>Se ha creado un pago recurrente en Elevate. Id. recurrente de Elevate: {0}.
-        
-        No obstante, no se creó una Donación recurrente equivalente en NPSP debido al siguiente error:
-        ● {1}
-        
-        Puede mantener este formulario abierto, solucionar el error y guardar la Donación recurrente de nuevo. De manera alternativa, cancele y póngase en contacto con su administrador del sistema para obtener ayuda.</label>
-    </customLabels>
-    <customLabels>
-        <name>RD2_EntryFormSaveACHMessage</name>
-        <label>Enviando información de ACH a Elevate...</label>
-    </customLabels>
-    <customLabels>
         <name>RD2_ACH_Payment_Method_Label</name>
         <label>Cuenta bancaria</label>
     </customLabels>
@@ -1317,16 +1196,8 @@
         <label>Debe activar Donaciones recurrentes mejoradas antes de que pueda ejecutar el trabajo por lotes de Donaciones recurrentes mejoradas.</label>
     </customLabels>
     <customLabels>
-        <name>RD2_ErrorRDIdIsMissingForCommitment</name>
-        <label>Se produjo un error al crear el registro Donación recurrente. No se envió ninguna solicitud de pago recurrente a Elevate. Póngase en contacto con su administrador del sistema para obtener asistencia.</label>
-    </customLabels>
-    <customLabels>
         <name>RD2_InstallmentFrequencyMustBeValid</name>
         <label>Se requiere la frecuencia de la cuota. Introduzca un valor entre 1 y 20.</label>
-    </customLabels>
-    <customLabels>
-        <name>RD2_ElevateInstallmentPeriodMustBeValid</name>
-        <label>{0} no es un Periodo de cotas admitido para Donaciones recurrentes conectadas de Elevate.</label>
     </customLabels>
     <customLabels>
         <name>RD2_InstallmentPeriodMustBeValid</name>
@@ -1614,14 +1485,6 @@
     <customLabels>
         <name>RecurringDonationNameSuffix</name>
         <label>Recurrente</label>
-    </customLabels>
-    <customLabels>
-        <name>RD_achElevatePayment</name>
-        <label>{0}, *{1}</label>
-    </customLabels>
-    <customLabels>
-        <name>RD_creditCardElevatePayment</name>
-        <label>{0}, *{1} Cad.{2}/{3}</label>
     </customLabels>
     <customLabels>
         <name>RD_firstDonation</name>
@@ -3005,10 +2868,6 @@ Para comprobar su configuración de asignaciones de CCG, vaya a Donaciones | Asi
         <label>Procesar lote y pagos</label>
     </customLabels>
     <customLabels>
-        <name>bgeEditPaymentInformation</name>
-        <label>No puede modificar este regalo conectado con Elevate hasta que vuelva a introducir la información de pago. Seleccione Modificar información del pago.</label>
-    </customLabels>
-    <customLabels>
         <name>bgeRetirementWarningBody</name>
         <label>El 13 de julio de 2021, la función heredada Entrada regalos en lote quedará retirada y dejará de funcionar en NPSP. Si tiene algún lote en curso en ese momento, podrá seguir accediendo a esos registros, pero no podrá procesarlos empleando Entrada regalos en lote. Para garantizar una transición sin problemas, active y utilice Entrada de admisión regalos antes del 13 de julio.</label>
     </customLabels>
@@ -3295,10 +3154,6 @@ Para comprobar su configuración de asignaciones de CCG, vaya a Donaciones | Asi
         <label>Modificar información del pago.</label>
     </customLabels>
     <customLabels>
-        <name>commonElevateFailedOnboarding</name>
-        <label>Se produjo un error al incorporar este cliente de Elevate</label>
-    </customLabels>
-    <customLabels>
         <name>commonError</name>
         <label>Error</label>
     </customLabels>
@@ -3365,10 +3220,6 @@ Para comprobar su configuración de asignaciones de CCG, vaya a Donaciones | Asi
     <customLabels>
         <name>commonPaymentProcessingErrors</name>
         <label>Errores de procesamiento de pago</label>
-    </customLabels>
-    <customLabels>
-        <name>commonPaymentServices</name>
-        <label>Salesforce.org Elevate</label>
     </customLabels>
     <customLabels>
         <name>commonPercent</name>
@@ -3581,14 +3432,6 @@ Para comprobar su configuración de asignaciones de CCG, vaya a Donaciones | Asi
     <customLabels>
         <name>conMergeSeeDupConDRS</name>
         <label>Ver contactos duplicados</label>
-    </customLabels>
-    <customLabels>
-        <name>elevateAdNotificationFor234Body</name>
-        <label>Con Elevate conectado con NPSP, las donaciones procedentes de sus formularios en línea fluyen automáticamente a NPSP. Elevate también procesa pagos y actualiza registros de donantes en NPSP.</label>
-    </customLabels>
-    <customLabels>
-        <name>elevateAdNotificationFor234Title</name>
-        <label>Simplificar el procesamiento de donaciones con Salesforce.org Elevate y NPSP</label>
     </customLabels>
     <customLabels>
         <name>engagementPlanCantEdit</name>
@@ -3894,10 +3737,6 @@ Si lo prefiere, puede desactivar Entrada de regalos y utilizar la herramienta En
         <label>Está actualizando en estos momentos:</label>
     </customLabels>
     <customLabels>
-        <name>geBodyPaymentNotProcessingTransaction</name>
-        <label>No está introduciendo información de pago que Elevate procesará.</label>
-    </customLabels>
-    <customLabels>
         <name>geBodyPaymentProcessedDuringBatchProcessing</name>
         <label>Se procesará el pago del donante cuando procese el lote.</label>
     </customLabels>
@@ -4024,30 +3863,6 @@ Si lo prefiere, puede desactivar Entrada de regalos y utilizar la herramienta En
     <customLabels>
         <name>geErrorBatchGiftEntryCurrencyMismatch</name>
         <label>No se puede guardar el regalo en el lote. Los regalos deben estar en la misma divisa que el lote. Cambie su divisa a {0} para guardar el regalo.</label>
-    </customLabels>
-    <customLabels>
-        <name>geErrorCardChargedBDIFailed</name>
-        <label>Elevate procesó correctamente el pago, pero NPSP no creó el registro para la transacción en Salesforce. Corrija los errores y vuelva a enviar el formulario para crear el registro de Salesforce.</label>
-    </customLabels>
-    <customLabels>
-        <name>geElevateDeleteErrorLog</name>
-        <label>Regalo eliminado de {0}, pero Entrada de regalos no puede eliminar el regalo. Elimine el registro Importación de datos de NPSP del regalo con el Id.: {1} del lote con el Id. {2} en Lotes de importación de datos de NPSP.</label>
-    </customLabels>
-    <customLabels>
-        <name>geElevateUpdateErrorLog</name>
-        <label>Regalo actualizado de {0}, pero Entrada de regalos no puede actualizar el regalo. Actualice el registro Importación de datos de NPSP del regalo con el Id.: {1} del lote con el Id. {2} en Lotes de importación de datos de NPSP.</label>
-    </customLabels>
-    <customLabels>
-        <name>geErrorElevateDelete</name>
-        <label>No se puede eliminar el regalo en {0}. No recomendamos procesar este lote, ya que el pago de este regalo aún puede realizarse. Actualice e intente eliminar de nuevo.</label>
-    </customLabels>
-    <customLabels>
-        <name>geErrorElevateUpdate</name>
-        <label>No se puede actualizar regalo en {0}. Actualice e intente actualizar el regalo de nuevo.</label>
-    </customLabels>
-    <customLabels>
-        <name>geErrorRecordFailAfterElevateDelete</name>
-        <label>Regalo eliminado de {0}, pero Entrada de regalos no puede eliminar el regalo. Póngase en contacto con su administrador de Salesforce para obtener ayuda.</label>
     </customLabels>
     <customLabels>
         <name>geDonorColumnLabel</name>
@@ -4718,10 +4533,6 @@ Si lo prefiere, puede desactivar Entrada de regalos y utilizar la herramienta En
         <label>Modificar información de lote</label>
     </customLabels>
     <customLabels>
-        <name>geElevateWidgetPaymentServiceUnavailable</name>
-        <label>Desconectado de {0}. Procesamiento de pago no disponible.</label>
-    </customLabels>
-    <customLabels>
         <name>geErrorExistingTemplateName</name>
         <label>Este nombre lo está utilizando otra plantilla. Introduzca un nombre exclusivo.</label>
     </customLabels>
@@ -4990,10 +4801,6 @@ Si lo prefiere, puede desactivar Entrada de regalos y utilizar la herramienta En
         <label>Nota: Este paquete de campos solo está disponible para regalos aislados y no se mostrará cuando se introduzcan lotes de regalos.</label>
     </customLabels>
     <customLabels>
-        <name>geTextFieldBundlePaymentMethod</name>
-        <label>El paquete de campos de Salesforce.org Elevate incluye campos para introducir información de pago. Permita que los usuarios cambien tipos de pagos agregando Método de pago desde el objeto Pago al formulario antes de este paquete de campos.</label>
-    </customLabels>
-    <customLabels>
         <name>geJWTUtilInvalidBase64Message</name>
         <label>El formato base64 no es válido. El número de caracteres debe ser un múltiplo de 4 y solo puede contener estos caracteres: [a-z A-Z 0-9 + / =]</label>
     </customLabels>
@@ -5017,10 +4824,6 @@ Si lo prefiere, puede desactivar Entrada de regalos y utilizar la herramienta En
     <customLabels>
         <name>gePaymentAuthExpiredHeader</name>
         <label>Autorización de pago caducada</label>
-    </customLabels>
-    <customLabels>
-        <name>gePaymentAuthExpiredWarningText</name>
-        <label>Una o más autorizaciones de tarjeta caducaron. Para garantizar que estos pagos se carguen cuando se procese el lote, vuelva a introducir la información de pago para donaciones con un Estado de pago de Elevate de Autorización caducada.</label>
     </customLabels>
     <customLabels>
         <name>gePaymentProcessError</name>
@@ -5071,10 +4874,6 @@ Si lo prefiere, puede desactivar Entrada de regalos y utilizar la herramienta En
     <customLabels>
         <name>gePaymentRequestTimedOut</name>
         <label>Se agotó el tiempo de espera de la solicitud. Inténtelo de nuevo o póngase en contacto con su administrador de Salesforce.</label>
-    </customLabels>
-    <customLabels>
-        <name>gePS_IntegrationTestInvalidAPIKey</name>
-        <label>Se ha proporcionado una clave de API no válida para este cliente de Elevate</label>
     </customLabels>
     <customLabels>
         <name>gePS_IntegrationTestInvalidConfigParams</name>
@@ -6221,20 +6020,12 @@ Si lo prefiere, puede desactivar Entrada de regalos y utilizar la herramienta En
         <label>Donaciones de la organización</label>
     </customLabels>
     <customLabels>
-        <name>pmtElevatePermissionRequired</name>
-        <label>Gestione este pago en Elevate.</label>
-    </customLabels>
-    <customLabels>
         <name>pmtModifyCurrency</name>
         <label>No se pueden modificar las divisas de pago directamente. Actualice la divisa de la oportunidad principal y NPSP actualizará automáticamente la divisa de todos los registros de pago relacionados.</label>
     </customLabels>
     <customLabels>
         <name>pmtNoRefundPermissionMessage</name>
         <label>No tiene permiso para reembolsar pagos. Póngase en contacto con su administrador de Salesforce para obtener ayuda.</label>
-    </customLabels>
-    <customLabels>
-        <name>pmtOriginalPaymentNotCompleted</name>
-        <label>No se puede reembolsar el pago porque Elevate no ha procesado aún el pago.</label>
     </customLabels>
     <customLabels>
         <name>pmtOriginalPaymentNotPaid</name>
@@ -6247,10 +6038,6 @@ Si lo prefiere, puede desactivar Entrada de regalos y utilizar la herramienta En
     <customLabels>
         <name>pmtPaidPaymentDateRequired</name>
         <label>Un pago realizado debe tener una fecha de pago.</label>
-    </customLabels>
-    <customLabels>
-        <name>pmtPaymentNotFound</name>
-        <label>No se pudo encontrar el registro del pago de Elevate correspondiente. Póngase en contacto con su administrador de Salesforce para obtener ayuda.</label>
     </customLabels>
     <customLabels>
         <name>pmtPaymentNotRefundable</name>
@@ -6469,28 +6256,12 @@ Si lo prefiere, puede desactivar Entrada de regalos y utilizar la herramienta En
         <label>ACH (cuenta bancaria)</label>
     </customLabels>
     <customLabels>
-        <name>psElevateConnectionTimeout</name>
-        <label>Se agotó el tiempo de espera de la conexión con Elevate. Inténtelo de nuevo más tarde.</label>
-    </customLabels>
-    <customLabels>
         <name>psGatewayDefault</name>
         <label>Utilizar siempre la pasarela predeterminada</label>
     </customLabels>
     <customLabels>
-        <name>psGatewaySelectionLabel</name>
-        <label>NPSP utiliza la pasarela que se agregó a Elevate más recientemente a no ser que la sustituya. Para establecer una pasarela de pago predeterminada de Elevate, selecciónela aquí.</label>
-    </customLabels>
-    <customLabels>
-        <name>psGatewaysNotFound</name>
-        <label>No se encontraron Pasarelas de pago. Compruebe su cuenta de Elevate.</label>
-    </customLabels>
-    <customLabels>
         <name>psGatewayNotValid</name>
         <label>No podemos validar la pasarela guardada anteriormente. Seleccione una pasarela diferente.</label>
-    </customLabels>
-    <customLabels>
-        <name>psHideGatewaysAndMethods</name>
-        <label>Ocultar pasarelas y métodos de pago de Elevate</label>
     </customLabels>
     <customLabels>
         <name>psHidePaymentMethods</name>
@@ -6513,10 +6284,6 @@ Si lo prefiere, puede desactivar Entrada de regalos y utilizar la herramienta En
         <label>Para introducir el pago, seleccione un Método de pago válido.</label>
     </customLabels>
     <customLabels>
-        <name>psShowGatewaysAndMethods</name>
-        <label>Mostrar pasarelas y métodos de pago de Elevate</label>
-    </customLabels>
-    <customLabels>
         <name>psEnableGatewayAssignment</name>
         <label>Activar asignación de pasarela</label>
     </customLabels>
@@ -6529,24 +6296,12 @@ Si lo prefiere, puede desactivar Entrada de regalos y utilizar la herramienta En
         <label>La activación de una asignación de pasarela le permite seleccionar la pasarela de pago y los métodos de pago respectivos al modificar Plantillas de entrada de regalos.</label>
     </customLabels>
     <customLabels>
-        <name>psGatewayManagementHelp</name>
-        <label>Estos parámetros gestionan las pasarelas de pago para las transacciones de Elevate.</label>
-    </customLabels>
-    <customLabels>
         <name>psGatewayIDHeader</name>
         <label>Id. de Pasarela</label>
     </customLabels>
     <customLabels>
-        <name>psGatewayIDHelp</name>
-        <label>NPSP utiliza la pasarela que se agregó a Elevate más recientemente a no ser que la sustituya. Para cambiar la pasarela que utiliza NPSP, haga clic en Modificar, introduzca el Id. de pasarela y guarde su trabajo. Encontrará el Id. de la pasarela en la Consola de administrador de Elevate | Gestión de pasarela.</label>
-    </customLabels>
-    <customLabels>
         <name>psShowPaymentMethods</name>
         <label>Mostrar métodos de pago</label>
-    </customLabels>
-    <customLabels>
-        <name>psUnableToConnect</name>
-        <label>No se puede conectar con Elevate. Compruebe su conexión e inténtelo de nuevo.</label>
     </customLabels>
     <customLabels>
         <name>ProgressMarkerAssistiveTextProgress</name>

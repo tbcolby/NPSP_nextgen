@@ -1,50 +1,42 @@
-import {LightningElement, wire} from 'lwc';
-import isSysAdmin from '@salesforce/apex/BDI_BatchNumberSettingsController.isSysAdmin';
-import save from '@salesforce/apex/BDI_BatchNumberSettingsController.save';
-import activate from '@salesforce/apex/BDI_BatchNumberSettingsController.activate';
-import deactivate from '@salesforce/apex/BDI_BatchNumberSettingsController.deactivate';
-import getAutoNumbers from '@salesforce/apex/BDI_BatchNumberSettingsController.getAutoNumbers';
-import getFieldDescribes from '@salesforce/apex/BDI_BatchNumberSettingsController.getFieldDescribes';
+import { LightningElement, wire } from "lwc";
+import isSysAdmin from "@salesforce/apex/BDI_BatchNumberSettingsController.isSysAdmin";
+import save from "@salesforce/apex/BDI_BatchNumberSettingsController.save";
+import activate from "@salesforce/apex/BDI_BatchNumberSettingsController.activate";
+import deactivate from "@salesforce/apex/BDI_BatchNumberSettingsController.deactivate";
+import getAutoNumbers from "@salesforce/apex/BDI_BatchNumberSettingsController.getAutoNumbers";
+import getFieldDescribes from "@salesforce/apex/BDI_BatchNumberSettingsController.getFieldDescribes";
 
-import DataImportBatch from '@salesforce/schema/DataImportBatch__c';
-import Batch_Number from '@salesforce/schema/DataImportBatch__c.Batch_Number__c';
+import DataImportBatch from "@salesforce/schema/DataImportBatch__c";
+import Batch_Number from "@salesforce/schema/DataImportBatch__c.Batch_Number__c";
 
-import Description from '@salesforce/schema/AutoNumber__c.Description__c';
-import Display_Format from '@salesforce/schema/AutoNumber__c.Display_Format__c';
-import Field_API_Name from '@salesforce/schema/AutoNumber__c.Field_API_Name__c';
-import IsActive from '@salesforce/schema/AutoNumber__c.IsActive__c';
-import Max_Used_Number from '@salesforce/schema/AutoNumber__c.Max_Used_Number__c';
-import Object_API_Name from '@salesforce/schema/AutoNumber__c.Object_API_Name__c';
-import Starting_Number from '@salesforce/schema/AutoNumber__c.Starting_Number__c';
+import Description from "@salesforce/schema/AutoNumber__c.Description__c";
+import Display_Format from "@salesforce/schema/AutoNumber__c.Display_Format__c";
+import Field_API_Name from "@salesforce/schema/AutoNumber__c.Field_API_Name__c";
+import IsActive from "@salesforce/schema/AutoNumber__c.IsActive__c";
+import Max_Used_Number from "@salesforce/schema/AutoNumber__c.Max_Used_Number__c";
+import Object_API_Name from "@salesforce/schema/AutoNumber__c.Object_API_Name__c";
+import Starting_Number from "@salesforce/schema/AutoNumber__c.Starting_Number__c";
 
-import autoNumberErrorInvalidDisplayFormat
-    from '@salesforce/label/c.autoNumberErrorInvalidDisplayFormat';
-import batchNumberSettingsActivate from '@salesforce/label/c.batchNumberSettingsActivate';
-import batchNumberSettingsConfigureHeader
-    from '@salesforce/label/c.batchNumberSettingsConfigureHeader';
-import batchNumberSettingsDescActivation
-    from '@salesforce/label/c.batchNumberSettingsDescActivation';
-import batchNumberSettingsDescDisplayFormat
-    from '@salesforce/label/c.batchNumberSettingsDescDisplayFormat';
-import batchNumberSettingsDescription
-    from '@salesforce/label/c.batchNumberSettingsDescription';
-import batchNumberSettingsDescriptionCreate
-    from '@salesforce/label/c.batchNumberSettingsDescriptionCreate';
-import batchNumberSettingsError from '@salesforce/label/c.batchNumberSettingsError';
-import batchNumberSettingsHeader from '@salesforce/label/c.batchNumberSettingsHeader';
-import batchNumberSettingsHeaderDisplayFormat
-    from '@salesforce/label/c.batchNumberSettingsHeaderDisplayFormat';
-import batchNumberSettingsHeaderFormats
-    from '@salesforce/label/c.batchNumberSettingsHeaderFormats';
-import commonActivate from '@salesforce/label/c.commonActivate';
-import commonDeactivate from '@salesforce/label/c.commonDeactivate';
-import commonSave from '@salesforce/label/c.commonSave';
+import autoNumberErrorInvalidDisplayFormat from "@salesforce/label/c.autoNumberErrorInvalidDisplayFormat";
+import batchNumberSettingsActivate from "@salesforce/label/c.batchNumberSettingsActivate";
+import batchNumberSettingsConfigureHeader from "@salesforce/label/c.batchNumberSettingsConfigureHeader";
+import batchNumberSettingsDescActivation from "@salesforce/label/c.batchNumberSettingsDescActivation";
+import batchNumberSettingsDescDisplayFormat from "@salesforce/label/c.batchNumberSettingsDescDisplayFormat";
+import batchNumberSettingsDescription from "@salesforce/label/c.batchNumberSettingsDescription";
+import batchNumberSettingsDescriptionCreate from "@salesforce/label/c.batchNumberSettingsDescriptionCreate";
+import batchNumberSettingsError from "@salesforce/label/c.batchNumberSettingsError";
+import batchNumberSettingsHeader from "@salesforce/label/c.batchNumberSettingsHeader";
+import batchNumberSettingsHeaderDisplayFormat from "@salesforce/label/c.batchNumberSettingsHeaderDisplayFormat";
+import batchNumberSettingsHeaderFormats from "@salesforce/label/c.batchNumberSettingsHeaderFormats";
+import commonActivate from "@salesforce/label/c.commonActivate";
+import commonDeactivate from "@salesforce/label/c.commonDeactivate";
+import commonSave from "@salesforce/label/c.commonSave";
 
 const COLUMNS = [
-    {fieldName: Display_Format.fieldApiName},
-    {fieldName: IsActive.fieldApiName, type: 'boolean'},
-    {fieldName: Description.fieldApiName, type: 'text'},
-    {fieldName: Max_Used_Number.fieldApiName, type: 'text'},
+    { fieldName: Display_Format.fieldApiName },
+    { fieldName: IsActive.fieldApiName, type: "boolean" },
+    { fieldName: Description.fieldApiName, type: "text" },
+    { fieldName: Max_Used_Number.fieldApiName, type: "text" },
 ];
 
 export default class bdiBatchNumberSettings extends LightningElement {
@@ -86,37 +78,35 @@ export default class bdiBatchNumberSettings extends LightningElement {
         header: batchNumberSettingsHeader,
         headerConfigure: batchNumberSettingsConfigureHeader,
         headerDisplayFormat: batchNumberSettingsHeaderDisplayFormat,
-        headerFormats: batchNumberSettingsHeaderFormats
-    }
+        headerFormats: batchNumberSettingsHeaderFormats,
+    };
 
     fieldDescribes;
     @wire(getFieldDescribes)
-    wiredFieldDescribes({error, data}) {
+    wiredFieldDescribes({ error, data }) {
         if (data) {
             this.fieldDescribes = JSON.parse(data);
-            this.columns =
-                this.getColumnsWithFieldLabels(COLUMNS, this.fieldDescribes)
-                    .concat(this.actionsColumn);
+            this.columns = this.getColumnsWithFieldLabels(COLUMNS, this.fieldDescribes).concat(this.actionsColumn);
         } else if (error) {
             this.error = error;
         }
     }
 
     get actionsColumn() {
-        return [{type: 'action', typeAttributes: {rowActions: this.getRowActions}}];
+        return [{ type: "action", typeAttributes: { rowActions: this.getRowActions } }];
     }
 
     getRowActions(row, doneCallback) {
         const actions = [];
         if (row[IsActive.fieldApiName]) {
             actions.push({
-                'label': commonDeactivate,
-                'name': 'deactivate'
+                label: commonDeactivate,
+                name: "deactivate",
             });
         } else {
             actions.push({
-                'label': commonActivate,
-                'name': 'activate'
+                label: commonActivate,
+                name: "activate",
             });
         }
         doneCallback(actions);
@@ -124,21 +114,21 @@ export default class bdiBatchNumberSettings extends LightningElement {
 
     getColumnsWithFieldLabels = (columns, fields) => {
         let columnsWithFieldLabelsApplied = JSON.parse(JSON.stringify(columns));
-        columnsWithFieldLabelsApplied.forEach(column => {
+        columnsWithFieldLabelsApplied.forEach((column) => {
             if (fields[column.fieldName]) {
                 column.label = fields[column.fieldName].label;
             }
         });
         return columnsWithFieldLabelsApplied;
-    }
+    };
 
     permissionEnabled;
     async connectedCallback() {
         await isSysAdmin()
-            .then(response => {
+            .then((response) => {
                 this.permissionEnabled = response;
             })
-            .catch(error => this.error = error);
+            .catch((error) => (this.error = error));
 
         if (this.permissionEnabled) {
             this.fetchAutoNumbers();
@@ -149,26 +139,26 @@ export default class bdiBatchNumberSettings extends LightningElement {
     fetchAutoNumbers() {
         this.isLoading = true;
         getAutoNumbers()
-            .then(response => {
+            .then((response) => {
                 this.isLoading = false;
                 this.autoNumberRecords = response;
             })
-            .catch(error => this.error = error);
+            .catch((error) => (this.error = error));
     }
 
     handleRowAction(event) {
         const actionName = event.detail.action.name;
         const row = event.detail.row;
         switch (actionName) {
-            case 'activate':
-                activate({autoNumberId: row['Id']})
+            case "activate":
+                activate({ autoNumberId: row["Id"] })
                     .then(() => this.fetchAutoNumbers())
-                    .catch(error => this.error = error);
+                    .catch((error) => (this.error = error));
                 break;
-            case 'deactivate':
-                deactivate({autoNumberId: row['Id']})
+            case "deactivate":
+                deactivate({ autoNumberId: row["Id"] })
                     .then(() => this.fetchAutoNumbers())
-                    .catch(error => this.error = error);
+                    .catch((error) => (this.error = error));
                 break;
         }
     }
@@ -182,7 +172,7 @@ export default class bdiBatchNumberSettings extends LightningElement {
     async save() {
         this.isLoading = true;
         try {
-            const autoNumber = await save({autoNumber: JSON.stringify({fields: this.fields})});
+            const autoNumber = await save({ autoNumber: JSON.stringify({ fields: this.fields }) });
             return autoNumber;
         } catch (err) {
             this.error = err;
@@ -202,7 +192,7 @@ export default class bdiBatchNumberSettings extends LightningElement {
     async activate(autoNumberId) {
         this.isLoading = true;
         try {
-            await activate({autoNumberId: autoNumberId});
+            await activate({ autoNumberId: autoNumberId });
         } catch (err) {
             this.error = err;
         } finally {
@@ -216,16 +206,16 @@ export default class bdiBatchNumberSettings extends LightningElement {
             [Field_API_Name.fieldApiName]: Batch_Number.fieldApiName,
             [Starting_Number.fieldApiName]: this.startingNumber,
             [Display_Format.fieldApiName]: this.displayFormat,
-            [Description.fieldApiName]: this.description
-        }
+            [Description.fieldApiName]: this.description,
+        };
     }
 
     get errorMessage() {
-        return this.error ? this.labels.error + ' ' + this.errorDetails : null;
+        return this.error ? this.labels.error + " " + this.errorDetails : null;
     }
 
     get errorDetails() {
-        return this.error ? this.error.body.message : '';
+        return this.error ? this.error.body.message : "";
     }
 
     handleStartingNumberChange(event) {
@@ -240,17 +230,15 @@ export default class bdiBatchNumberSettings extends LightningElement {
         if (!this.isValidDisplayFormat(event.target.value)) {
             event.target.setCustomValidity(this.labels.errorInvalidDisplayFormat);
         } else {
-            event.target.setCustomValidity('');
+            event.target.setCustomValidity("");
         }
         event.target.reportValidity();
     }
 
     isValidDisplayFormat(value) {
-        const re = '.*\\{0+\\}';
+        const re = ".*\\{0+\\}";
         const regex = RegExp(re);
-        return regex.test(value) &&
-            value.match(/{/g).length === 1 &&
-            value.match(/}/g).length === 1;
+        return regex.test(value) && value.match(/{/g).length === 1 && value.match(/}/g).length === 1;
     }
 
     handleDisplayFormatChange(event) {
@@ -258,7 +246,7 @@ export default class bdiBatchNumberSettings extends LightningElement {
     }
 
     get displayNumberPlaceholder() {
-        return '{000000} or BTC-{000000}';
+        return "{000000} or BTC-{000000}";
     }
 
     // ================================================================================
@@ -290,27 +278,27 @@ export default class bdiBatchNumberSettings extends LightningElement {
     }
 
     get labelDisplayFormat() {
-        return this.fieldDescribes ? this.fieldDescribes[Display_Format.fieldApiName].label : '';
+        return this.fieldDescribes ? this.fieldDescribes[Display_Format.fieldApiName].label : "";
     }
 
     get inlineHelpTextDisplayFormat() {
-        return this.fieldDescribes ? this.fieldDescribes[Display_Format.fieldApiName].inlineHelpText : '';
+        return this.fieldDescribes ? this.fieldDescribes[Display_Format.fieldApiName].inlineHelpText : "";
     }
 
     get labelStartingNumber() {
-        return this.fieldDescribes ? this.fieldDescribes[Starting_Number.fieldApiName].label : '';
+        return this.fieldDescribes ? this.fieldDescribes[Starting_Number.fieldApiName].label : "";
     }
 
     get inlineHelpTextStartingNumber() {
-        return this.fieldDescribes ? this.fieldDescribes[Starting_Number.fieldApiName].inlineHelpText : '';
+        return this.fieldDescribes ? this.fieldDescribes[Starting_Number.fieldApiName].inlineHelpText : "";
     }
 
     get labelDescription() {
-        return this.fieldDescribes ? this.fieldDescribes[Description.fieldApiName].label : '';
+        return this.fieldDescribes ? this.fieldDescribes[Description.fieldApiName].label : "";
     }
 
     get inlineHelpTextDescription() {
-        return this.fieldDescribes ? this.fieldDescribes[Description.fieldApiName].inlineHelpText : '';
+        return this.fieldDescribes ? this.fieldDescribes[Description.fieldApiName].inlineHelpText : "";
     }
 
     reset() {
@@ -321,15 +309,14 @@ export default class bdiBatchNumberSettings extends LightningElement {
     }
 
     displayErrorOnInputs(errorMessage) {
-        const inputs = this.template.querySelectorAll('lightning-input');
-        inputs.forEach(input => {
+        const inputs = this.template.querySelectorAll("lightning-input");
+        inputs.forEach((input) => {
             if (errorMessage.includes(input.name) || errorMessage.includes(input.label)) {
                 input.setCustomValidity(errorMessage);
                 input.reportValidity();
             } else {
-                input.setCustomValidity('');
+                input.setCustomValidity("");
             }
-        })
+        });
     }
-
 }

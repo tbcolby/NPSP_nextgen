@@ -66,23 +66,6 @@
               ],
               "customLabel": "Existing Donor Contact",
               "componentName": null
-            },
-            {
-              "validationRule": null,
-              "sectionId": "06050356-7463-fba6-27f5-7423ebf2b6c5",
-              "required": false,
-              "objectApiName": null,
-              "label": "Salesforce.org Elevate",
-              "id": "2da59f08-d342-de14-a74f-3737fb06cb04",
-              "fieldApiName": null,
-              "elementType": "widget",
-              "displayRule": null,
-              "defaultValue": null,
-              "dataType": null,
-              "dataImportObjectMappingDevName": null,
-              "dataImportFieldMappingDevNames": [],
-              "customLabel": "Salesforce.org Elevate",
-              "componentName": "geFormWidgetTokenizeCard"
             }
           ],
           "displayType": "accordion",

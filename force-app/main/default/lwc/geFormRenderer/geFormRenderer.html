@@ -23,34 +23,6 @@
                 </lightning-layout-item>
             </template>
 
-            <template if:true={hasPurchaseCallTimedout}>
-                <lightning-layout-item size='12'
-                                       class='slds-card slds-p-around_small'>
-                    <div class="illustration-container fade-in">
-                        <c-util-illustration title={CUSTOM_LABELS.commonCriticalError}
-                                             size='large'
-                                             variant='going-camping'>
-                            <div slot='body'
-                                 class='critical-error-container'>
-                                <p slot='body'
-                                   class='slds-text-body_regular critical-error-text'>
-                                    {CUSTOM_LABELS.geErrorUncertainCardChargePart1}
-                                </p>
-                                <ul class="slds-list_dotted critical-error-ul">
-                                    <li>{CUSTOM_LABELS.geErrorUncertainCardChargePart2}</li>
-                                    <li>{CUSTOM_LABELS.geErrorUncertainCardChargePart3}</li>
-                                </ul>
-                                <p slot='body'
-                                   class='slds-text-body_regular critical-error-text'>
-                                    {CUSTOM_LABELS.geErrorUncertainCardChargePart4}
-                                </p>
-                            </div>
-                        </c-util-illustration>
-                    </div>
-                </lightning-layout-item>
-            </template>
-
-            <template if:false={hasPurchaseCallTimedout}>
                 <template if:false={isPermissionError}>
                     <lightning-layout-item size='12'>
                         <c-ge-review-donations ontogglemodal={toggleModal}
@@ -129,12 +101,6 @@
                         <lightning-layout multiple-rows='true'
                                           horizontal-align='center'
                                           if:false={isPermissionError}>
-                            <lightning-layout-item size='12'
-                                                   if:true={isWidgetEnabled}>
-                                <p class='slds-align_absolute-center slds-p-top_small'>
-                                    {CUSTOM_LABELS.geTextPaymentsSaveNotice}
-                                </p>
-                            </lightning-layout-item>
                             <lightning-layout-item size='12'>
                                 <div class='slds-align_absolute-center slds-p-vertical_small'>
                                     <lightning-button label={cancelButtonText}
@@ -156,22 +122,7 @@
                     </template>
                     <template if:false={isSingleGiftEntry}>
                         <lightning-layout>
-                            <lightning-layout-item size="10">
-                                <template if:true={shouldShowElevateTransactionWarning}>
-                                    <div class="slds-notify_alert payment-warn" role="alert">
-                                        <span class="slds-assistive-text">{CUSTOM_LABELS.commonWarning}</span>
-                                        <span class="slds-icon_container slds-m-right_x-small">
-                                            <lightning-icon
-                                                    variant="warning"
-                                                    icon-name="utility:warning"
-                                                    size="small">
-                                            </lightning-icon>
-                                        </span>
-                                        <div class="slds-text-heading_small" data-id="elevateTrnxWarning">{elevateTransactionWarning}</div>
-                                    </div>
-                                </template>
-                            </lightning-layout-item>
-                            <lightning-layout-item class="slds-text-align_right" size="2">
+                            <lightning-layout-item class="slds-text-align_right" size="12">
                                 <template if:false={hasSchedule}>
                                     <lightning-button
                                         if:true={isRecurringGiftsEnabled}
@@ -225,12 +176,6 @@
                             <lightning-layout multiple-rows='true'
                                               horizontal-align='center'
                                               if:false={isPermissionError}>
-                                <lightning-layout-item size='12'
-                                                       if:true={isWidgetEnabled}>
-                                    <p class='slds-align_absolute-center slds-p-top_small'>
-                                        {CUSTOM_LABELS.geTextPaymentsSaveNotice}
-                                    </p>
-                                </lightning-layout-item>
                                 <lightning-layout-item size='12'>
                                     <div class='slds-align_absolute-center slds-p-vertical_small'>
                                         <lightning-button label={cancelButtonText}
@@ -256,7 +201,6 @@
 
 
                 </lightning-layout-item>
-            </template>
         </lightning-layout>
     </template>
 </template>

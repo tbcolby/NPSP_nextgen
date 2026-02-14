@@ -37,9 +37,7 @@
 */
 public with sharing class GE_GiftEntryController {
 
-    public static final String PURCHASE_CALL_TIMEOUT_MESSAGE = System.Label.geErrorRequestTimedout;
     private static final String BOOLEAN_DATA_TYPE = 'BOOLEAN';
-    public static final String ENCRYPTION_ALGORITHM = 'AES128';
 
     @TestVisible
     private static GiftBatchService giftBatchService {
@@ -71,34 +69,12 @@ public with sharing class GE_GiftEntryController {
         set;
     }
 
-    @TestVisible
-    private static ElevateBatchService elevateBatchService {
-        get {
-            if (elevateBatchService == null) {
-                elevateBatchService = new ElevateBatchService();
-            }
-            return elevateBatchService;
-        }
-        set;
-    }
-
     private static GE_SettingsService geSettingsService {
         get {
             if (geSettingsService == null) {
                 geSettingsService = new GE_SettingsService();
             }
             return geSettingsService;
-        }
-        set;
-    }
-
-    @TestVisible
-    private static PS_GatewayService gatewayService {
-        get {
-            if (gatewayService == null) {
-                gatewayService = new PS_GatewayService();
-            }
-            return gatewayService;
         }
         set;
     }
@@ -212,19 +188,6 @@ public with sharing class GE_GiftEntryController {
         }
     }
 
-    /*******************************************************************************************************
-    * @description Indicates if the org is connected to Elevate
-    * @return Boolean
-    */
-    @AuraEnabled(cacheable=true)
-    public static Boolean isElevateCustomer() {
-        try {
-            return new GE_PaymentServices().isElevateCustomer();
-        } catch (Exception ex) {
-            throw new AuraHandledException(ex.getMessage());
-        }
-    }
-
     @AuraEnabled(cacheable=true)
     public static Boolean isRecurringGiftsEnabled() {
         try {
@@ -244,87 +207,6 @@ public with sharing class GE_GiftEntryController {
     }
 
     /*******************************************************************************************************
-    * @description Creates and posts an elevate purchase request
-    *
-    * @param requestBodyParameters: JSON containing parameters for the purchase call request body
-    * @param dataImportRecordId: Record ID of the related Data Import
-    *
-    * @return String: http response wrapper
-    */
-    @AuraEnabled
-    public static String sendPurchaseRequest(String requestBodyParameters, String dataImportRecordId) {
-        UTIL_Http.Response response = processPurchaseRequest(requestBodyParameters, dataImportRecordId);
-
-        return response.body;
-    }
-
-    /***
-    * @description Sends the purchase request to Elevate and logs an error on a timeout error.
-    * This method is used in tests instead of the sendPurchaseRequest() in order to skip JSON.deserialize(response)
-    * due to it erroring out because the response header contains the Object data type.
-    * @param requestBodyParameters: JSON containing parameters for the purchase call request body
-    * @param dataImportRecordId: Record ID of the related Data Import
-    * @return UTIL_Http.Response
-    */
-    @TestVisible
-    private static UTIL_Http.Response processPurchaseRequest(String requestBodyParameters, String dataImportRecordId) {
-        UTIL_Http.Response response = new UTIL_Http.Response();
-
-        try {
-            GE_PaymentServices paymentServices = new GE_PaymentServices();
-            response = paymentServices.createTransaction(requestBodyParameters);
-
-            if (response.statusCode == UTIL_Http.STATUS_CODE_REQUEST_TIMEOUT) {
-                processPurchaseTimeoutResponse(response, dataImportRecordId);
-            }            
-
-        } catch (Exception ex) {
-            String JSONExceptionData = ERR_ExceptionData.createExceptionWrapperJSONString(ex);
-            throw buildDmlException(JSONExceptionData);
-        } 
-
-        return response;
-    }
-
-    /*******************************************************************************************************
-    * @description Updates the timeout response so it can be read by the GE forms.
-    * The status code stays the same (408), however the status is changed to contain the error message
-    * and the response body is changed to contain a generic GE request timed out message.
-    * @param response: timeout response
-    * @param dataImportRecordId: Record ID of the related Data Import to include in our error logs
-    * @return void
-    */
-    private static void processPurchaseTimeoutResponse(UTIL_Http.Response response, String dataImportRecordId) {   
-        response.body = JSON.serialize(new Map<String, String> {
-            'message' => PURCHASE_CALL_TIMEOUT_MESSAGE,
-            'statusCode' => String.valueOf(response.statusCode),
-            'status' => response.getErrorMessages()
-        });
-        logTimeoutError(dataImportRecordId);
-    }
-
-    /*******************************************************************************************************
-    * @description Logs an error when the purchase request timed out
-    * @param dataImportRecordId: Record ID of the related Data Import to include in our error logs
-    * @return void
-    */
-    private static void logTimeoutError(String dataImportRecordId) {
-        String objectAndRecordId = String.format(
-            System.Label.stgErrorInvalidNameFormat,
-            new String[] {
-                Schema.SObjectType.DataImport__c.getLabel(),
-                dataImportRecordId
-            }
-        );
-
-        String errorMsg = PURCHASE_CALL_TIMEOUT_MESSAGE + ' ' + objectAndRecordId;
-        BDIException ex = new BDIException(errorMsg);
-        ex.setMessage(errorMsg);
-
-        ERR_Handler.processError(ex, ERR_Handler_API.Context.GE);
-    }
-
-    /*******************************************************************************************************
     * @description Creates an DmlException with the specified error message
     *
     * @param errorMsg contents of the exception error message
@@ -335,42 +217,6 @@ public with sharing class GE_GiftEntryController {
         DmlException ex = new DmlException(errorMsg);
         ex.setMessage(errorMsg);
         return ex;
-    }
-
-    @AuraEnabled
-    public static ElevateBatchItem addToElevateBatch(ElevateCreateBatchItemRequestDTO batchItemRequestDTO,
-                                                     String elevateBatchId) {
-        ElevateBatchItem batchItem;
-        try {
-            batchItem = elevateBatchService.addToElevateBatch(batchItemRequestDTO, elevateBatchId);
-        } catch (AuraHandledException ex) {
-          UTIL_AuraEnabledCommon.throwAuraHandledException(ex.getMessage());
-        }
-
-        return batchItem;
-    }
-
-    @AuraEnabled
-    public static void removeFromElevateBatch(ElevateBatchItem batchItem) {
-        try {
-           elevateBatchService.removeFromElevateBatch(batchItem);
-        } catch (AuraHandledException ex) {
-          UTIL_AuraEnabledCommon.throwAuraHandledException(ex.getMessage());
-        }
-    }
-
-    @AuraEnabled
-    public static ElevateBatch createElevateBatch() {
-        ElevateBatch elevateBatch = elevateBatchService.createElevateBatch();
-        return elevateBatch;
-    }
-
-    @AuraEnabled
-    public static void validateAuthorizedGiftEdit(DataImport__c dataImport){
-        Gift editedGift = new Gift(dataImport);
-        if (editedGift.requiresReauthorizationBeforeChange()) { 
-            throw new AuraHandledException(Label.geErrorBatchGiftEntryReauthRequired);
-        }
     }
 
     @AuraEnabled
@@ -521,8 +367,7 @@ public with sharing class GE_GiftEntryController {
                 'npe01__Scheduled_Date__c, ' +
                 'npe01__Opportunity__r.Name, ' +
                 'npe01__Opportunity__c, ' +
-                'npe01__Payment_Amount__c, ' +
-                'Elevate_Payment_API_Status__c ' +
+                'npe01__Payment_Amount__c ' +
                 'FROM npe01__OppPayment__c ' +
                 'WHERE npe01__Opportunity__r.' + relationshipField + ' = :donorId ' +
                 'AND npe01__Written_Off__c = false ' +
@@ -552,8 +397,7 @@ public with sharing class GE_GiftEntryController {
                     'npe01__Payment_Amount__c,' +
                     'npe01__Payment_Date__c,' +
                     'npe01__Paid__c, ' +
-                    'npe01__Written_Off__c, ' +
-                    'Elevate_Payment_API_Status__c ' +
+                    'npe01__Written_Off__c ' +
                     'FROM npe01__OppPayment__r ' +
                     'WHERE npe01__Written_Off__c = false ' +
                     'AND npe01__Paid__c = false)' +
@@ -977,82 +821,7 @@ public with sharing class GE_GiftEntryController {
             formTemplates.add(deserializedFormTemplate);
         }
 
-        if (!getGiftEntrySettings().Enable_Gateway_Assignment__c) {
-            return formTemplates;
-        }
-
-        return getMappedGateways(formTemplates);
-    }
-
-    private static GE_Template.Template[] getMappedGateways(GE_Template.Template[] formTemplates) {
-        List<PS_GatewayService.GatewayTemplateSetting> gatewayTemplateSettings = getGatewayTemplateSettings();
-        Map<String, String> gatewayNameById = getGatewayNameById(gatewayTemplateSettings);
-
-        String defaultGatewayId = new PS_IntegrationServiceConfig.Service().getGatewayIds();
-        for (GE_Template.Template formTemplate : formTemplates) {
-            if (String.isNotBlank(formTemplate.elevateSettings?.uniqueKey)) {
-
-                try {
-                    formTemplate.elevateSettings.gatewayName =
-                        gatewayNameById.get(decryptGatewayId(formTemplate.elevateSettings.uniqueKey));
-                    if (String.isBlank(formTemplate.elevateSettings.gatewayName)) {
-                        formTemplate.elevateSettings.gatewayName = System.Label.psGatewayNotValid;
-                    }
-
-                } catch (Exception e) {
-                    throw new AuraHandledException(e.getMessage());
-                }
-
-            } else {
-                if (formTemplate.elevateSettings != null) {
-                    formTemplate.elevateSettings.gatewayName = gatewayNameById.get(defaultGatewayId);
-                }
-            }
-        }
-
         return formTemplates;
-    }
-
-    private static Map<String, String> getGatewayNameById(List<PS_GatewayService.GatewayTemplateSetting> gatewayTemplateSettings) {
-        Map<String, String> gatewayNameById = new Map<String, String>();
-
-        for (PS_GatewayService.GatewayTemplateSetting gatewayTemplateSetting : gatewayTemplateSettings) {
-            gatewayNameById.put(gatewayTemplateSetting.id, gatewayTemplateSetting.gatewayName);
-        }
-
-        return gatewayNameById;
-    }
-
-    private static List<PS_GatewayService.GatewayTemplateSetting> getGatewayTemplateSettings() {
-        List<PS_GatewayService.GatewayTemplateSetting> gatewayTemplateSettings =
-                new List<PS_GatewayService.GatewayTemplateSetting>();
-        PS_GatewayService gatewayService = new PS_GatewayService();
-        String gatewaysByMerchant = gatewayService.getGatewaysByMerchant();
-
-        try {
-            gatewayTemplateSettings = (List<PS_GatewayService.GatewayTemplateSetting>)
-                    JSON.deserialize(gatewaysByMerchant,
-                            List<PS_GatewayService.GatewayTemplateSetting>.class);
-
-        } catch (Exception e) {
-            throw new AuraHandledException(e.getMessage());
-        }
-
-        return gatewayTemplateSettings;
-    }
-
-    @AuraEnabled
-    public static String getGatewayAssignmentSettingsWithDefaultGatewayName() {
-        GatewayAssignmentSettings gaSettings = new GatewayAssignmentSettings();
-        gaSettings.gatewayAssignmentEnabled = getGiftEntrySettings().Enable_Gateway_Assignment__c;
-
-        if (gaSettings.gatewayAssignmentEnabled) {
-            List<PS_GatewayService.GatewayTemplateSetting> gatewayTemplateSettings = getGatewayTemplateSettings();
-            Map<String, String> gatewayNameById = getGatewayNameById(gatewayTemplateSettings);
-            gaSettings.defaultGatewayName = gatewayNameById.get(new PS_IntegrationServiceConfig.Service().getGatewayIds());
-        }
-
-        return JSON.serialize(gaSettings);
     }
 
     /*******************************************************************************************************
@@ -1387,62 +1156,6 @@ public with sharing class GE_GiftEntryController {
             .build();
         List<DataImportBatch__c> batches = Database.query(query);
         return (String)batches[0].get(UTIL_Currency.CURRENCY_ISO_CODE_FIELD);
-    }
-
-    @AuraEnabled
-    public static String getGatewaysFromElevate() {
-        return gatewayService.getGatewaysByMerchant();
-    }
-
-    @AuraEnabled
-    public static String encryptGatewayId(String gatewayId) {
-        PS_IntegrationServiceConfig.Service integrationService = new PS_IntegrationServiceConfig.Service();
-        try {
-            return EncodingUtil.base64Encode(Crypto.encryptWithManagedIV(ENCRYPTION_ALGORITHM,
-                    Blob.valueOf(integrationService.getMerchantIds().left(16)), Blob.valueOf(gatewayId)));
-        }
-        catch (Exception e) {
-            return null;
-        }
-    }
-
-    @AuraEnabled
-    public static String decryptGatewayId(String encryptedGatewayId) {
-        PS_IntegrationServiceConfig.Service integrationService = new PS_IntegrationServiceConfig.Service();
-        try {
-            return (Crypto.decryptWithManagedIV(ENCRYPTION_ALGORITHM,
-                    Blob.valueOf(integrationService.getMerchantIds().left(16)),
-                    EncodingUtil.base64Decode(encryptedGatewayId))).toString();
-        }
-        catch (Exception e) {
-            return null;
-        }
-    }
-
-    @AuraEnabled
-    public static String getGatewayAssignmentSettings() {
-
-        try {
-            GatewayAssignmentSettings gaSettings = new GatewayAssignmentSettings();
-
-            gaSettings.defaultGatewayId = PS_GatewayManagement.getGatewayIdFromConfig();
-            gaSettings.defaultTemplateId = getGiftEntrySettings().Default_Gift_Entry_Template__c;
-            gaSettings.gatewayAssignmentEnabled = getGiftEntrySettings().Enable_Gateway_Assignment__c;
-
-            return JSON.serialize(gaSettings);
-
-        } catch (Exception e) {
-            UTIL_AuraEnabledCommon.throwAuraHandledException(e.getMessage());
-        }
-
-        return null;
-    }
-
-    public class GatewayAssignmentSettings {
-        String defaultGatewayId;
-        String defaultGatewayName;
-        String defaultTemplateId;
-        Boolean gatewayAssignmentEnabled;
     }
 
     private class CurrencyMismatchException extends Exception {}

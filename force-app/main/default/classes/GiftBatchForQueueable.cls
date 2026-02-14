@@ -79,28 +79,6 @@ public inherited sharing class GiftBatchForQueueable {
         set;
     }
     @TestVisible
-    private ElevateBatchService elevateBatchService {
-        get {
-            if (elevateBatchService == null) {
-                elevateBatchService = new ElevateBatchService();
-            }
-            return elevateBatchService;
-        }
-        set;
-    }
-    @TestVisible
-    private PS_IntegrationServiceConfig paymentIntegrationServiceConfig {
-        get {
-            if (paymentIntegrationServiceConfig == null) {
-                paymentIntegrationServiceConfig = new PS_IntegrationServiceConfig();
-            }
-            return paymentIntegrationServiceConfig;
-        }
-        set;
-    }
-
-
-    @TestVisible
     private GiftBatchService giftBatchService {
         get {
             if (giftBatchService == null) {
@@ -134,13 +112,6 @@ public inherited sharing class GiftBatchForQueueable {
 
     public void preprocessRecurringGifts() {
         gifts.preprocessRecurringGifts(this.giftBatch.shouldPayFirstInstallment());
-    }
-
-    public void captureElevateBatches() {
-        if (paymentIntegrationServiceConfig.isIntegrationEnabled()) {
-            elevateBatchService.enqueuePaymentCaptureJobFor(id().value(), gifts?.elevateBatchIds());
-            gifts.authorizedToPaymentProcessingStatus();
-        }
     }
 
     public void updateGiftsInChunk() {

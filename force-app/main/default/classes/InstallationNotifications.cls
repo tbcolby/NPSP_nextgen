@@ -142,8 +142,8 @@ public inherited sharing class InstallationNotifications {
 
    @TestVisible
    private UserIds getAudience(String audienceImpl) {
-      IAudience nonElevateCustomers = (IAudience)getClassType(audienceImpl)?.newInstance();
-      return nonElevateCustomers?.audience();
+      IAudience audienceProvider = (IAudience)getClassType(audienceImpl)?.newInstance();
+      return audienceProvider?.audience();
    }
 
    private Type getClassType(String classImpl) {

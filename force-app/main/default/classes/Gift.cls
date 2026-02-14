@@ -90,11 +90,7 @@ public with sharing class Gift {
     }
 
     public Boolean requiresReauthorizationBeforeChange() {
-        if (dataImport.Payment_Status__c != ElevateTransactionStatus.AUTHORIZED.name()) {
-            return false;
-        }
-
-        return this.hasPaymentFieldsChanged();
+        return false;
     }
 
     public SoftCredits softCredits() {
@@ -192,9 +188,7 @@ public with sharing class Gift {
     }
 
     private Boolean canPayFirstInstallment(Boolean shouldPayFirstInstallment) {
-        return this.dataImport.Recurring_Donation_Elevate_Recurring_ID__c == null
-                && this.dataImport.Payment_Elevate_Batch_ID__c == null
-                && shouldPayFirstInstallment;
+        return shouldPayFirstInstallment;
     }
 
     public void remapFieldsForView() {
@@ -215,11 +209,11 @@ public with sharing class Gift {
     }
 
     public Boolean hasAuthorizedPayment() {
-        return this.dataImport.Payment_Status__c == ElevateTransactionStatus.AUTHORIZED.name();
+        return false;
     }
 
     public Boolean isPaymentProcessing() {
-        return this.dataImport.Payment_Status__c == ElevateTransactionStatus.PAYMENTPROCESSING.name();
+        return false;
     }
 
     public Boolean isDryRunValidated() {

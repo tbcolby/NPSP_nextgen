@@ -1,7 +1,7 @@
-import { api, LightningElement } from 'lwc';
+import { api, LightningElement } from "lwc";
 
 export default class UtilScreenReaderAnnouncer extends LightningElement {
-    @api priority = 'polite';
+    @api priority = "polite";
 
     @api
     announce(message) {

@@ -70,8 +70,6 @@ global class ERR_Handler_API {
         REL,
         /* @description Recurring Donations context. */
         RD,
-        /* @description Elevate Integration context. */
-        Elevate,
         /* @description Rollups context. */
         RLLP,
         /* @description Schedulable context. */

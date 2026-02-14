@@ -156,28 +156,8 @@ private class Gift_Test {
     }
 
     @isTest
-    static void validateThatGiftNeedsToBeReauthorized() {
-        DataImport__c dataImport = new DataImport__c(
-            Payment_Status__c = ElevateTransactionStatus.AUTHORIZED.name(),
-            Payment_Elevate_Batch_ID__c = 'test-valid-group-id',
-            Donation_Amount__c = 3.00
-        );
-        Gift authorizedGift = new Gift(dataImport);
-
-        GiftSelector mockedGiftSelector = stubFor(new GiftSelectorMock(3.00));
-        authorizedGift.giftSelector = mockedGiftSelector;
-        System.assertEquals(false, authorizedGift.requiresReauthorizationBeforeChange());
-
-        mockedGiftSelector = stubFor(new GiftSelectorMock(5.00));
-        authorizedGift.giftSelector = mockedGiftSelector;
-
-        Boolean needsReauthorization = authorizedGift.requiresReauthorizationBeforeChange();
-        System.assert(needsReauthorization);
-    }
-
-    @isTest
     static void shouldNotRequireReauthorization() {
-        DataImport__c dataImport = new DataImport__c(Payment_Status__c = null);
+        DataImport__c dataImport = new DataImport__c();
         Gift gift = new Gift(dataImport);
 
         System.assertEquals(false, gift.requiresReauthorizationBeforeChange());
@@ -271,16 +251,8 @@ private class Gift_Test {
     }
 
     @isTest
-    static void shouldReturnTrueForAuthorizedGift() {
-        DataImport__c dataImport = new DataImport__c(Payment_Status__c = ElevateTransactionStatus.AUTHORIZED.name());
-        Gift gift = new Gift(dataImport);
-
-        System.assertEquals(true, gift.hasAuthorizedPayment());
-    }
-
-    @isTest
-    static void shouldReturnFalseForNonAuthorizedGift() {
-        DataImport__c dataImport = new DataImport__c(Payment_Status__c = null);
+    static void shouldReturnFalseForHasAuthorizedPayment() {
+        DataImport__c dataImport = new DataImport__c();
         Gift gift = new Gift(dataImport);
 
         System.assertEquals(false, gift.hasAuthorizedPayment());
@@ -394,42 +366,6 @@ private class Gift_Test {
         System.assertEquals(1, mockService.value, 'The instrumentation service should have indicated one new Gift was inserted');
         System.assertEquals(sfdoInstrumentationEnum.Feature.GiftEntry, mockService.feature,
             'The instrumentation service should have indicated GiftEntry');
-    }
-
-    private class GiftSelectorMock implements StubProvider {
-
-        private Decimal newDonationAmount;
-
-        public GiftSelectorMock(Decimal newDonationAmount) {
-            this.newDonationAmount = newDonationAmount;
-        }
-
-        public Object handleMethodCall(Object stubbedObject,
-            String stubbedMethodName,
-            Type returnType,
-            List<Type> listOfParamTypes,
-            List<String> listOfParamNames,
-            List<Object> listOfArgs) {
-
-            switch on (stubbedMethodName) {
-                when 'getGiftById' {
-                    return new DataImport__c(
-                        Payment_Status__c = ElevateTransactionStatus.AUTHORIZED.name(),
-                        Payment_Elevate_Batch_ID__c = 'test-valid-group-id',
-                        Donation_Amount__c = newDonationAmount
-                    );
-                }
-            }
-
-            return null;
-        }
-    }
-
-    private static GiftSelector stubFor(GiftSelectorMock giftSelectorMock) {
-        return (GiftSelector) Test.createStub(
-            GiftSelector.class,
-            giftSelectorMock
-        );
     }
 
     private class UnitOfWorkMock implements StubProvider {

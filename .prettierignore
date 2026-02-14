@@ -1,0 +1,8 @@
+# Vendored third-party libraries
+force-app/main/default/staticresources/
+
+# Legacy Aura components
+force-app/main/default/aura/
+
+# LWC HTML templates use directives (if:true, for:each) that Prettier mangles
+*.html

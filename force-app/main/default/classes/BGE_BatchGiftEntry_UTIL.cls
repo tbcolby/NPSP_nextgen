@@ -36,9 +36,6 @@
 */
 public with sharing class BGE_BatchGiftEntry_UTIL {
 
-    @TestVisible
-    private static GiftBatch giftBatch;
-
     /*******************************************************************************************************
     * @description Currently limit the set of allowed objects, and point to their BDI-defined 
     *  Object group name
@@ -86,7 +83,6 @@ public with sharing class BGE_BatchGiftEntry_UTIL {
             return new List<String>( fieldApiNames );
         }
 
-        fieldApiNames.addAll(getDataImportElevateFields(batchId));
         fieldApiNames.add(getNewBatchGiftEntryVersionFields());
 
         for (String field : dataImportCoreFields) {
@@ -187,28 +183,6 @@ public with sharing class BGE_BatchGiftEntry_UTIL {
                 WHERE Id = :batchId
         ];
         return batch;
-    }
-
-    @TestVisible
-    private static List<String> getDataImportElevateFields(Id batchId) {
-        List<String> elevateFieldApiNames = new List<String>();
-        if (GE_PaymentServices.getInstance().isElevateCustomer()
-            && hasElevateWidgetOnTemplate(batchId)) {
-
-            elevateFieldApiNames = new List<String>{
-                String.valueOf(DataImport__c.Payment_Declined_Reason__c),
-                String.valueOf(DataImport__c.Elevate_Payment_Status__c)
-            };
-        }
-
-        return elevateFieldApiNames;
-    }
-
-    private static Boolean hasElevateWidgetOnTemplate(Id batchId) {
-        if (giftBatch == null) {
-            giftBatch = new GiftBatch(new GiftBatchId(batchId));
-        }
-        return giftBatch.hasElevateWidget();
     }
 
     /*******************************************************************************************************

@@ -75,9 +75,9 @@ private class GiftBatches_TEST {
     }
 
     private static Id DUMMY_BATCH_ID_0 = UTIL_UnitTestData_TEST.mockId(DataImportBatch__c.SObjectType);
-    private static String elevatePaymentAuthorizedStatus = ElevateTransactionStatus.AUTHORIZED.name();
-    private static String elevatePaymentDeclinedStatus = ElevateTransactionStatus.DECLINED.name();
-    private static String elevatePaymentExpiredStatus = ElevateTransactionStatus.EXPIRED.name();
+    private static String paymentAuthorizedStatus = 'AUTHORIZED';
+    private static String paymentDeclinedStatus = 'DECLINED';
+    private static String paymentExpiredStatus = 'EXPIRED';
 
     private static String dataImportBatchFieldAPIName = String.valueOf(DataImport__c.fields.NPSP_Data_Import_Batch__c);
     private static String dataImportPaymentStatusFieldAPIName = String.valueOf(DataImport__c.fields.Payment_Status__c);
@@ -94,11 +94,11 @@ private class GiftBatches_TEST {
             .withAliasAndValue('recordCount', 2),
         new AggregateResultProxy()
             .withAliasAndValue(dataImportBatchFieldAPIName, DUMMY_BATCH_ID_0)
-            .withAliasAndValue(dataImportPaymentStatusFieldAPIName, elevatePaymentAuthorizedStatus)
+            .withAliasAndValue(dataImportPaymentStatusFieldAPIName, paymentAuthorizedStatus)
             .withAliasAndValue('recordCount', 3),
         new AggregateResultProxy()
             .withAliasAndValue(dataImportBatchFieldAPIName, DUMMY_BATCH_ID_0)
-            .withAliasAndValue(dataImportPaymentStatusFieldAPIName, elevatePaymentExpiredStatus)
+            .withAliasAndValue(dataImportPaymentStatusFieldAPIName, paymentExpiredStatus)
             .withAliasAndValue('recordCount', 4)                
     };
 }

@@ -40,9 +40,9 @@ private with sharing class GiftBatchGroupedTotals_TEST {
     @isTest
     private static void shouldReturnMapContainingCorrectRecordCounts() {
         Id DUMMY_BATCH_ID_0 = Id.valueOf('001xa000003DIlo');
-        String elevatePaymentAuthorizedStatus = ElevateTransactionStatus.AUTHORIZED.name();
-        String elevatePaymentDeclinedStatus = ElevateTransactionStatus.DECLINED.name();
-        String elevatePaymentExpiredStatus = ElevateTransactionStatus.EXPIRED.name();
+        String paymentAuthorizedStatus = 'AUTHORIZED';
+        String paymentDeclinedStatus = 'DECLINED';
+        String paymentExpiredStatus = 'EXPIRED';
 
         String dataImportBatchFieldAPIName = String.valueOf(DataImport__c.fields.NPSP_Data_Import_Batch__c);
         String dataImportPaymentStatusFieldAPIName = String.valueOf(DataImport__c.fields.Payment_Status__c);
@@ -59,11 +59,11 @@ private with sharing class GiftBatchGroupedTotals_TEST {
                 .withAliasAndValue('recordCount', 2),
             new AggregateResultProxy()
                 .withAliasAndValue(dataImportBatchFieldAPIName, DUMMY_BATCH_ID_0)
-                .withAliasAndValue(dataImportPaymentStatusFieldAPIName, elevatePaymentAuthorizedStatus)
+                .withAliasAndValue(dataImportPaymentStatusFieldAPIName, paymentAuthorizedStatus)
                 .withAliasAndValue('recordCount', 3),
             new AggregateResultProxy()
                 .withAliasAndValue(dataImportBatchFieldAPIName, DUMMY_BATCH_ID_0)
-                .withAliasAndValue(dataImportPaymentStatusFieldAPIName, elevatePaymentExpiredStatus)
+                .withAliasAndValue(dataImportPaymentStatusFieldAPIName, paymentExpiredStatus)
                 .withAliasAndValue('recordCount', 4)                
         };
 
@@ -71,12 +71,12 @@ private with sharing class GiftBatchGroupedTotals_TEST {
         List<AggregateResultProxy> proxiesForBatch1 = new List<AggregateResultProxy> {
             new AggregateResultProxy()
                 .withAliasAndValue(dataImportBatchFieldAPIName, DUMMY_BATCH_ID_1)
-                .withAliasAndValue(dataImportPaymentStatusFieldAPIName, elevatePaymentDeclinedStatus)
+                .withAliasAndValue(dataImportPaymentStatusFieldAPIName, paymentDeclinedStatus)
                 .withAliasAndValue('recordCount', 5),
             new AggregateResultProxy()
                 .withAliasAndValue(dataImportBatchFieldAPIName, DUMMY_BATCH_ID_1)
                 .withAliasAndValue(dataImportStatusFieldName, BDI_DataImport_API.bdiFailed)
-                .withAliasAndValue(dataImportPaymentStatusFieldAPIName, elevatePaymentDeclinedStatus)
+                .withAliasAndValue(dataImportPaymentStatusFieldAPIName, paymentDeclinedStatus)
                 .withAliasAndValue('recordCount', 6)
         };
 
