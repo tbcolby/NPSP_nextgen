@@ -182,7 +182,7 @@ public class ALLO_Multicurrency_TEST {
         String oppId = oppList[0].Id;
 
         //  where opportunity__c = :oppList[0].Id and CurrencyIsoCode != :usersDefaultCurrency
-        List<Allocation__c> queryAllo = Database.query('SELECT Id, Amount__c, CurrencyIsoCode FROM Allocation__c WHERE Opportunity__c = \'' + oppId + '\'');
+        List<Allocation__c> queryAllo = Database.query('SELECT Id, Amount__c, CurrencyIsoCode FROM Allocation__c WHERE Opportunity__c = :oppId');
         System.assertEquals(nonDefaultCurrencyType.get('IsoCode'), oppList[0].get('CurrencyIsoCode'), 'Opportunity should have a non-default currency type.');
         System.assertEquals(nonDefaultCurrencyType.get('IsoCode'), queryAllo[0].get('CurrencyIsoCode'), 'Allocation should have a non-default currency type.');
         System.assertEquals(oppList[0].Amount, queryAllo[0].Amount__c, 'Opportunity and Allocation amounts should be equal for 100% allocation with the same non-default currency type.');

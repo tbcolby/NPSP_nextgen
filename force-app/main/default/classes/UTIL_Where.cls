@@ -33,7 +33,7 @@
 * @group Utilities
 * @description Utility used to build the WHERE clause
 */
-public class UTIL_Where {
+public inherited sharing class UTIL_Where {
     /** @description Exception class */
     public class CriteriaException extends Exception {}
 

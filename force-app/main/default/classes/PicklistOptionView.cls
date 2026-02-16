@@ -33,7 +33,7 @@
 * @group LWC View, Picklist
 * @description Lightning Web Component combo-box and Picklist wrapper class
 */
-public class PicklistOptionView {
+public inherited sharing class PicklistOptionView {
     @AuraEnabled public String value;
     @AuraEnabled public String label;
 

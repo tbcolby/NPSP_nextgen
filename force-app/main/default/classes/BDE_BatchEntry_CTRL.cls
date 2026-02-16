@@ -93,7 +93,8 @@ public with sharing class BDE_BatchEntry_CTRL {
 
             q = q.subString(0, q.length() - 2);
             UTIL_Debug.debug('Q IS: ' + q);
-            q += ' from ' + UTIL_Namespace.StrTokenNSPrefix('Batch__c') + ' where id = \'' + stdController.getId() + '\' limit 1';
+            Id batchId = stdController.getId();
+            q += ' from ' + UTIL_Namespace.StrTokenNSPrefix('Batch__c') + ' where id = :batchId limit 1';
             batch = Database.query(q);        
         }
                             

@@ -34,7 +34,7 @@
 * @description Track errors of a specific SObject record
 *
 */
-public class ErrorRecord {
+public inherited sharing class ErrorRecord {
     SObject sObjectRecord;
     List<String> errors = new List<String>();
 

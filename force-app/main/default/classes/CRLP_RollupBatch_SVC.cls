@@ -34,7 +34,7 @@
 * @group-content ../../ApexDocContent/Rollups2.htm
 * @description Service method explicitly related to batch or queueable rollup operations
 */
-public class CRLP_RollupBatch_SVC {
+public inherited sharing class CRLP_RollupBatch_SVC {
 
     /** @description Custom Settings record that defines specific Customizable Rollups settings */
     private static final Customizable_Rollup_Settings__c customizableRollupSettings = UTIL_CustomSettingsFacade.getCustomizableRollupSettings();
@@ -99,6 +99,9 @@ public class CRLP_RollupBatch_SVC {
             jobType != CRLP_RollupProcessingOptions.RollupType.RecurringDonations)
         {
             String objName = recordId.getSobjectType().getDescribe().getName();
+            if (UTIL_Describe.getSObjectType(objName) == null) {
+                return true;
+            }
             String soql = 'SELECT Id FROM ' + objName + ' WHERE Id = :recordID ';
             String filter = getSkewWhereClause(jobType, CRLP_RollupProcessingOptions.BatchJobMode.SkewMode);
             if (!String.isEmpty(filter)) {

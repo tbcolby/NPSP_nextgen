@@ -37,7 +37,7 @@
 * in a batch process.
 *
 */
-public class CRLP_Rollup {
+public inherited sharing class CRLP_Rollup {
 
     private static CRLP_FiscalYears fiscalYrs;
 

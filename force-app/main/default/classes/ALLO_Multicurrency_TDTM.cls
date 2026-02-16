@@ -34,7 +34,7 @@
 * @group-content ../../ApexDocContent/Allocations.htm
 * @description Class for multicurrency triggers and allocations rollup multicurrency related code.
 */
-public class ALLO_Multicurrency_TDTM extends TDTM_Runnable {
+public inherited sharing class ALLO_Multicurrency_TDTM extends TDTM_Runnable {
 
     /** @description Map holds exchange rates to avoid multiple queries. */
     public static map<string, decimal> exchangeRates = new map<string,decimal>();
@@ -152,6 +152,9 @@ public class ALLO_Multicurrency_TDTM extends TDTM_Runnable {
 
         //query for ISO codes, fill out map
         for (string parent : parentTypes) {
+            if (UTIL_Describe.getSObjectType(parent) == null) {
+                continue;
+            }
             string query = 'SELECT Id, CurrencyIsoCode';
             if (parent == 'Opportunity') {
                 query += ', CloseDate';
