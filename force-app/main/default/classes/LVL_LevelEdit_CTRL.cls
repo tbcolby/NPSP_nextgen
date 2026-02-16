@@ -182,7 +182,7 @@ public with sharing class LVL_LevelEdit_CTRL {
             if (!canWriteLevel()) {
                 throw new UTIL_Permissions.InsufficientPermissionException(System.Label.commonAccessErrorMessage);
             }
-            upsert lvl;
+            Database.upsert(lvl, true);
             // now fixup lvl to be the new next level
             lvl.Id = null;
             lvl.Name = null;
@@ -208,7 +208,7 @@ public with sharing class LVL_LevelEdit_CTRL {
             if (!canWriteLevel()) {
                 throw new UTIL_Permissions.InsufficientPermissionException(System.Label.commonAccessErrorMessage);
             }
-            upsert lvl;
+            Database.upsert(lvl, true);
             return new PageReference('/' + lvl.Id);
         } catch (Exception ex) {
             ApexPages.addMessages(ex);            

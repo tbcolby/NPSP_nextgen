@@ -271,8 +271,19 @@ public with sharing class GE_GiftEntryController {
     public static DataImport__c upsertDataImport(String dataImport) {
         DataImport__c dataImportObject = (DataImport__c)JSON.deserialize(dataImport, DataImport__c.class);
 
+        String diObjectName = UTIL_Namespace.StrAllNSPrefix('DataImport__c');
+        if (dataImportObject.Id != null) {
+            if (!UTIL_Permissions.canUpdate(diObjectName, false)) {
+                throw new UTIL_Permissions.InsufficientPermissionException(System.Label.commonAccessErrorMessage);
+            }
+        } else {
+            if (!UTIL_Permissions.canCreate(diObjectName, false)) {
+                throw new UTIL_Permissions.InsufficientPermissionException(System.Label.commonAccessErrorMessage);
+            }
+        }
+
         try {
-            upsert dataImportObject Id;
+            Database.upsert(dataImportObject, DataImport__c.Id, true);
 
             return dataImportObject;
         } catch (Exception e) {
@@ -775,7 +786,13 @@ public with sharing class GE_GiftEntryController {
 
         Custom_Column_Header__c[] columnHeaders =
                 (Custom_Column_Header__c[])JSON.deserialize(columnHeadersString, Custom_Column_Header__c[].class);
-        upsert columnHeaders;
+
+        String cchObjectName = UTIL_Namespace.StrAllNSPrefix('Custom_Column_Header__c');
+        if (!UTIL_Permissions.canCreate(cchObjectName, false)
+                || !UTIL_Permissions.canUpdate(cchObjectName, false)) {
+            throw new UTIL_Permissions.InsufficientPermissionException(System.Label.commonAccessErrorMessage);
+        }
+        Database.upsert(columnHeaders, true);
 
         Id[] headerIdsToKeep = new Id[]{};
         for (Custom_Column_Header__c columnHeader : columnHeaders) {
@@ -789,7 +806,11 @@ public with sharing class GE_GiftEntryController {
                 AND List_Name__c = :listName
                 WITH SECURITY_ENFORCED
         ];
-        delete headersToDelete;
+
+        if (!UTIL_Permissions.canDelete(cchObjectName, false)) {
+            throw new UTIL_Permissions.InsufficientPermissionException(System.Label.commonAccessErrorMessage);
+        }
+        Database.delete(headersToDelete, true);
 
         return getColumnHeaderDataWithPermissions(columnHeaders, listName);
     }
@@ -833,6 +854,11 @@ public with sharing class GE_GiftEntryController {
     * of the DML action
     */
     public static String [] deleteFormTemplates(String[] ids) {
+        String ftObjectName = UTIL_Namespace.StrAllNSPrefix('Form_Template__c');
+        if (!UTIL_Permissions.canDelete(ftObjectName, false)) {
+            throw new UTIL_Permissions.InsufficientPermissionException(System.Label.commonAccessErrorMessage);
+        }
+
         String[] formTemplateNames = new String[] {};
         Form_Template__c[] templates = [
                 SELECT Id, Name
@@ -841,7 +867,7 @@ public with sharing class GE_GiftEntryController {
                 WITH SECURITY_ENFORCED
         ];
         try {
-            delete templates;
+            Database.delete(templates, true);
             for (Form_Template__c template : templates) {
                 formTemplateNames.add(template.Name);
             }
@@ -948,7 +974,7 @@ public with sharing class GE_GiftEntryController {
                     Description__c = description,
                     Template_JSON__c = templateJSON,
                     Format_Version__c = formatVersion);
-            upsert templateObj;
+            Database.upsert(templateObj, true);
             return templateObj.Id;
         }
 

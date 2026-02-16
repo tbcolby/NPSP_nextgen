@@ -224,11 +224,20 @@ public with sharing class EP_ManageEPTemplate_CTRL {
         Map<Id, Id> existingParentIdsByTaskId = new Map<Id, Id>();
         Id templateId = template.Id;
 
+        String eptObjectName = UTIL_Namespace.StrAllNSPrefix('Engagement_Plan_Template__c');
+        String epTaskObjectName = UTIL_Namespace.StrAllNSPrefix('Engagement_Plan_Task__c');
+        if (!UTIL_Permissions.canCreate(eptObjectName, false) || !UTIL_Permissions.canUpdate(eptObjectName, false)
+                || !UTIL_Permissions.canCreate(epTaskObjectName, false) || !UTIL_Permissions.canUpdate(epTaskObjectName, false)
+                || !UTIL_Permissions.canDelete(epTaskObjectName, false)) {
+            ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, System.Label.commonAccessErrorMessage));
+            return null;
+        }
+
         Savepoint sp = Database.setSavepoint();
         try {
-            upsert template;
+            Database.upsert(template, true);
 
-            delete tasksToDelete;
+            Database.delete(tasksToDelete, true);
 
             //first, find and insert all EP Tasks without an Id
             for (TaskWrapper wrapper : mapTaskWrappers.values()) {
@@ -241,7 +250,7 @@ public with sharing class EP_ManageEPTemplate_CTRL {
             }
 
             if (!tasksForInsert.isEmpty()) {
-                insert tasksForInsert;
+                UTIL_DMLService.insertRecords(tasksForInsert);
             }
 
             //then, fill out any parent lookups and update everything
@@ -258,7 +267,7 @@ public with sharing class EP_ManageEPTemplate_CTRL {
             }
 
             if (!tasksForUpdate.isEmpty()) {
-                update tasksForUpdate;
+                UTIL_DMLService.updateRecords(tasksForUpdate);
             }
 
             pageReference source = new pageReference('/'+template.Id);
