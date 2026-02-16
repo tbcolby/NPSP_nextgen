@@ -82,6 +82,9 @@ public with sharing class GE_LookupController {
      */
     @TestVisible
     private static List<LookupResult> doSearchSOSL(String searchValue, String sObjectType) {
+        if (UTIL_Describe.getSObjectType(sObjectType) == null) {
+            return new List<LookupResult>();
+        }
         String formattedValue = '\'' + String.escapeSingleQuotes(searchValue) + '\'';
         String searchTemplate = 'FIND {0} IN NAME FIELDS Returning {1} LIMIT {2}';
         List<String> args = new List<String>{formattedValue, sObjectType + '(Name)', String.valueOf(RESULTS_LIMIT)};
@@ -107,6 +110,9 @@ public with sharing class GE_LookupController {
      */
     @TestVisible
     private static List<LookupResult> doSearchSOQL(String searchValue, String sObjectType) {
+        if (UTIL_Describe.getSObjectType(sObjectType) == null) {
+            return new List<LookupResult>();
+        }
         String formattedValue = '%' + searchValue + '%';
         String queryTemplate = 'SELECT Id, Name FROM {0} WHERE Name LIKE :formattedValue LIMIT {1}';
         List<String> args = new List<String>{sObjectType, String.valueOf(RESULTS_LIMIT)};

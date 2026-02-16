@@ -36,7 +36,7 @@
 *
 */
 
-public class BDI_RecurringDonations {
+public inherited sharing class BDI_RecurringDonations {
 
     public static final String RD_OBJ_MAPPING_NAME = 'Recurring_Donation';
 

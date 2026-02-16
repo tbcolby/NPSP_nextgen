@@ -13,7 +13,7 @@ This document tracks backwards-compatible modernization items across multiple re
 |----------|-------------|-----------|-------------|-----------|
 | Phase 0: Packaging & Setup | 4 | 4 | 0 | 0 |
 | Phase 1: Foundation | 8 | 6 | 0 | 2 |
-| Phase 2: Security | 12 | 1 | 2 | 9 |
+| Phase 2: Security | 12 | 3 | 0 | 9 |
 | Phase 3: Async Modernization | 15 | 0 | 0 | 15 |
 | Phase 4: Performance | 18 | 0 | 0 | 18 |
 | Phase 5: Code Quality | 14 | 0 | 0 | 14 |
@@ -22,7 +22,7 @@ This document tracks backwards-compatible modernization items across multiple re
 | Phase 8: Accessibility | 10 | 0 | 0 | 10 |
 | Phase 9: Integration | 8 | 0 | 0 | 8 |
 | Phase 10: Long-term | 20 | 0 | 0 | 20 |
-| **TOTAL** | **158** | **11** | **2** | **145** |
+| **TOTAL** | **158** | **13** | **0** | **145** |
 
 **Estimated Total Effort**: 800-1200 hours across 8 quarterly releases
 
@@ -224,25 +224,28 @@ Fixed 6 LWC test suites broken by Elevate removal. Fixed pre-existing rd2EntryFo
 | STG_PanelOppBatch_CTRL.cls | 92-93 | Object name in FROM | Schema validation guard | ✅ |
 | ALLO_Multicurrency_TEST.cls | 185 | Test: oppId concat | Bind variable `:oppId` | ✅ |
 | PSC_Opportunity_TDTM.cls | 87, 96 | (False positive) | Already uses bind variables | ✅ N/A |
+| GE_LookupController.cls | 84, 109 | sObjectType concat in SOSL/SOQL | Schema validation guard | ✅ (Phase 2b) |
 
 **Note**: ~30 test-only instances remain — deferred to test hygiene PR.
 
 ---
 
 ### 2.2 Add Explicit Sharing Declarations
-**Status**: 🔄 In Progress (46/~50 classes done)
+**Status**: ✅ Complete
 **Effort**: 10-15 hours | **Risk**: Low-Medium | **Priority**: P1
 
-**Completed in Phase 2 PR**: Added `inherited sharing` to 46 public/global classes that had no explicit sharing declaration. Covers global API classes, TDTM handlers, service/utility classes, and DTO/view classes.
+**Completed across Phase 2a + 2b**: Added `inherited sharing` to 158 public/global classes that had no explicit sharing declaration.
 
-| Category | Classes | Status |
-|----------|---------|--------|
-| Global API classes | 6 (UTIL_Version_API, ERR_Handler_API, UTIL_CustomSettings_API, CAO_Constants_API, CONV_Account_Conversion_BATCH, STG_UninstallScript) | ✅ |
-| TDTM handlers | 13 (HH_OppContactRoles, CRLP_Rollup, AN_AutoNumber, ALLO_Multicurrency, REL_Relationships_Cm, RD2_RecurringDonations, ACCT_AccountMerge, PMT_Payment, CON_DoNotContact, REL_Relationships, CDL_CascadeDeleteLookups, BDI_DataImportBatchStatus, HH_HHObject) | ✅ |
-| Service/utility classes | 15 (RD_RecurringDonations, CRLP_RollupBatch_SVC, CRLP_Rollup_SVC, UTIL_Describe, UTIL_DMLService, UTIL_Namespace, UTIL_String, UTIL_CurrencyConversion, UTIL_Where, UTIL_OrderBy, UTIL_PageMessages_CTRL, CMT_FilterRuleEvaluation_SVC, CMT_FilterRuleUI_SVC, ContactMergeService, CRLP_DefaultConfigBuilder, CRLP_FiscalYears) | ✅ |
-| DTO/view classes | 8 (AggregateResultProxy, SaveResultView, SaveErrorView, ErrorRecord, CallableApiParameters, RD2_AppView, RD2_RecordView, RD_Constants) | ✅ |
-| Other | 4 (RLLP_OppPartialSoftCreditRollup, CRLP_Rollup, BDI_TargetFields, CRLP_ResetRollupFieldsQueueable, InputFieldView, PicklistOptionView) | ✅ |
-| Remaining (fflib vendor, test classes, already-declared) | ~remaining | ⏳ Deferred |
+| PR | Category | Count | Status |
+|----|----------|-------|--------|
+| Phase 2a | Global API classes, TDTM handlers, service/utility, DTO/view | 46 | ✅ |
+| Phase 2b | TDTM framework (Runnable, TriggerHandler, Config_API) | 6 | ✅ |
+| Phase 2b | TDTM handlers (force-app/tdtm/ + main/default/) | 24 | ✅ |
+| Phase 2b | Batch & abstract base classes | 28 | ✅ |
+| Phase 2b | Rollup handler virtual base + subclasses | 7 | ✅ |
+| Phase 2b | Service, utility, controller, adapter classes | 47 | ✅ |
+
+**Not changed**: fflib vendor code (~170), test classes, classes already declaring sharing.
 
 ---
 
@@ -293,13 +296,14 @@ List<Account> accounts = (List<Account>) Security.stripInaccessible(
 ---
 
 ### 2.5 Remove Hardcoded Credentials/IDs
-**Status**: 🔄 In Progress (documentation added)
+**Status**: ✅ Complete
 **Effort**: 2-3 hours | **Risk**: Low | **Priority**: P2
 
 | File | Issue | Status |
 |------|-------|--------|
-| RP_Constants.cls | YouTube playlist ID & Heroku endpoints — documented as external dependencies, not credentials. Added comments noting community forks may need to reconfigure via Custom Metadata. | ✅ Documented |
-| Audit all test classes | Hardcoded test IDs | ⬜ |
+| RP_Constants.cls | YouTube playlist ID & Heroku endpoints — documented as external dependencies, not credentials. Added comments noting community forks may need to reconfigure via Custom Metadata. | ✅ Documented (Phase 2a) |
+| Production code audit | No hardcoded Salesforce IDs or credentials found in production classes. | ✅ Audit complete (Phase 2b) |
+| Test classes | Hardcoded test IDs are standard test practice — no security concern. | ✅ N/A |
 
 ---
 
@@ -925,7 +929,7 @@ Each release should include:
 | 2026-02-03 | 158 | 0 | 158 | - |
 | 2026-02-14 | 158 | 5 | 153 | Phase 0 (4 items) + Phase 1 item 1.1 (API upgrade) |
 | 2026-02-15 | 158 | 10 | 148 | Phase 1 items 1.2-1.8 (+5 completed) |
-| 2026-02-16 | 158 | 11 | 145 | Phase 2: SOQL injection (2.1 complete), sharing (2.2 partial), hardcoded IDs (2.5 partial) |
+| 2026-02-16 | 158 | 13 | 145 | Phase 2a+2b: SOQL injection complete (2.1), sharing complete (2.2), hardcoded IDs audit complete (2.5) |
 
 ### Sprint Velocity History
 
@@ -934,6 +938,7 @@ Each release should include:
 | Phase 0 | 4 | 5 | 4 Phase 0 items + 1 Phase 1 item (API upgrade bundled) |
 | Phase 1 | 7 | 5 | 1 deferred (TODO/FIXME → Phase 5), 1 was N/A (fflib = no app usage) |
 | Phase 2a | 3 | 1 | 2.1 complete, 2.2 + 2.5 in progress (46 sharing + 8 SOQL injection + 1 doc) |
+| Phase 2b | 3 | 3 | 2.1 addendum (GE_LookupController), 2.2 complete (112 sharing), 2.5 complete (audit) |
 
 ---
 
