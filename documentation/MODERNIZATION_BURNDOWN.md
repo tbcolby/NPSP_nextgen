@@ -12,7 +12,7 @@ This document tracks backwards-compatible modernization items across multiple re
 | Category | Total Items | Completed | In Progress | Remaining |
 |----------|-------------|-----------|-------------|-----------|
 | Phase 0: Packaging & Setup | 4 | 4 | 0 | 0 |
-| Phase 1: Foundation | 8 | 6 | 0 | 2 |
+| Phase 1: Foundation | 8 | 7 | 0 | 1 |
 | Phase 2: Security | 12 | 5 | 0 | 7 |
 | Phase 3: Async Modernization | 15 | 0 | 0 | 15 |
 | Phase 4: Performance | 18 | 0 | 0 | 18 |
@@ -21,10 +21,10 @@ This document tracks backwards-compatible modernization items across multiple re
 | Phase 7: Configuration | 14 | 0 | 0 | 14 |
 | Phase 8: Accessibility | 10 | 0 | 0 | 10 |
 | Phase 9: Integration | 8 | 0 | 0 | 8 |
-| Phase 10: Long-term | 20 | 0 | 0 | 20 |
-| **TOTAL** | **158** | **15** | **0** | **143** |
+| Phase 10: Long-term | 8 | 0 | 0 | 8 |
+| **TOTAL** | **146** | **16** | **0** | **130** |
 
-**Estimated Total Effort**: 800-1200 hours across 8 quarterly releases
+**Estimated Total Effort**: 600-900 hours across 6 quarterly releases
 
 ---
 
@@ -846,29 +846,19 @@ CRUD/FLS enforced at controller boundary (Phase 2c: 7 methods + 4 pre-existing c
 
 ## Phase 10: Long-term Items (Post v2.3)
 
-### 10.1-10.20 Future Modernization
+### 10.1-10.8 Future Modernization
 | ID | Item | Effort | Priority | Status |
 |----|------|--------|----------|--------|
-| 10.1 | Full VF to LWC migration | 100h+ | P4 | ⬜ |
+| 10.1 | Full VF to LWC migration (remaining pages) | 100h+ | P4 | ⬜ |
 | 10.2 | Implement Flow-based automation | 40h | P3 | ⬜ |
-| 10.3 | Add CRM Analytics dashboards | 30h | P4 | ⬜ |
-| 10.4 | Implement Einstein features | 40h | P4 | ⬜ |
+| 10.3 | Add comprehensive logging framework | 20h | P2 | ⬜ |
+| 10.4 | Implement feature flags system | 20h | P3 | ⬜ |
 | 10.5 | Add mobile optimization | 30h | P3 | ⬜ |
-| 10.6 | Implement Experience Cloud components | 50h | P4 | ⬜ |
+| 10.6 | Implement event-driven architecture | 40h | P3 | ⬜ |
 | 10.7 | Add multi-language support improvements | 20h | P3 | ⬜ |
-| 10.8 | Implement event-driven architecture | 40h | P3 | ⬜ |
-| 10.9 | Add comprehensive logging framework | 20h | P2 | ⬜ |
-| 10.10 | Create admin configuration app | 60h | P3 | ⬜ |
-| 10.11 | Implement feature flags system | 20h | P3 | ⬜ |
-| 10.12 | Add A/B testing capability | 30h | P4 | ⬜ |
-| 10.13 | Create developer sandbox toolkit | 20h | P3 | ⬜ |
-| 10.14 | Implement GraphQL API layer | 40h | P4 | ⬜ |
-| 10.15 | Add real-time sync capabilities | 30h | P4 | ⬜ |
-| 10.16 | Implement offline support | 40h | P4 | ⬜ |
-| 10.17 | Add progressive web app features | 30h | P4 | ⬜ |
-| 10.18 | Create component library package | 40h | P3 | ⬜ |
-| 10.19 | Implement microservices patterns | 60h | P4 | ⬜ |
-| 10.20 | Full security audit and hardening | 40h | P2 | ⬜ |
+| 10.8 | Full security audit and hardening | 40h | P2 | ⬜ |
+
+*Removed 12 aspirational items (Einstein, GraphQL, PWA, A/B testing, microservices, offline support, real-time sync, CRM Analytics, Experience Cloud, component library, admin app, sandbox toolkit) that are not practical modernization targets for a community NPSP fork.*
 
 ---
 
@@ -917,18 +907,21 @@ Each release should include:
 | 2026-02-03 | 158 | 0 | 158 | - |
 | 2026-02-14 | 158 | 5 | 153 | Phase 0 (4 items) + Phase 1 item 1.1 (API upgrade) |
 | 2026-02-15 | 158 | 10 | 148 | Phase 1 items 1.2-1.8 (+5 completed) |
-| 2026-02-16 | 158 | 13 | 145 | Phase 2a+2b: SOQL injection complete (2.1), sharing complete (2.2), hardcoded IDs audit complete (2.5) |
-| 2026-02-16 | 158 | 13 | 143 | Phase 2c: CRUD/FLS enforcement + DML wrapping in controllers (2.3 + 2.4 in progress) |
+| 2026-02-16 | 158 | 13 | 145 | Phase 2a+2b: items 2.1, 2.2, 2.5 complete |
+| 2026-02-16 | 158 | 15 | 143 | Phase 2c+2d: items 2.3, 2.4 complete (DML wrapping + CRUD/FLS) |
+| 2026-02-16 | 146 | 16 | 130 | Phase 2e complete + reassessment: trimmed 12 aspirational items from Phase 10 |
 
 ### Sprint Velocity History
 
 | Sprint | Planned | Completed | Notes |
 |--------|---------|-----------|-------|
-| Phase 0 | 4 | 5 | 4 Phase 0 items + 1 Phase 1 item (API upgrade bundled) |
-| Phase 1 | 7 | 5 | 1 deferred (TODO/FIXME → Phase 5), 1 was N/A (fflib = no app usage) |
-| Phase 2a | 3 | 1 | 2.1 complete, 2.2 + 2.5 in progress (46 sharing + 8 SOQL injection + 1 doc) |
-| Phase 2b | 3 | 3 | 2.1 addendum (GE_LookupController), 2.2 complete (112 sharing), 2.5 complete (audit) |
-| Phase 2c | 2 | 0 | 2.3 in progress (31 bare DML in 11 controllers), 2.4 in progress (7 CRUD gaps in 5 controllers) |
+| Phase 0 (PR #1) | 4 | 5 | 4 Phase 0 items + 1 Phase 1 item (API upgrade bundled) |
+| Phase 1 (PR #2) | 7 | 6 | 1 deferred (TODO/FIXME), 1 was N/A (fflib = no app usage, counted as complete) |
+| Phase 2a (PR #3) | 3 | 3 | 2.1 SOQL injection, 2.2 sharing (46 classes), 2.5 hardcoded IDs |
+| Phase 2b (PR #4) | 2 | 2 | 2.1 addendum (GE_LookupController), 2.2 complete (158 total sharing) |
+| Phase 2c (PR #5) | 2 | 0 | 2.3 + 2.4 in progress (31 DML + 7 CRUD in controllers) |
+| Phase 2d (PR #6) | 1 | 1 | 2.3 complete (55 DML across services/TDTM/batch/utilities) |
+| Phase 2e (PR #7) | 1 | 1 | 2.4 complete (5 selector FLS + 2 controller read guards) |
 
 ---
 
