@@ -9,8 +9,13 @@ NPSP_nextgen is a community-driven fork of Salesforce's Nonprofit Success Pack (
 **Critical**: This is independent from Salesforce/Salesforce.org. Always test in a sandbox before production deployment.
 
 ### Modernization Status
-- **Phase 0** (complete): Namespace npsp→npsp2, API 53→63, Elevate removal, CCI 4.6.0
-- **Phase 1** (complete): testMethod→@IsTest (648), @track cleanup (~90), deps update, ESLint fixes
+- **Phase 0** (PR #1, complete): Namespace npsp→npsp2, API 53→63, Elevate removal, CCI 4.6.0
+- **Phase 1** (PR #2, complete): testMethod→@IsTest (648), @track cleanup (~90), deps update, ESLint fixes
+- **Phase 2a** (PR #3, complete): SOQL injection fixes (8 files), sharing declarations (46 classes), hardcoded ID docs
+- **Phase 2b** (PR #4, complete): GE_LookupController injection fix, sharing complete (158 classes), hardcoded IDs audit
+- **Phase 2c** (PR #5, complete): CRUD/FLS enforcement (7 controller methods), DML wrapping (31 bare DML in 11 controllers)
+- **Phase 2d** (PR #6, complete): DML wrapping for services/TDTM/batch/utilities (55 bare DML across 27 files)
+- **Phase 2e** (PR #7, complete): Selector FLS hardening (5 selectors), controller read-access guards (2 controllers)
 - See `planning/` for full roadmap and `documentation/MODERNIZATION_BURNDOWN.md` for tracking
 
 ## Build & Development Commands
@@ -96,8 +101,9 @@ force-app/
 ### Apex
 - Use domain prefixes consistently
 - Prefer `inherited sharing` over `without sharing`
-- Include CRUD/FLS checks for DML operations
-- Use bind variables in SOQL (no string concatenation)
+- Include CRUD/FLS checks at controller boundary (UTIL_Permissions); services/batch are internal and do not enforce CRUD/FLS
+- Use `UTIL_DMLService.insertRecord(s)`/`updateRecord(s)` for insert/update DML; `Database.delete(records, true)` for deletes
+- Use bind variables in SOQL (no string concatenation); add `WITH SECURITY_ENFORCED` to selectors serving controller paths
 - Follow service/selector/domain layer patterns
 
 ### Lightning Web Components
@@ -111,7 +117,7 @@ force-app/
 - Use `@TestSetup` for shared test data
 - Include assertion messages: `System.assertEquals(expected, actual, 'Description')`
 - Test bulk scenarios (200+ records) for trigger handlers
-- LWC tests: 52 Jest suites, 422 tests (all passing)
+- LWC tests: 45 Jest suites, 279 tests (all passing)
 
 ## Agent System
 
