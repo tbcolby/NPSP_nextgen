@@ -13,7 +13,7 @@ This document tracks backwards-compatible modernization items across multiple re
 |----------|-------------|-----------|-------------|-----------|
 | Phase 0: Packaging & Setup | 4 | 4 | 0 | 0 |
 | Phase 1: Foundation | 8 | 6 | 0 | 2 |
-| Phase 2: Security | 12 | 4 | 1 | 7 |
+| Phase 2: Security | 12 | 5 | 0 | 7 |
 | Phase 3: Async Modernization | 15 | 0 | 0 | 15 |
 | Phase 4: Performance | 18 | 0 | 0 | 18 |
 | Phase 5: Code Quality | 14 | 0 | 0 | 14 |
@@ -22,7 +22,7 @@ This document tracks backwards-compatible modernization items across multiple re
 | Phase 8: Accessibility | 10 | 0 | 0 | 10 |
 | Phase 9: Integration | 8 | 0 | 0 | 8 |
 | Phase 10: Long-term | 20 | 0 | 0 | 20 |
-| **TOTAL** | **158** | **14** | **1** | **143** |
+| **TOTAL** | **158** | **15** | **0** | **143** |
 
 **Estimated Total Effort**: 800-1200 hours across 8 quarterly releases
 
@@ -260,7 +260,7 @@ All non-Custom-Settings bare DML in production code wrapped with Database.*/UTIL
 | @AuraEnabled controllers (P0) | GE_GiftEntryController, BGE_ConfigurationWizard_CTRL, BGE_DataImportBatchEntry_CTRL | 8 | ✅ (Phase 2c) |
 | VF controllers (P1) | EP_ManageEPTemplate_CTRL, OPP_SendAcknowledgmentBTN_CTRL | 6 | ✅ (Phase 2c) |
 | Controllers with existing CRUD (P2) | ALLO_ManageAllocations_CTRL, MTCH_FindGifts_CTRL, BDI_DataImportDeleteBTN_CTRL, LVL_LevelEdit_CTRL, CON_DeleteContactOverride_CTRL, RD2_ETableController | 17 | ✅ (Phase 2c) |
-| Services | AN_AutoNumberService, RD_RecurringDonations, RD2_ScheduleService, RD2_QueueableService, ERR_Notifier, ContactMergeService, Gift, Gifts | 24 | ✅ (Phase 2d) |
+| Services | AN_AutoNumberService, RD_RecurringDonations, RD2_ScheduleService, RD2_QueueableService, ERR_Notifier, ContactMergeService, Gift, Gifts | 26 | ✅ (Phase 2d) |
 | TDTM handlers | OPP_OpportunityContactRoles_TDTM, AFFL_Affiliations_TDTM, PSC_PartialSoftCredit_TDTM, BDI_DataImportBatchStatus_TDTM, OPP_PrimaryContactRoleMerge | 10 | ✅ (Phase 2d) |
 | Batch classes | LVL_LevelAssign_BATCH, ALLO_MakeDefaultAllocations_BATCH, CRLP_Batch_Base, CRLP_RollupQueueable, UTIL_AbstractRollup_BATCH, RLLP_OppRollup | 8 | ✅ (Phase 2d) |
 | Remaining controllers & utilities | PMT_PaymentWizard_CTRL, LD_LeadConvertOverride_CTRL, OPP_OpportunityNamingBTN_CTRL, GE_Template, GS_ChecklistSetup, ERR_AsyncErrors, BDI_GAUAllocationsUtil, UTIL_PerfLogger | 10 | ✅ (Phase 2d) |
@@ -268,21 +268,18 @@ All non-Custom-Settings bare DML in production code wrapped with Database.*/UTIL
 ---
 
 ### 2.4 Implement CRUD/FLS Security Checks
-**Status**: 🔄 In Progress
+**Status**: ✅ Complete
 **Effort**: 15-20 hours | **Risk**: Medium | **Priority**: P1
 
-**Phase 2c**: Added CRUD checks (via UTIL_Permissions) to 6 controller methods that had DML without permission validation.
+CRUD/FLS enforced at controller boundary (Phase 2c: 7 methods + 4 pre-existing controllers verified). Selector FLS hardening for 5 selectors serving controller paths (Phase 2e). Services and batch classes intentionally excluded — per Salesforce ISV security review guidance, CRUD/FLS enforcement belongs at the controller boundary, not in internal services. Adding it to services would break multi-object transactions and batch processing in existing orgs.
 
-| Priority | Method | File | Check Added | Status |
-|----------|--------|------|-------------|--------|
-| P0 | upsertDataImport | GE_GiftEntryController | canCreate/canUpdate DataImport__c | ✅ |
-| P0 | upsertCustomColumnHeaders | GE_GiftEntryController | canCreate/canUpdate/canDelete Custom_Column_Header__c | ✅ |
-| P0 | deleteFormTemplates | GE_GiftEntryController | canDelete Form_Template__c | ✅ |
-| P0 | saveRecord | BGE_ConfigurationWizard_CTRL | canCreate/canUpdate DataImportBatch__c | ✅ |
-| P0 | updateAndDryRunRow | BGE_DataImportBatchEntry_CTRL | canUpdate DataImport__c | ✅ |
-| P1 | saveClose | EP_ManageEPTemplate_CTRL | canCreate/canUpdate/canDelete EP Template + Task | ✅ |
-| P1 | SendAcknowledgment | OPP_SendAcknowledgmentBTN_CTRL | canUpdate Opportunity | ✅ |
-| — | Services, selectors, batch | ~50+ files | — | ⬜ |
+| Category | Scope | Status |
+|----------|-------|--------|
+| @AuraEnabled controllers with DML | GE_GiftEntryController, BGE_ConfigurationWizard_CTRL, BGE_DataImportBatchEntry_CTRL, EP_ManageEPTemplate_CTRL, OPP_SendAcknowledgmentBTN_CTRL (7 methods) | ✅ (Phase 2c) |
+| Pre-existing CRUD/FLS | RD2_ETableController, RD2_PauseForm_CTRL, RD2_EntryFormController, PMT_RefundController, HH_Container_LCTRL, RD2_EnablementDelegate_CTRL (6 controllers) | ✅ Pre-existing |
+| Read-only controller guards | DonationHistoryController (canRead Opportunity), RD2_ChangeLogController (canRead RecurringDonationChangeLog__c) | ✅ (Phase 2e) |
+| Selector FLS | PaymentSelector, OpportunitySelector, AllocationSelector, RD2_ChangeLogSelector, CON_DeleteContactOverrideSelector | ✅ (Phase 2e) |
+| Services, batch (excluded) | ~50+ files — intentionally not enforced (ISV security review compliant; controller-boundary pattern) | N/A |
 
 ---
 

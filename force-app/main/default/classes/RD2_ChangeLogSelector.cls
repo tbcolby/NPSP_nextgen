@@ -70,6 +70,7 @@ public with sharing class RD2_ChangeLogSelector {
                 .withMultiCurrencyField()
                 .withFrom(RecurringDonationChangeLog__c.SObjectType)
                 .withWhere('RecurringDonation__c = :recurringDonationId')
+                .withSecurityEnforced()
                 .withLimit(this.recordLimit)
                 .withOrderBy('EffectiveDate__c DESC, CreatedDate DESC');
 

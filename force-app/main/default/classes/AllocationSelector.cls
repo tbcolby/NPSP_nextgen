@@ -39,6 +39,7 @@ public with sharing class AllocationSelector {
             .withFrom(Allocation__c.SObjectType)
             .withSelectFields(getStandardAllocationFields())
             .withWhere('Opportunity__c IN: oppIds')
+            .withSecurityEnforced()
             .build();
 
         return Database.query(soql);

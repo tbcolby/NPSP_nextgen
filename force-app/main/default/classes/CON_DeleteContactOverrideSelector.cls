@@ -42,6 +42,7 @@ public with sharing class CON_DeleteContactOverrideSelector {
                 AccountId, Account.Name, Account.npe01__SYSTEMIsIndividual__c
             FROM Contact
             WHERE Id = :contactId
+            WITH SECURITY_ENFORCED
         ];
         return contactDetails;
     }
@@ -51,6 +52,7 @@ public with sharing class CON_DeleteContactOverrideSelector {
             SELECT COUNT(id) ct
             FROM Contact
             WHERE AccountId = :accountId
+            WITH SECURITY_ENFORCED
             GROUP BY AccountId
             HAVING COUNT(id) = 1
         ];

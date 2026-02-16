@@ -61,6 +61,7 @@ public with sharing class PaymentSelector {
             .withFrom(npe01__OppPayment__c.SObjectType)
             .withSelectFields(queryFields)
             .withWhere('Id IN: paymentIds')
+            .withSecurityEnforced()
             .build();
 
         return Database.query(soql);
