@@ -39,6 +39,7 @@ public with sharing class OpportunitySelector {
             .withFrom(Opportunity.SObjectType)
             .withSelectFields(getOpportunityFields())
             .withWhere('Id IN: oppIds')
+            .withSecurityEnforced()
             .build();
 
         return Database.query(soql);

@@ -25,8 +25,10 @@ This directory contains CTA-level architectural planning documents for the NPSP_
 | Phase 1 | [PR #2](https://github.com/tbcolby/NPSP_nextgen/pull/2) (merged) | **Complete** | testMethod→@IsTest (648), @track cleanup (90), deps update, ESLint fixes |
 | Phase 2a | [PR #3](https://github.com/tbcolby/NPSP_nextgen/pull/3) (merged) | **Complete** | SOQL injection fixes (8 files), sharing declarations (46 classes), hardcoded ID docs |
 | Phase 2b | [PR #4](https://github.com/tbcolby/NPSP_nextgen/pull/4) (merged) | **Complete** | GE_LookupController injection fix, sharing complete (112 classes), hardcoded IDs audit |
-| Phase 2c | PR #5 | **In Progress** | CRUD/FLS enforcement (7 controller methods), DML wrapping (31 bare DML in 11 controllers) |
-| Phase 2d+ | — | Not started | DML error handling (services/batch/TDTM), CRUD/FLS (services/selectors), remaining security |
+| Phase 2c | [PR #5](https://github.com/tbcolby/NPSP_nextgen/pull/5) (merged) | **Complete** | CRUD/FLS enforcement (7 controller methods), DML wrapping (31 bare DML in 11 controllers) |
+| Phase 2d | [PR #6](https://github.com/tbcolby/NPSP_nextgen/pull/6) (merged) | **Complete** | DML wrapping complete: services (8 files), TDTM (5 files), batch (6 files), utilities (8 files) — 55 bare DML converted |
+| Phase 2e | PR #7 | **In Progress** | Selector FLS hardening (5 selectors), controller read-access guards (2 controllers), item 2.4 complete |
+| Phase 2f+ | — | Not started | Input validation, remaining security items (2.6-2.12) |
 
 ## Salesforce Well-Architected Framework Alignment
 

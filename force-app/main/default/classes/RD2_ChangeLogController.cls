@@ -31,6 +31,10 @@ public with sharing class RD2_ChangeLogController {
 
     @AuraEnabled
     public static RD2_ChangeLogView getChangeLog(Id recurringDonationId, Integer recordLimit, String changeTypeFilter) {
+        if (!UTIL_Permissions.canRead(
+                UTIL_Namespace.StrTokenNSPrefix('RecurringDonationChangeLog__c'), false)) {
+            throw new AuraHandledException(Label.commonPermissionErrorMessage);
+        }
         RD2_ChangeLogService service = new RD2_ChangeLogService();
         try {
             return service.getChangeLogView(recurringDonationId, recordLimit, changeTypeFilter);

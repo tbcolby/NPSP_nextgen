@@ -94,6 +94,9 @@ public with sharing class DonationHistoryController {
     */
     @AuraEnabled(cacheable=true)
     public static DonationHistoryAppView getDonationHistory(Id contactId, Integer offset, String filter) {
+        if (!UTIL_Permissions.canRead('Opportunity', false)) {
+            throw new AuraHandledException(Label.commonPermissionErrorMessage);
+        }
         contactId = (contactId == null ? getContactIdByUserId() : contactId );
         DonationHistoryService service = new DonationHistoryService();
         try {
@@ -118,6 +121,9 @@ public with sharing class DonationHistoryController {
      */
     @AuraEnabled(cacheable=true)
     public static List<String> getYearsWithDonations(Id contactId) {
+        if (!UTIL_Permissions.canRead('Opportunity', false)) {
+            throw new AuraHandledException(Label.commonPermissionErrorMessage);
+        }
         try {
             contactId = (contactId == null ? getContactIdByUserId() : contactId );
             return historyService.getYearsWithDonationsForContact(contactId);
