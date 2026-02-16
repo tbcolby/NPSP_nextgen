@@ -159,27 +159,32 @@ public with sharing class OPP_SendAcknowledgmentBTN_CTRL {
             }
         }
 
-        Savepoint sp = Database.setSavepoint(); 
+        if (!UTIL_Permissions.canUpdate('Opportunity', false)) {
+            addStatusMessage(ApexPages.Severity.ERROR, System.Label.commonAccessErrorMessage);
+            return null;
+        }
+
+        Savepoint sp = Database.setSavepoint();
         try {
-            update oppsToAttemptAck;
-            
+            UTIL_DMLService.updateRecords(oppsToAttemptAck);
+
             // detect how many were not sent via the workflow
             oppsNotSent = [
                 SELECT Name
-                FROM Opportunity 
-                WHERE Id IN :oppsToAttemptAck 
+                FROM Opportunity
+                WHERE Id IN :oppsToAttemptAck
                 AND Acknowledgment_Status__c = :ACKNOWLEDGEMENT_READY_TO_EMAIL
             ];
-            
+
             notSentCount = oppsNotSent.size();
             sentCount = oppsToAcknowledge.size() - notSentCount - alreadySentCount;
-            
+
             // for those Opps that failed, set status to acknowledgement failed
             for (Opportunity opp : oppsNotSent) {
                 opp.Acknowledgment_Status__c = ACKNOWLEDGEMENT_FAILED;
             }
-            
-            update oppsNotSent;
+
+            UTIL_DMLService.updateRecords(oppsNotSent);
 
             reportSendAckStatus();
 

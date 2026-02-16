@@ -119,7 +119,7 @@ public with sharing class RD2_ETableController {
     public static void upsertDonation(npe03__Recurring_Donation__c recurringDonation) {
         try {
             if(controller.hasAccessToRecurringDonation()) {
-                upsert recurringDonation; 
+                Database.upsert(recurringDonation, true);
             } else {
                 throw new UTIL_Permissions.InsufficientPermissionException(Label.commonInsufficientPermissions);
             }

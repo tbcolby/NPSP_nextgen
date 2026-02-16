@@ -523,7 +523,17 @@ public with sharing class BGE_ConfigurationWizard_CTRL {
             dataImportBatch.GiftBatch__c = true;
             dataImportBatch.Process_Using_Scheduled_Job__c = false;
 
-            upsert dataImportBatch;
+            String dibObjectName = UTIL_Namespace.StrAllNSPrefix('DataImportBatch__c');
+            if (dataImportBatch.Id != null) {
+                if (!UTIL_Permissions.canUpdate(dibObjectName, false)) {
+                    throw new UTIL_Permissions.InsufficientPermissionException(System.Label.commonAccessErrorMessage);
+                }
+            } else {
+                if (!UTIL_Permissions.canCreate(dibObjectName, false)) {
+                    throw new UTIL_Permissions.InsufficientPermissionException(System.Label.commonAccessErrorMessage);
+                }
+            }
+            Database.upsert(dataImportBatch, true);
 
             recordDetails.id = dataImportBatch.Id;
 

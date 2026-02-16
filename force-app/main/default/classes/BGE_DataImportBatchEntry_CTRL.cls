@@ -65,7 +65,7 @@ public with sharing class BGE_DataImportBatchEntry_CTRL {
         }
         
         try {
-            delete new DataImport__c(Id = dataImportId);
+            Database.delete(new DataImport__c(Id = dataImportId), true);
             DataImportModel dataImportModel = getUpdatedTotals(batchId);
             return JSON.serialize(dataImportModel);
         } catch (DmlException ex) {
@@ -387,6 +387,9 @@ public with sharing class BGE_DataImportBatchEntry_CTRL {
     */
     @AuraEnabled
     public static String updateAndDryRunRow(Id batchId, DataImport__c dataImport) {
+        if (!UTIL_Permissions.canUpdate(UTIL_Namespace.StrAllNSPrefix('DataImport__c'), false)) {
+            throw new UTIL_Permissions.InsufficientPermissionException(System.Label.commonAccessErrorMessage);
+        }
         try {
             Database.update(dataImport);
             return runSingleDryRun(dataImport.Id, batchId);
@@ -509,7 +512,7 @@ public with sharing class BGE_DataImportBatchEntry_CTRL {
             }
         }
 
-        update dataImportRecords;
+        Database.update(dataImportRecords, true);
 
         return dataImportRecords;
     }

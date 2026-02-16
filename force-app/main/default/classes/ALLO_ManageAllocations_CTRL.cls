@@ -372,7 +372,7 @@ public with sharing class ALLO_ManageAllocations_CTRL {
                     UTIL_AuraEnabledCommon.throwAuraHandledException(System.Label.commonAccessErrorMessage);
                 }
                 TDTM_ProcessControl.setRecursionFlag(TDTM_ProcessControl.flag.ALLOC, false);
-                delete allocationsToBeDeleted;
+                Database.delete(allocationsToBeDeleted, true);
 
                 //allow user to delete all GAUs and save with one empty GAU
                 if (allocations.size() == 1
@@ -389,7 +389,7 @@ public with sharing class ALLO_ManageAllocations_CTRL {
                     UTIL_AuraEnabledCommon.throwAuraHandledException(System.Label.commonAccessErrorMessage);
                 }
                 TDTM_ProcessControl.setRecursionFlag(TDTM_ProcessControl.flag.ALLOC, false);
-                update listAlloForUpdate;
+                UTIL_DMLService.updateRecords(listAlloForUpdate);
             }
 
             if (!listAlloForInsert.isEmpty()) {
@@ -397,7 +397,7 @@ public with sharing class ALLO_ManageAllocations_CTRL {
                     UTIL_AuraEnabledCommon.throwAuraHandledException(System.Label.commonAccessErrorMessage);
                 }
                 TDTM_ProcessControl.setRecursionFlag(TDTM_ProcessControl.flag.ALLOC, false);
-                insert listAlloForInsert;
+                UTIL_DMLService.insertRecords(listAlloForInsert);
             }
             redirect = true;
 

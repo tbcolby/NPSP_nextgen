@@ -140,7 +140,7 @@ public with sharing class BDI_DataImportDeleteBTN_CTRL {
         try {
             // avoid using VF view state to check delete permissions
             if(checkDelete()) {
-                delete dataImports;
+                Database.delete(dataImports, true);
                 return close();
             } else {
                 displayAccessError();

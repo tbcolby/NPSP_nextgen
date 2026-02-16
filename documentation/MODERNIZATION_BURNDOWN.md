@@ -13,7 +13,7 @@ This document tracks backwards-compatible modernization items across multiple re
 |----------|-------------|-----------|-------------|-----------|
 | Phase 0: Packaging & Setup | 4 | 4 | 0 | 0 |
 | Phase 1: Foundation | 8 | 6 | 0 | 2 |
-| Phase 2: Security | 12 | 3 | 0 | 9 |
+| Phase 2: Security | 12 | 3 | 2 | 7 |
 | Phase 3: Async Modernization | 15 | 0 | 0 | 15 |
 | Phase 4: Performance | 18 | 0 | 0 | 18 |
 | Phase 5: Code Quality | 14 | 0 | 0 | 14 |
@@ -22,7 +22,7 @@ This document tracks backwards-compatible modernization items across multiple re
 | Phase 8: Accessibility | 10 | 0 | 0 | 10 |
 | Phase 9: Integration | 8 | 0 | 0 | 8 |
 | Phase 10: Long-term | 20 | 0 | 0 | 20 |
-| **TOTAL** | **158** | **13** | **0** | **145** |
+| **TOTAL** | **158** | **13** | **2** | **143** |
 
 **Estimated Total Effort**: 800-1200 hours across 8 quarterly releases
 
@@ -250,48 +250,36 @@ Fixed 6 LWC test suites broken by Elevate removal. Fixed pre-existing rd2EntryFo
 ---
 
 ### 2.3 Add Database Operation Error Handling
-**Status**: ⬜ Not Started
+**Status**: 🔄 In Progress
 **Effort**: 8-10 hours | **Risk**: Very Low | **Priority**: P1
 
-**Classes needing explicit allOrNone parameter**:
+**Phase 2c**: Converted 31 bare DML statements in 11 controller files to Database.*/UTIL_DMLService with explicit allOrNone parameter.
 
-| Class | Operations | Status |
-|-------|------------|--------|
-| RD_RecurringDonations.cls | insert, delete | ⬜ |
-| OPP_OpportunityContactRoles_TDTM.cls | insert, delete | ⬜ |
-| ALLO_AllocationsDMLService.cls | insert, update, delete | ⬜ |
-| BDI_DataImportService.cls | multiple DML | ⬜ |
-| 20+ other classes | various | ⬜ |
+| Category | Files | Bare DML Converted | Status |
+|----------|-------|--------------------|--------|
+| @AuraEnabled controllers (P0) | GE_GiftEntryController, BGE_ConfigurationWizard_CTRL, BGE_DataImportBatchEntry_CTRL | 8 | ✅ |
+| VF controllers (P1) | EP_ManageEPTemplate_CTRL, OPP_SendAcknowledgmentBTN_CTRL | 6 | ✅ |
+| Controllers with existing CRUD (P2) | ALLO_ManageAllocations_CTRL, MTCH_FindGifts_CTRL, BDI_DataImportDeleteBTN_CTRL, LVL_LevelEdit_CTRL, CON_DeleteContactOverride_CTRL, RD2_ETableController | 17 | ✅ |
+| Services, batch, TDTM (deferred) | ~30 files | ~143 | ⬜ |
 
 ---
 
 ### 2.4 Implement CRUD/FLS Security Checks
-**Status**: ⬜ Not Started
+**Status**: 🔄 In Progress
 **Effort**: 15-20 hours | **Risk**: Medium | **Priority**: P1
 
-**Current State**: Only 1 file uses `Security.stripInaccessible()` (CON_ContactMerge_CTRL.cls)
+**Phase 2c**: Added CRUD checks (via UTIL_Permissions) to 6 controller methods that had DML without permission validation.
 
-| Priority | Area | Files | Status |
-|----------|------|-------|--------|
-| Critical | Batch classes | 45 files | ⬜ |
-| Critical | Visualforce controllers | 40+ files | ⬜ |
-| High | Aura controllers | 35 files | ⬜ |
-| High | Service classes | 50+ files | ⬜ |
-| Medium | Selector classes | 20+ files | ⬜ |
-
-**Implementation Pattern**:
-```apex
-// Check before DML
-if (!Schema.sObjectType.Account.isUpdateable()) {
-    throw new SecurityException('Insufficient permissions');
-}
-
-// Or use stripInaccessible (API 48.0+)
-List<Account> accounts = (List<Account>) Security.stripInaccessible(
-    AccessType.UPDATABLE,
-    [SELECT Id, Name, SecretField__c FROM Account]
-).getRecords();
-```
+| Priority | Method | File | Check Added | Status |
+|----------|--------|------|-------------|--------|
+| P0 | upsertDataImport | GE_GiftEntryController | canCreate/canUpdate DataImport__c | ✅ |
+| P0 | upsertCustomColumnHeaders | GE_GiftEntryController | canCreate/canUpdate/canDelete Custom_Column_Header__c | ✅ |
+| P0 | deleteFormTemplates | GE_GiftEntryController | canDelete Form_Template__c | ✅ |
+| P0 | saveRecord | BGE_ConfigurationWizard_CTRL | canCreate/canUpdate DataImportBatch__c | ✅ |
+| P0 | updateAndDryRunRow | BGE_DataImportBatchEntry_CTRL | canUpdate DataImport__c | ✅ |
+| P1 | saveClose | EP_ManageEPTemplate_CTRL | canCreate/canUpdate/canDelete EP Template + Task | ✅ |
+| P1 | SendAcknowledgment | OPP_SendAcknowledgmentBTN_CTRL | canUpdate Opportunity | ✅ |
+| — | Services, selectors, batch | ~50+ files | — | ⬜ |
 
 ---
 
@@ -930,6 +918,7 @@ Each release should include:
 | 2026-02-14 | 158 | 5 | 153 | Phase 0 (4 items) + Phase 1 item 1.1 (API upgrade) |
 | 2026-02-15 | 158 | 10 | 148 | Phase 1 items 1.2-1.8 (+5 completed) |
 | 2026-02-16 | 158 | 13 | 145 | Phase 2a+2b: SOQL injection complete (2.1), sharing complete (2.2), hardcoded IDs audit complete (2.5) |
+| 2026-02-16 | 158 | 13 | 143 | Phase 2c: CRUD/FLS enforcement + DML wrapping in controllers (2.3 + 2.4 in progress) |
 
 ### Sprint Velocity History
 
@@ -939,6 +928,7 @@ Each release should include:
 | Phase 1 | 7 | 5 | 1 deferred (TODO/FIXME → Phase 5), 1 was N/A (fflib = no app usage) |
 | Phase 2a | 3 | 1 | 2.1 complete, 2.2 + 2.5 in progress (46 sharing + 8 SOQL injection + 1 doc) |
 | Phase 2b | 3 | 3 | 2.1 addendum (GE_LookupController), 2.2 complete (112 sharing), 2.5 complete (audit) |
+| Phase 2c | 2 | 0 | 2.3 in progress (31 bare DML in 11 controllers), 2.4 in progress (7 CRUD gaps in 5 controllers) |
 
 ---
 

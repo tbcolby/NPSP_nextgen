@@ -24,8 +24,9 @@ This directory contains CTA-level architectural planning documents for the NPSP_
 | Phase 0 | [PR #1](https://github.com/tbcolby/NPSP_nextgen/pull/1) (merged) | **Complete** | Namespace npsp→npsp2, API 53→63, Elevate removal, CCI 4.6.0, CI fixes |
 | Phase 1 | [PR #2](https://github.com/tbcolby/NPSP_nextgen/pull/2) (merged) | **Complete** | testMethod→@IsTest (648), @track cleanup (90), deps update, ESLint fixes |
 | Phase 2a | [PR #3](https://github.com/tbcolby/NPSP_nextgen/pull/3) (merged) | **Complete** | SOQL injection fixes (8 files), sharing declarations (46 classes), hardcoded ID docs |
-| Phase 2b | PR #4 | **In Progress** | GE_LookupController injection fix, sharing complete (112 classes), hardcoded IDs audit |
-| Phase 2c+ | — | Not started | DML error handling (209 bare DML), CRUD/FLS (593 @AuraEnabled), remaining security |
+| Phase 2b | [PR #4](https://github.com/tbcolby/NPSP_nextgen/pull/4) (merged) | **Complete** | GE_LookupController injection fix, sharing complete (112 classes), hardcoded IDs audit |
+| Phase 2c | PR #5 | **In Progress** | CRUD/FLS enforcement (7 controller methods), DML wrapping (31 bare DML in 11 controllers) |
+| Phase 2d+ | — | Not started | DML error handling (services/batch/TDTM), CRUD/FLS (services/selectors), remaining security |
 
 ## Salesforce Well-Architected Framework Alignment
 

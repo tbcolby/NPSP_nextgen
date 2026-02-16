@@ -303,13 +303,13 @@ public with sharing class MTCH_FindGifts_CTRL {
 
         Savepoint sp = Database.setSavepoint();
         try {
-            update potentialGifts;
+            UTIL_DMLService.updateRecords(potentialGifts);
             if (softCredits.size() > 0)
-                insert softCredits;
+                UTIL_DMLService.insertRecords(softCredits);
             if (listPSCDelete.size() > 0)
-               delete listPSCDelete;
+               Database.delete(listPSCDelete, true);
             if (listOCRDelete.size() > 0)
-               delete listOCRDelete;
+               Database.delete(listOCRDelete, true);
 
             return true;
 

@@ -281,7 +281,7 @@ public with sharing class CON_DeleteContactOverride_CTRL {
             cascadeDelete.deleteOpportunities();
             cascadeDelete.deleteRecurringDonations();
 
-            delete contactRecord;
+            Database.delete(contactRecord, true);
 
 
             if (lexOrSF1User) {
@@ -320,7 +320,7 @@ public with sharing class CON_DeleteContactOverride_CTRL {
             AccountCascadeDelete cascadeDelete = new AccountCascadeDelete(account, contactOverrideSelector);
             cascadeDelete.validate();
 
-            delete account;
+            Database.delete(account, true);
         } catch (Exception ex){
             if (!hasPageMessages)
                 ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, ex.getMessage()));
@@ -430,7 +430,7 @@ public with sharing class CON_DeleteContactOverride_CTRL {
         * @return void
         ********************************************************************************************************/
         public void deleteOpportunities() {
-            delete relatedOpportunities;
+            Database.delete(relatedOpportunities, true);
         }
 
         /*******************************************************************************************************
@@ -438,7 +438,7 @@ public with sharing class CON_DeleteContactOverride_CTRL {
         * @return void
         ********************************************************************************************************/
         public void deleteRecurringDonations() {
-            delete relatedRecurringDonations;
+            Database.delete(relatedRecurringDonations, true);
         }
     }
 
