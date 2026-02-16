@@ -27,30 +27,29 @@
  *     ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  *     POSSIBILITY OF SUCH DAMAGE.
  */
-import { LightningElement, track } from 'lwc';
-import { buildErrorMessage } from 'c/utilTemplateBuilder';
-import { isEmpty } from 'c/utilCommon';
+import { LightningElement, track } from "lwc";
+import { buildErrorMessage } from "c/utilTemplateBuilder";
+import { isEmpty } from "c/utilCommon";
 
-import messageLoading from '@salesforce/label/c.labelMessageLoading';
-import insufficientPermissions from '@salesforce/label/c.commonInsufficientPermissions';
-import commonAdminPermissionErrorMessage from '@salesforce/label/c.commonAdminPermissionErrorMessage';
-import gatewaySelectionLabel from '@salesforce/label/c.psGatewaySelectionLabel';
-import psEnableGatewayAssignment from '@salesforce/label/c.psEnableGatewayAssignment';
-import psEnableGatewayAssignmentHeader from '@salesforce/label/c.psEnableGatewayAssignmentHeader';
-import psEnableGatewayAssignmentHelp from '@salesforce/label/c.psEnableGatewayAssignmentHelp';
-import psGatewayIDHeader from '@salesforce/label/c.psGatewayIdHeader';
-import psGatewayIDHelp from '@salesforce/label/c.psGatewayIdHelp';
-import psGatewayManagementHelp from '@salesforce/label/c.psGatewayManagementHelp';
+import messageLoading from "@salesforce/label/c.labelMessageLoading";
+import insufficientPermissions from "@salesforce/label/c.commonInsufficientPermissions";
+import commonAdminPermissionErrorMessage from "@salesforce/label/c.commonAdminPermissionErrorMessage";
+import gatewaySelectionLabel from "@salesforce/label/c.psGatewaySelectionLabel";
+import psEnableGatewayAssignment from "@salesforce/label/c.psEnableGatewayAssignment";
+import psEnableGatewayAssignmentHeader from "@salesforce/label/c.psEnableGatewayAssignmentHeader";
+import psEnableGatewayAssignmentHelp from "@salesforce/label/c.psEnableGatewayAssignmentHelp";
+import psGatewayIDHeader from "@salesforce/label/c.psGatewayIdHeader";
+import psGatewayIDHelp from "@salesforce/label/c.psGatewayIdHelp";
+import psGatewayManagementHelp from "@salesforce/label/c.psGatewayManagementHelp";
 
-import setGatewayId from '@salesforce/apex/PS_GatewayManagement.setGatewayId';
-import setGatewayAssignmentEnabled from '@salesforce/apex/PS_GatewayManagement.setGatewayAssignmentEnabled';
-import getGatewayManagementSettings from '@salesforce/apex/PS_GatewayManagement.getGatewayManagementSettings';
-import { fireEvent, registerListener } from 'c/pubsubNoPageRef';
+import setGatewayId from "@salesforce/apex/PS_GatewayManagement.setGatewayId";
+import setGatewayAssignmentEnabled from "@salesforce/apex/PS_GatewayManagement.setGatewayAssignmentEnabled";
+import getGatewayManagementSettings from "@salesforce/apex/PS_GatewayManagement.getGatewayManagementSettings";
+import { fireEvent, registerListener } from "c/pubsubNoPageRef";
 
-const GATEWAY_MANAGEMENT_MODE = 'MANAGEMENT';
+const GATEWAY_MANAGEMENT_MODE = "MANAGEMENT";
 
 export default class GePaymentGatewayManagement extends LightningElement {
-
     showSpinner;
     gatewayId;
 
@@ -75,7 +74,7 @@ export default class GePaymentGatewayManagement extends LightningElement {
         psEnableGatewayAssignmentHelp,
         psGatewayIDHeader,
         psGatewayIDHelp,
-        psGatewayManagementHelp
+        psGatewayManagementHelp,
     };
 
     async connectedCallback() {
@@ -88,16 +87,16 @@ export default class GePaymentGatewayManagement extends LightningElement {
             this.hasAccess = !!(this.isElevateCustomer && this.isSystemAdmin);
 
             if (this.hasAccess) {
-            this.isGatewayAssignmentEnabled = await gatewayManagementSettings.isGatewayAssignmentEnabled;
+                this.isGatewayAssignmentEnabled = await gatewayManagementSettings.isGatewayAssignmentEnabled;
             }
-        } catch(ex) {
+        } catch (ex) {
             this.errorMessage = buildErrorMessage(ex);
             this.isError = true;
         }
 
         if (this.hasAccess) {
-            registerListener('updateSelectedGateway', this.updateSelectedGateway, this);
-            registerListener('getElevateGatewaysError', this.displayGatewayError, this);
+            registerListener("updateSelectedGateway", this.updateSelectedGateway, this);
+            registerListener("getElevateGatewaysError", this.displayGatewayError, this);
         }
     }
 
@@ -108,7 +107,9 @@ export default class GePaymentGatewayManagement extends LightningElement {
     set isSuccess(value) {
         this._isSuccess = value;
 
-        if (value) { this.isError = false; }
+        if (value) {
+            this.isError = false;
+        }
     }
 
     _isError;
@@ -118,26 +119,28 @@ export default class GePaymentGatewayManagement extends LightningElement {
     set isError(value) {
         this._isError = value;
 
-        if (value) { this.isSuccess = false; }
+        if (value) {
+            this.isSuccess = false;
+        }
     }
 
     get noAccessErrorMessage() {
         if (!this.isSystemAdmin) {
-            return this.CUSTOM_LABELS.commonAdminPermissionErrorMessage
+            return this.CUSTOM_LABELS.commonAdminPermissionErrorMessage;
         }
         // Temporary Hardcoded Text until this functionality is moved out of NPSP entirely
         if (!this.isElevateCustomer) {
-            return 'You must be an Elevate customer to use this setting.';
+            return "You must be an Elevate customer to use this setting.";
         }
     }
 
     handleEdit() {
         this.isReadOnly = false;
-        fireEvent(this, 'editGatewayManagement', null);
+        fireEvent(this, "editGatewayManagement", null);
     }
 
     handleCancel() {
-        fireEvent(this, 'cancelGatewayManagement', null);
+        fireEvent(this, "cancelGatewayManagement", null);
 
         this.resetAlert();
         this.isReadOnly = true;
@@ -159,8 +162,8 @@ export default class GePaymentGatewayManagement extends LightningElement {
             this.isSuccess = true;
             this.showSpinner = false;
 
-            fireEvent(this, 'saveGatewayManagement', this.gatewayId);
-        } catch(ex) {
+            fireEvent(this, "saveGatewayManagement", this.gatewayId);
+        } catch (ex) {
             this.errorMessage = buildErrorMessage(ex);
             this.showSpinner = false;
             this.isError = true;
@@ -177,14 +180,13 @@ export default class GePaymentGatewayManagement extends LightningElement {
     }
 
     async handleToggle(event) {
-
         this.showSpinner = true;
         const gatewayAssignmentEnabled = this.template.querySelector("[data-id='enableGatewayAssignment']");
 
         try {
-            await setGatewayAssignmentEnabled({ gatewayAssignmentEnabled: gatewayAssignmentEnabled.checked});
+            await setGatewayAssignmentEnabled({ gatewayAssignmentEnabled: gatewayAssignmentEnabled.checked });
             this.showSpinner = false;
-        } catch(ex) {
+        } catch (ex) {
             this.errorMessage = buildErrorMessage(ex);
             this.showSpinner = false;
             this.isError = true;

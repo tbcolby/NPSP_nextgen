@@ -1,6 +1,6 @@
-import GeFormService from 'c/geFormService';
-import { isNotEmpty } from 'c/utilCommon';
-import { isTrueFalsePicklist } from 'c/utilTemplateBuilder';
+import GeFormService from "c/geFormService";
+import { isNotEmpty } from "c/utilCommon";
+import { isTrueFalsePicklist } from "c/utilTemplateBuilder";
 
 export default class GeFormElementHelper {
     element;

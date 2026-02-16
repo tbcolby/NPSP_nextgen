@@ -22,7 +22,7 @@ import {
     ACCOUNT_HOLDER_TYPES,
     TOKENIZE_CREDIT_CARD_EVENT_ACTION,
     TOKENIZE_ACH_EVENT_ACTION,
-    DEFAULT_NAME_ON_CARD
+    DEFAULT_NAME_ON_CARD,
 } from "c/geConstants";
 
 import { Rd2Service, CONTACT_DONOR_TYPE, ACCOUNT_DONOR_TYPE } from "c/rd2Service";
@@ -56,8 +56,8 @@ export default class rd2ElevateCreditCardForm extends LightningElement {
 
     rd2Service = new Rd2Service();
 
-    @track isLoading = true;
-    @track isDisabled = false;
+    isLoading = true;
+    isDisabled = false;
     @track alert = {};
 
     _paymentMethod;
@@ -77,8 +77,8 @@ export default class rd2ElevateCreditCardForm extends LightningElement {
     @api payerLastName;
 
     @api isDigitalExperience = false;
-    creditCardContainerClass = 'credit-card-container slds-var-m-top_small';
-    cardInfoClass = 'slds-var-p-horizontal_small slds-var-p-top_small';
+    creditCardContainerClass = "credit-card-container slds-var-m-top_small";
+    cardInfoClass = "slds-var-p-horizontal_small slds-var-p-top_small";
 
     @api
     get paymentMethod() {
@@ -197,21 +197,19 @@ export default class rd2ElevateCreditCardForm extends LightningElement {
         });
 
         await tokenHandler.setVisualforceOriginURLs(domainInfo);
-        
-        if(this.isDigitalExperience) {
+
+        if (this.isDigitalExperience) {
             this.handleUserEnabledWidget();
-            this.creditCardContainerClass = '';
-            this.cardInfoClass = '';
+            this.creditCardContainerClass = "";
+            this.cardInfoClass = "";
         }
-        
     }
 
     shouldLoadInDisabledMode() {
         if (this.updatePaymentMode) {
             return false;
-        } else {
-            return !this.isPaymentMethodChanged() && this.rd2RecordId;
         }
+        return !this.isPaymentMethodChanged() && this.rd2RecordId;
     }
 
     /***
@@ -289,7 +287,7 @@ export default class rd2ElevateCreditCardForm extends LightningElement {
     getCardParams() {
         const cardholderName = this.cardholderName || DEFAULT_NAME_ON_CARD;
         return {
-            nameOnCard: cardholderName
+            nameOnCard: cardholderName,
         };
     }
 

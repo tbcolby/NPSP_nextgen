@@ -42,7 +42,7 @@ private with sharing class EP_EngagementPlans_TEST {
     * Engagement Plan using that template. Verifies that tasks are created, that fields are copied over, and
     * that both non-dependent and dependent tasks use the correct defaults.
     */
-    static testMethod void testDependentPlan() {
+    @IsTest static void testDependentPlan() {
 
         Id otherUserId = getOtherUserId();
 
@@ -117,7 +117,7 @@ private with sharing class EP_EngagementPlans_TEST {
     * @description Creates an EP Task with a delay of the number of days until the weekend, as part of a
     * template set to delay until Monday. Verifies that the activity date is set on Monday.
     */
-    static testMethod void testSkipWeekendsMonday() {
+    @IsTest static void testSkipWeekendsMonday() {
 
         Integer daysUntilWeekend = getDaysUntilWeekend(System.today());
 
@@ -181,7 +181,7 @@ private with sharing class EP_EngagementPlans_TEST {
     * @description Creates an EP Task with a delay of the number of days until the weekend, as part of a
     * template set to advance the date to Friday. Verifies that the activity date is set on Friday.
     */
-    static testMethod void testSkipWeekendsFriday() {
+    @IsTest static void testSkipWeekendsFriday() {
 
         Integer daysUntilWeekend = getDaysUntilWeekend(System.today());
 
@@ -246,7 +246,7 @@ private with sharing class EP_EngagementPlans_TEST {
     * Engagement Plan associated with an Account. Verifies that WhatId is used for Engagement Plans assigned
     * to objects other than Contact and Lead, and that the task assignment correctly uses the Account's owner.
     */
-    static testMethod void testTaskAssignment() {
+    @IsTest static void testTaskAssignment() {
 
         Integer daysUntilWeekend = getDaysUntilWeekend(System.today());
         Id otherUserId = getOtherUserId();
@@ -287,7 +287,7 @@ private with sharing class EP_EngagementPlans_TEST {
     /*********************************************************************************************************
     * @description Inserts an Engagement Plan without an object lookup, verifies exception is thrown.
     */
-    static testMethod void testPlanWithoutLookup() {
+    @IsTest static void testPlanWithoutLookup() {
 
         Engagement_Plan_Template__c template = new Engagement_Plan_Template__c(Name = 'Template');
         insert template;
@@ -313,7 +313,7 @@ private with sharing class EP_EngagementPlans_TEST {
     /*********************************************************************************************************
     * @description Inserts an Engagement Plan with two object lookups, verifies exception is thrown.
     */
-    static testMethod void testPlanWithTwoLookups() {
+    @IsTest static void testPlanWithTwoLookups() {
 
         Account acc = new Account(Name='foo');
         insert acc;
@@ -344,7 +344,7 @@ private with sharing class EP_EngagementPlans_TEST {
     /*********************************************************************************************************
     * @description Updates an engagement plan to change the value of the  lookup, verifies an exception is thrown.
     */
-    static testMethod void testPlanUpdate() {
+    @IsTest static void testPlanUpdate() {
 
         Account acc = new Account(Name='foo');
         insert acc;

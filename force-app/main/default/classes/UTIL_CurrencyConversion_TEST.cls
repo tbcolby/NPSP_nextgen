@@ -40,7 +40,7 @@ private class UTIL_CurrencyConversion_TEST {
     /**
      * @description Validate proper currency conversion math when dated exchange rates are enabled in an org
      */
-    static testMethod void test_CurrencyConversionWithDatedRates() {
+    @IsTest static void test_CurrencyConversionWithDatedRates() {
 
         UtilCurrencyCacheMock mockcurrCache = new UtilCurrencyCacheMock();
         UTIL_CurrencyCache.instance = mockcurrCache;

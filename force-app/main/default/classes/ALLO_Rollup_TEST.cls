@@ -56,7 +56,7 @@ private with sharing class ALLO_Rollup_TEST {
     }
 
     /** @description Tests rollup button on general accounting units. */
-    static testMethod void rollupBTN() {
+    @IsTest static void rollupBTN() {
         setupSettings(null);
 
         Account acc = new Account(Name='foo');
@@ -97,7 +97,7 @@ private with sharing class ALLO_Rollup_TEST {
 
     /** @description Tests rollup button on general accounting units with fiscal year enabled. This test is only different
     * from the above test if fiscal years are enabled in the current org; we can't set that setting in tests. */
-    static testMethod void rollupFiscalYear() {
+    @IsTest static void rollupFiscalYear() {
         setupSettings(new Allocations_Settings__c(Use_Fiscal_Year_for_Rollups__c=true));
 
         Account acc = new Account(Name='foo');

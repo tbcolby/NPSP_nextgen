@@ -228,19 +228,19 @@ public class CRLP_RollupContact_TEST {
         CRLP_Rollup_SEL.cachedRollups = (List<Rollup__mdt>) JSON.deserialize(rollupsJSON, List<Rollup__mdt>.class);
     }
 
-    static testMethod void test_Rollups_Queueable() {
+    @IsTest static void test_Rollups_Queueable() {
         testRollupsServices(TestType.TestQueueuable);
     }
-    static testMethod void test_Rollups_Batch() {
+    @IsTest static void test_Rollups_Batch() {
         testRollupsServices(TestType.TestBatch);
     }
-    static testMethod void test_Rollups_SkewBatch() {
+    @IsTest static void test_Rollups_SkewBatch() {
         testRollupsServices(TestType.testSkewBatch);
     }
-    static testMethod void test_Rollups_Trigger() {
+    @IsTest static void test_Rollups_Trigger() {
         testRollupsServices(TestType.TestTrigger);
     }
-    static testMethod void test_Rollups_AlwaysRollupToPrimaryEnabled() {
+    @IsTest static void test_Rollups_AlwaysRollupToPrimaryEnabled() {
         testRollupsServices(TestType.TestWithAlwaysRollupToPrimary);
     }
 

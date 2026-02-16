@@ -1,28 +1,25 @@
-import { fireEvent } from 'c/pubsubNoPageRef';
-import { getNamespace, isFunction, isNull, validateJSONString } from 'c/utilCommon';
-import PAYMENT_AUTHORIZATION_TOKEN_FIELD from
-        '@salesforce/schema/DataImport__c.Payment_Authorization_Token__c';
-import tokenRequestTimedOut from '@salesforce/label/c.gePaymentRequestTimedOut';
-import getOriginUrls from '@salesforce/apex/GE_PaymentServices.getOriginUrls';
-import { isBlank } from 'c/util';
-
+import { fireEvent } from "c/pubsubNoPageRef";
+import { getNamespace, isFunction, isNull, validateJSONString } from "c/utilCommon";
+import PAYMENT_AUTHORIZATION_TOKEN_FIELD from "@salesforce/schema/DataImport__c.Payment_Authorization_Token__c";
+import tokenRequestTimedOut from "@salesforce/label/c.gePaymentRequestTimedOut";
+import getOriginUrls from "@salesforce/apex/GE_PaymentServices.getOriginUrls";
+import { isBlank } from "c/util";
 
 /***
  * @description Visualforce page used to handle the payment services credit card tokenization request
  */
-const TOKENIZE_CARD_PAGE_NAME = 'GE_TokenizeCard';
+const TOKENIZE_CARD_PAGE_NAME = "GE_TokenizeCard";
 
-const MOUNT_IFRAME_EVENT_ACTION = 'mount';
+const MOUNT_IFRAME_EVENT_ACTION = "mount";
 
-const SET_PAYMENT_METHOD_EVENT_ACTION = 'setPaymentMethod';
+const SET_PAYMENT_METHOD_EVENT_ACTION = "setPaymentMethod";
 
 /***
  * @description Max number of ms to wait for the response containing a token or an error
  */
 const TOKENIZE_TIMEOUT_MS = 10000;
 
-const NON_NAMESPACED_CHARACTER = 'c';
-
+const NON_NAMESPACED_CHARACTER = "c";
 
 /***
  * @description Payment services Elevate credit card tokenization service
@@ -32,12 +29,11 @@ class psElevateTokenHandler {
      * @description Custom labels
      */
     labels = Object.freeze({
-        tokenRequestTimedOut
+        tokenRequestTimedOut,
     });
 
     _visualforceOriginUrls;
     _visualforceOrigin;
-
 
     /***
      * @description Returns credit card tokenization Visualforce page URL
@@ -49,12 +45,9 @@ class psElevateTokenHandler {
     }
 
     async getVisualForceOriginURLs(domainInfo, namespace) {
-        const originUrls = await getOriginUrls({namespace});
+        const originUrls = await getOriginUrls({ namespace });
 
-        const originURLs = [
-            {value: originUrls.visualForceOriginUrl},
-            {value: originUrls.lightningOriginUrl}
-        ];
+        const originURLs = [{ value: originUrls.visualForceOriginUrl }, { value: originUrls.lightningOriginUrl }];
         if (!isBlank(domainInfo.communityBaseURL)) {
             return [...originURLs, { value: domainInfo.communityBaseURL }];
         }
@@ -70,12 +63,8 @@ class psElevateTokenHandler {
         if (isNull(domainInfo)) {
             return;
         }
-        const namespace = this.currentNamespace
-            ? this.currentNamespace
-            : NON_NAMESPACED_CHARACTER;
-        this._visualforceOriginUrls =
-            await this.getVisualForceOriginURLs(domainInfo, namespace);
-
+        const namespace = this.currentNamespace ? this.currentNamespace : NON_NAMESPACED_CHARACTER;
+        this._visualforceOriginUrls = await this.getVisualForceOriginURLs(domainInfo, namespace);
     }
 
     /***
@@ -102,14 +91,14 @@ class psElevateTokenHandler {
 
         window.onmessage = async function (event) {
             if (self.shouldHandleMessage(event)) {
-                if (typeof event.data === 'object') {
+                if (typeof event.data === "object") {
                     component.handleMessage(event.data);
                 } else {
                     const message = event.data;
                     component.handleMessage(message);
                 }
             }
-        }
+        };
     }
 
     /**
@@ -118,19 +107,13 @@ class psElevateTokenHandler {
      * @param event
      * @returns {boolean}
      */
-    shouldHandleMessage (event) {
-        return !!(this.isExpectedVisualForceOrigin(event)
-            && validateJSONString(JSON.stringify(event.data)));
+    shouldHandleMessage(event) {
+        return !!(this.isExpectedVisualForceOrigin(event) && validateJSONString(JSON.stringify(event.data)));
     }
 
-    isExpectedVisualForceOrigin (event) {
-        this._visualforceOrigin = this._visualforceOriginUrls.find(
-            origin => event.origin === origin.value
-        );
-        this._visualforceOrigin =
-            this._visualforceOrigin !== undefined
-                ? this._visualforceOrigin.value
-                : undefined;
+    isExpectedVisualForceOrigin(event) {
+        this._visualforceOrigin = this._visualforceOriginUrls.find((origin) => event.origin === origin.value);
+        this._visualforceOrigin = this._visualforceOrigin !== undefined ? this._visualforceOrigin.value : undefined;
         return this._visualforceOrigin !== undefined;
     }
 
@@ -139,7 +122,7 @@ class psElevateTokenHandler {
      * @param message Message received from the iframe
      */
     handleMessage(message) {
-        const isValidMessageType = message.type === 'post__npsp';
+        const isValidMessageType = message.type === "post__npsp";
         if (isValidMessageType) {
             if (isFunction(this.tokenCallback)) {
                 this.tokenCallback(message);
@@ -153,33 +136,28 @@ class psElevateTokenHandler {
      * @param {Object} params An object that holds parameters needed to tokenize credit card and ACH transactions
      * @return Promise A token promise
      */
-    requestToken({
-                     iframe,
-                     handleError,
-                     resolveToken,
-                     eventAction,
-                     tokenizeParameters,
-                 } = {}) {
+    requestToken({ iframe, handleError, resolveToken, eventAction, tokenizeParameters } = {}) {
         if (isNull(iframe)) {
             return;
         }
 
         const tokenPromise = new Promise((resolve, reject) => {
-
-            const timer = setTimeout(() =>
-                    reject(handleError({
-                        error: this.labels.tokenRequestTimedOut,
-                        isObject: false,
-                    })),
-                TOKENIZE_TIMEOUT_MS,
+            const timer = setTimeout(
+                () =>
+                    reject(
+                        handleError({
+                            error: this.labels.tokenRequestTimedOut,
+                            isObject: false,
+                        })
+                    ),
+                TOKENIZE_TIMEOUT_MS
             );
 
-            this.tokenCallback = message => {
+            this.tokenCallback = (message) => {
                 clearTimeout(timer);
 
                 if (message.error) {
                     reject(handleError(message));
-
                 } else if (message.token) {
                     if (resolveToken) {
                         resolve(resolveToken(message.token));
@@ -188,7 +166,6 @@ class psElevateTokenHandler {
                     }
                 }
             };
-
         });
 
         const message = {
@@ -206,7 +183,7 @@ class psElevateTokenHandler {
         }
 
         const setPaymentMethodPromise = new Promise((resolve, reject) => {
-            this.tokenCallback = message => {
+            this.tokenCallback = (message) => {
                 if (message.error) {
                     reject(handleError(message));
                 } else {
@@ -217,7 +194,7 @@ class psElevateTokenHandler {
 
         const message = {
             action: SET_PAYMENT_METHOD_EVENT_ACTION,
-            paymentMethod: paymentMethod
+            paymentMethod: paymentMethod,
         };
         this.sendIframeMessage(iframe, message, this._visualforceOrigin);
 
@@ -230,7 +207,7 @@ class psElevateTokenHandler {
         }
 
         const mountPromise = new Promise((resolve, reject) => {
-            this.tokenCallback = message => {
+            this.tokenCallback = (message) => {
                 if (message.error) {
                     reject(handleError(message));
                 } else {
@@ -242,19 +219,15 @@ class psElevateTokenHandler {
         const message = {
             action: MOUNT_IFRAME_EVENT_ACTION,
             paymentMethod: paymentMethod,
-            gatewayId: gatewayOverride
+            gatewayId: gatewayOverride,
         };
         this.sendIframeMessage(iframe, message, this._visualforceOrigin);
 
         return mountPromise;
     }
 
-
     sendIframeMessage(iframe, message, targetOrigin) {
-        iframe.contentWindow.postMessage(
-            JSON.stringify(message),
-            targetOrigin
-        );
+        iframe.contentWindow.postMessage(JSON.stringify(message), targetOrigin);
     }
 }
 

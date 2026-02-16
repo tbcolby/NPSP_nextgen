@@ -196,9 +196,8 @@ export default class RelationshipsTreeGrid extends NavigationMixin(LightningElem
         if (relationship.relationshipId === row.relationshipId) {
             if (children.length > 0) {
                 return this.attachChildrenToRow(children, relationship);
-            } else {
-                delete relationship._children;
             }
+            delete relationship._children;
         }
 
         return relationship;

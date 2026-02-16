@@ -39,7 +39,7 @@ private class CRLP_Rollup_SVC_TEST {
     /**
      * @description Simple tests for static methods to retrieve customizable rollup settings
      */
-    static testMethod void test_get_batch_sizes() {
+    @IsTest static void test_get_batch_sizes() {
         // Start by enabling Customizable Rollups (which disables all legacy rollup operations)
         UTIL_CustomSettingsFacade.getRollupSettingsForTests(new Customizable_Rollup_Settings__c (
                         Customizable_Rollups_Enabled__c = true,
@@ -67,7 +67,7 @@ private class CRLP_Rollup_SVC_TEST {
      * @description Test the CRLP_Rollup_TDTM.isRollupRecalcNeeded() method against various versions of
      * changed and similar SObjects
      */
-    static testMethod void test_isRecalcNeeded() {
+    @IsTest static void test_isRecalcNeeded() {
 
         CMT_UnitTestData_TEST.mockFullSetOfRollupDefinitions();
 

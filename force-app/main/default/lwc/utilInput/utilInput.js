@@ -1,34 +1,45 @@
 /* eslint-disable consistent-return */
-import { LightningElement, api, track, wire } from 'lwc';
+import { LightningElement, api, track, wire } from "lwc";
 import { getObjectInfo, getPicklistValues } from "lightning/uiObjectInfoApi";
-import { inputTypeByDescribeType } from 'c/utilTemplateBuilder';
-import { isEmpty, isNotEmpty, isString, UtilDescribe, nonePicklistOption } from 'c/utilCommon';
-import geBodyBatchFieldBundleInfo from '@salesforce/label/c.geBodyBatchFieldBundleInfo';
-import commonLabelNone from '@salesforce/label/c.stgLabelNone';
-import RECORD_TYPE_FIELD from '@salesforce/schema/Opportunity.RecordTypeId';
+import { inputTypeByDescribeType } from "c/utilTemplateBuilder";
+import { isEmpty, isNotEmpty, isString, UtilDescribe, nonePicklistOption } from "c/utilCommon";
+import geBodyBatchFieldBundleInfo from "@salesforce/label/c.geBodyBatchFieldBundleInfo";
+import commonLabelNone from "@salesforce/label/c.stgLabelNone";
+import RECORD_TYPE_FIELD from "@salesforce/schema/Opportunity.RecordTypeId";
 
-const WIDGET = 'widget';
-const TEXTAREA = 'textarea';
-const COMBOBOX = 'combobox';
-const SEARCH = 'search';
-const CHECKBOX = 'checkbox';
-const DATE = 'date';
-const DATETIME = 'datetime-local';
-const YES = 'Yes';
-const TEXT = 'text';
-const TRUE = 'true';
+const WIDGET = "widget";
+const TEXTAREA = "textarea";
+const COMBOBOX = "combobox";
+const SEARCH = "search";
+const CHECKBOX = "checkbox";
+const DATE = "date";
+const DATETIME = "datetime-local";
+const YES = "Yes";
+const TEXT = "text";
+const TRUE = "true";
 const RICH_TEXT_FORMATS = [
-    'font', 'size', 'bold', 'italic', 'underline', 'strike', 'list', 'indent', 'align', 'link', 'clean', 'table', 'header'
+    "font",
+    "size",
+    "bold",
+    "italic",
+    "underline",
+    "strike",
+    "list",
+    "indent",
+    "align",
+    "link",
+    "clean",
+    "table",
+    "header",
 ];
-const CURRENCY = 'currency';
-const PERCENT = 'percent';
-const DECIMAL = 'decimal';
-const LABEL_HIDDEN = 'label-hidden';
-const LABEL_STACKED = 'label-stacked';
-const LABEL_INLINE = 'label-inline';
+const CURRENCY = "currency";
+const PERCENT = "percent";
+const DECIMAL = "decimal";
+const LABEL_HIDDEN = "label-hidden";
+const LABEL_STACKED = "label-stacked";
+const LABEL_INLINE = "label-inline";
 
 export default class utilInput extends LightningElement {
-
     // expose custom labels to template
     CUSTOM_LABELS = { geBodyBatchFieldBundleInfo, commonLabelNone };
     PICKLIST_OPTION_NONE = nonePicklistOption();
@@ -48,8 +59,8 @@ export default class utilInput extends LightningElement {
     @api picklistOptionsOverride;
     @api disabled;
 
-    @track isRichTextValid = true;
-    @track defaultRecordTypeId;
+    isRichTextValid = true;
+    defaultRecordTypeId;
     @track fieldDescribe;
     @track _picklistValues;
 
@@ -59,7 +70,7 @@ export default class utilInput extends LightningElement {
             objectApiName: this.objectApiName,
             fieldApiName: this.fieldApiName,
             value: this.fieldValue,
-            label: this.uiLabel
+            label: this.uiLabel,
         };
     }
 
@@ -78,13 +89,13 @@ export default class utilInput extends LightningElement {
         }
         // Workaround to empty a rich text input if an explicit value or default value isn't provided
         if (this.isLightningRichText) {
-            return '';
+            return "";
         }
         return undefined;
     }
 
     get checkboxDefaultValue() {
-        return (this.defaultValue === TRUE || this.defaultValue === true);
+        return this.defaultValue === TRUE || this.defaultValue === true;
     }
 
     get isWidget() {
@@ -104,8 +115,7 @@ export default class utilInput extends LightningElement {
     }
 
     get isLightningRichText() {
-        if ((this.fieldDescribe && this.fieldDescribe.htmlFormatted) &&
-            this.lightningInputType === TEXTAREA) {
+        if (this.fieldDescribe && this.fieldDescribe.htmlFormatted && this.lightningInputType === TEXTAREA) {
             return this.fieldDescribe.htmlFormatted;
         }
         return false;
@@ -116,16 +126,18 @@ export default class utilInput extends LightningElement {
     }
 
     get isLightningDateOrDatetime() {
-        return (this.lightningInputType === DATE || this.lightningInputType === DATETIME);
+        return this.lightningInputType === DATE || this.lightningInputType === DATETIME;
     }
 
     get isBaseLightningInput() {
-        if (this.lightningInputType !== TEXTAREA &&
+        if (
+            this.lightningInputType !== TEXTAREA &&
             this.lightningInputType !== COMBOBOX &&
             this.lightningInputType !== SEARCH &&
             this.lightningInputType !== CHECKBOX &&
             this.lightningInputType !== DATE &&
-            this.lightningInputType !== DATETIME) {
+            this.lightningInputType !== DATETIME
+        ) {
             return true;
         }
         return false;
@@ -145,10 +157,14 @@ export default class utilInput extends LightningElement {
     get granularity() {
         if (this.formatter) {
             switch (this.dataType) {
-                case CURRENCY: return '0.01';
-                case PERCENT: return '0.01';
-                case DECIMAL: return '0.001';
-                default: return 'any';
+                case CURRENCY:
+                    return "0.01";
+                case PERCENT:
+                    return "0.01";
+                case DECIMAL:
+                    return "0.001";
+                default:
+                    return "any";
             }
         }
         return undefined;
@@ -190,12 +206,12 @@ export default class utilInput extends LightningElement {
     }
 
     get lookupFormElementClass() {
-        if(this.variant === LABEL_INLINE) {
-            return 'slds-form-element slds-form-element_horizontal';
+        if (this.variant === LABEL_INLINE) {
+            return "slds-form-element slds-form-element_horizontal";
         } else if (this.variant === LABEL_STACKED) {
-            return 'slds-form-element slds-form-element_stacked';
+            return "slds-form-element slds-form-element_stacked";
         } else if (this.variant === LABEL_HIDDEN) {
-            return 'slds-form-element slds-form-element_hidden combo-adjust';
+            return "slds-form-element slds-form-element_hidden combo-adjust";
         }
     }
 
@@ -213,7 +229,7 @@ export default class utilInput extends LightningElement {
         return this.isLightningRichText && this.variant !== LABEL_HIDDEN;
     }
 
-    @wire(getObjectInfo, { objectApiName: '$objectApiName' })
+    @wire(getObjectInfo, { objectApiName: "$objectApiName" })
     wiredObjectInfo(response) {
         if (response.data) {
             this.objectInfo = response.data;
@@ -230,10 +246,10 @@ export default class utilInput extends LightningElement {
     }
 
     @wire(getPicklistValues, {
-        fieldApiName: '$fullFieldApiNameForStandardPicklists',
-        recordTypeId: '$defaultRecordTypeId'
+        fieldApiName: "$fullFieldApiNameForStandardPicklists",
+        recordTypeId: "$defaultRecordTypeId",
     })
-    wiredPicklistValues({error, data}) {
+    wiredPicklistValues({ error, data }) {
         if (data) {
             this.picklistValues = [this.PICKLIST_OPTION_NONE, ...data.values];
         }
@@ -253,11 +269,11 @@ export default class utilInput extends LightningElement {
     }
 
     /*******************************************************************************
-    * @description Dispatches an event to notify parent component that the form
-    * field's defaultValue property for a combobox has changed.
-    *
-    * @param {object} event: Event object from lightning-combobox onchange event handler 
-    */
+     * @description Dispatches an event to notify parent component that the form
+     * field's defaultValue property for a combobox has changed.
+     *
+     * @param {object} event: Event object from lightning-combobox onchange event handler
+     */
     handleChangeCombobox(event) {
         const { value } = event.detail;
         const isSelectedValueNone = value === this.CUSTOM_LABELS.commonLabelNone;
@@ -265,19 +281,19 @@ export default class utilInput extends LightningElement {
         const detail = {
             objectApiName: this.objectApiName,
             fieldApiName: this.fieldApiName,
-            value: isSelectedValueNone ? null : value
+            value: isSelectedValueNone ? null : value,
         };
         this.value = event.detail.value;
-        this.dispatchEvent(new CustomEvent('changevalue', { detail: detail }));
+        this.dispatchEvent(new CustomEvent("changevalue", { detail: detail }));
     }
 
     /*******************************************************************************
-    * @description Dispatches an event to notify parent component that the form
-    * field's defaultValue property has changed.
-    *
-    * @param {object} event: Event object from various lightning-input type's
-    * change event handler.
-    */
+     * @description Dispatches an event to notify parent component that the form
+     * field's defaultValue property has changed.
+     *
+     * @param {object} event: Event object from various lightning-input type's
+     * change event handler.
+     */
     handleValueChange(event) {
         if (this.type && this.lightningInputType === CHECKBOX) {
             this.value = event.target.checked;
@@ -298,19 +314,19 @@ export default class utilInput extends LightningElement {
             objectApiName: this.objectApiName,
             fieldApiName: this.fieldApiName,
             value: this.fieldValue,
-            isValid: isValid
-        }
+            isValid: isValid,
+        };
 
-        this.dispatchEvent(new CustomEvent('changevalue', { detail: detail }));
+        this.dispatchEvent(new CustomEvent("changevalue", { detail: detail }));
     }
 
     /*******************************************************************************
-    * @description Public method used to check the current input's validity by
-    * calling checkFieldValidity.
-    *
-    * @return {boolean}: TRUE when a field is required and filled in correctly,
-    * or not required at all.
-    */
+     * @description Public method used to check the current input's validity by
+     * calling checkFieldValidity.
+     *
+     * @return {boolean}: TRUE when a field is required and filled in correctly,
+     * or not required at all.
+     */
     @api
     isValid() {
         // We need to check for invalid values, regardless if the field is required
@@ -323,17 +339,19 @@ export default class utilInput extends LightningElement {
     }
 
     /*******************************************************************************
-    * @description Method calls lightning-input methods reportValidity and
-    * checkValidity on the current input.
-    *
-    * @return {boolean}: TRUE when a field is filled in, and is the correct format.
-    */
+     * @description Method calls lightning-input methods reportValidity and
+     * checkValidity on the current input.
+     *
+     * @return {boolean}: TRUE when a field is filled in, and is the correct format.
+     */
     checkFieldValidity() {
         const inputField = this.template.querySelector('[data-id="inputComponent"]');
-        if (typeof inputField !== 'undefined'
-            && inputField !== null
-            && typeof inputField.reportValidity === 'function'
-            && typeof inputField.checkValidity === 'function') {
+        if (
+            typeof inputField !== "undefined" &&
+            inputField !== null &&
+            typeof inputField.reportValidity === "function" &&
+            typeof inputField.checkValidity === "function"
+        ) {
             inputField.reportValidity();
             return inputField.checkValidity();
         } else if (this.isLightningRichText) {
@@ -405,6 +423,4 @@ export default class utilInput extends LightningElement {
     /*******************************************************************************
      * End getters for data-qa-locator attributes
      */
-
-
 }

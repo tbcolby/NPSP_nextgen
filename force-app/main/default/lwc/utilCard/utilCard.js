@@ -1,4 +1,4 @@
-import { LightningElement, api, track } from 'lwc';
+import { LightningElement, api } from "lwc";
 
 export default class utilCard extends LightningElement {
     @api title;
@@ -6,7 +6,7 @@ export default class utilCard extends LightningElement {
     @api iconSize;
     @api cssClass;
 
-    @track showFooter = true;
+    showFooter = true;
 
     renderedCallback() {
         if (this.footerSlot) {
@@ -15,7 +15,7 @@ export default class utilCard extends LightningElement {
     }
 
     get footerSlot() {
-        return this.template.querySelectorAll('slot[name=footer]');
+        return this.template.querySelectorAll("slot[name=footer]");
     }
 
     get hasIcon() {
@@ -27,13 +27,13 @@ export default class utilCard extends LightningElement {
     }
 
     get computedCssClass() {
-        let baseClass = ['slds-card', 'slds-card_boundary'];
+        let baseClass = ["slds-card", "slds-card_boundary"];
 
         if (this.cssClass) {
-            let cssClass = this.cssClass.split(' ');
+            let cssClass = this.cssClass.split(" ");
             baseClass = [...baseClass, ...cssClass];
         }
 
-        return baseClass.join(' ');
+        return baseClass.join(" ");
     }
 }

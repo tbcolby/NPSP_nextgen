@@ -58,7 +58,7 @@ public with sharing class BDI_BatchOverride_TEST {
     * @description operation:
     *    test controller against a new Batch
     */
-    static testMethod void saveNewBatch() {
+    @IsTest static void saveNewBatch() {
 
         DataImportBatch__c diBatch = newDIBatch();
         BDI_BatchOverride_CTRL ctrl = new BDI_BatchOverride_CTRL(new ApexPages.StandardController(diBatch));
@@ -75,7 +75,7 @@ public with sharing class BDI_BatchOverride_TEST {
     * @description operation:
     *    test controller against an existing Batch
     */
-    static testMethod void saveExistingBatch() {
+    @IsTest static void saveExistingBatch() {
 
         DataImportBatch__c diBatch = newDIBatch();
         insert diBatch;
@@ -95,7 +95,7 @@ public with sharing class BDI_BatchOverride_TEST {
     * @description operation:
     *    test controller against cloning an existing Batch
     */
-    static testMethod void saveClonedBatch() {
+    @IsTest static void saveClonedBatch() {
 
         DataImportBatch__c diBatch = newDIBatch();
         insert diBatch;
@@ -123,7 +123,7 @@ public with sharing class BDI_BatchOverride_TEST {
     * verify:
     *    errors detected
     */
-    static testMethod void testBDIBatchUISaveValidation() {
+    @IsTest static void testBDIBatchUISaveValidation() {
 
         // start with a valid diBatch
         DataImportBatch__c diBatch = newDIBatch();

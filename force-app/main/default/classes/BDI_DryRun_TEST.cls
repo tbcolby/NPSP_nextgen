@@ -45,7 +45,7 @@ public with sharing class BDI_DryRun_TEST {
     *    no objects created
     *    Statuses updated appropriately
     **********************************************************************************************************/
-    static testMethod void manyDISameNewC1Contact() {
+    @IsTest static void manyDISameNewC1Contact() {
 
         List<DataImport__c> dataImports = new List<DataImport__c>();
         dataImports.add(BDI_DataImport_TEST.newDI('c1', 'C1'));
@@ -80,7 +80,7 @@ public with sharing class BDI_DryRun_TEST {
     *    no objects created
     *    Statuses updated appropriately
     **********************************************************************************************************/
-    static testMethod void manyDINewC1andC2Contacts() {
+    @IsTest static void manyDINewC1andC2Contacts() {
 
         List<DataImport__c> dataImports = new List<DataImport__c>();
         dataImports.add(BDI_DataImport_TEST.newDI('c1', 'C1', 'c1Spouse', null));
@@ -117,7 +117,7 @@ public with sharing class BDI_DryRun_TEST {
     *    no objects created
     *    Statuses updated appropriately
     **********************************************************************************************************/
-    static testMethod void manyDISameNewC1andC2Contacts() {
+    @IsTest static void manyDISameNewC1andC2Contacts() {
 
         List<DataImport__c> dataImports = new List<DataImport__c>();
         dataImports.add(BDI_DataImport_TEST.newDI('c1', 'C1', 'c1Spouse', null));
@@ -154,7 +154,7 @@ public with sharing class BDI_DryRun_TEST {
     *    no objects created
     *    Statuses updated appropriately
     **********************************************************************************************************/
-    static testMethod void manyDIExistingC1andC2Contacts() {
+    @IsTest static void manyDIExistingC1andC2Contacts() {
 
         // existing contacts
         List<Contact> existingContacts = new List<Contact>();
@@ -200,7 +200,7 @@ public with sharing class BDI_DryRun_TEST {
     *    no objects created
     *    Statuses updated appropriately
     **********************************************************************************************************/
-    static testMethod void manyDISameNewA1A2Accounts() {
+    @IsTest static void manyDISameNewA1A2Accounts() {
 
         List<DataImport__c> dataImports = new List<DataImport__c>();
         dataImports.add(new DataImport__c(Account1_Name__c='A1', Account2_Name__c='A2'));
@@ -236,7 +236,7 @@ public with sharing class BDI_DryRun_TEST {
     *    no objects created
     *    Statuses updated appropriately
     **********************************************************************************************************/
-    static testMethod void manyDIExistingA1A2Accounts() {
+    @IsTest static void manyDIExistingA1A2Accounts() {
 
         // existing Accounts
         List<Account> existingAccounts = new List<Account>();
@@ -281,7 +281,7 @@ public with sharing class BDI_DryRun_TEST {
     *    no objects created
     *    Statuses updated appropriately
     **********************************************************************************************************/
-    static testMethod void manyDIExistingHomeAddresses() {
+    @IsTest static void manyDIExistingHomeAddresses() {
         //skip the test if Advancement is installed
         if(ADV_PackageInfo_SVC.useAdv()) return;
 
@@ -331,7 +331,7 @@ public with sharing class BDI_DryRun_TEST {
     *    no objects created
     *    Statuses updated appropriately
     **********************************************************************************************************/
-    static testMethod void manyDIUpdatedHomeAddresses() {
+    @IsTest static void manyDIUpdatedHomeAddresses() {
         //skip the test if Advancement is installed
         if(ADV_PackageInfo_SVC.useAdv()) return;
 
@@ -383,7 +383,7 @@ public with sharing class BDI_DryRun_TEST {
     *    no objects created
     *    Statuses updated appropriately
     **********************************************************************************************************/
-    static testMethod void manyDIContainingErrors() {
+    @IsTest static void manyDIContainingErrors() {
 
         List<DataImport__c> dataImports = new List<DataImport__c>();
         dataImports.add(new DataImport__c(Contact1_Firstname__c='fail'));
@@ -425,7 +425,7 @@ public with sharing class BDI_DryRun_TEST {
     *    no objects created
     *    Statuses updated appropriately
     **********************************************************************************************************/
-    static testMethod void manyDINewC1ContactNewDonations() {
+    @IsTest static void manyDINewC1ContactNewDonations() {
 
         List<DataImport__c> dataImports = new List<DataImport__c>();
         dataImports.add(BDI_DataImport_TEST.newDI('c1', 'C1', 100));
@@ -470,7 +470,7 @@ public with sharing class BDI_DryRun_TEST {
     *    no objects created
     *    Statuses updated appropriately
     **********************************************************************************************************/
-    static testMethod void manyDIExistingC1ContactNewDonations() {
+    @IsTest static void manyDIExistingC1ContactNewDonations() {
 
         // existing contacts
         List<Contact> existingContacts = new List<Contact>();
@@ -529,7 +529,7 @@ public with sharing class BDI_DryRun_TEST {
     *    no objects created
     *    Statuses updated appropriately
     **********************************************************************************************************/
-    static testMethod void manyDIExistingC1ContactExistingMatchedDonations() {
+    @IsTest static void manyDIExistingC1ContactExistingMatchedDonations() {
 
         // existing contacts
         List<Contact> existingContacts = new List<Contact>();
@@ -594,7 +594,7 @@ public with sharing class BDI_DryRun_TEST {
     *    no objects created
     *    Statuses updated appropriately
     **********************************************************************************************************/
-    static testMethod void manyDIExistingC1ContactExistingMatchedByIdDonations() {
+    @IsTest static void manyDIExistingC1ContactExistingMatchedByIdDonations() {
 
         // existing contacts
         List<Contact> existingContacts = new List<Contact>();
@@ -661,7 +661,7 @@ public with sharing class BDI_DryRun_TEST {
     *    no objects created
     *    Statuses updated appropriately
     **********************************************************************************************************/
-    static testMethod void manyDIExistingC1ContactExistingMatchedByIdPayments() {
+    @IsTest static void manyDIExistingC1ContactExistingMatchedByIdPayments() {
 
         // existing contacts
         List<Contact> existingContacts = new List<Contact>();
@@ -731,7 +731,7 @@ public with sharing class BDI_DryRun_TEST {
     *    no objects created
     *    Statuses updated appropriately
     **********************************************************************************************************/
-    static testMethod void manyDIExistingC1ContactExistingBestMatchedDonations() {
+    @IsTest static void manyDIExistingC1ContactExistingBestMatchedDonations() {
 
         // existing contacts
         List<Contact> existingContacts = new List<Contact>();
@@ -800,7 +800,7 @@ public with sharing class BDI_DryRun_TEST {
     *    no objects created
     *    Statuses updated appropriately
     **********************************************************************************************************/
-    static testMethod void manyDIExistingC1ContactNewDonationsInvalidRecordtype() {
+    @IsTest static void manyDIExistingC1ContactNewDonationsInvalidRecordtype() {
 
         // existing contacts
         List<Contact> existingContacts = new List<Contact>();
@@ -861,7 +861,7 @@ public with sharing class BDI_DryRun_TEST {
     *    Statuses updated appropriately
     *    Batch statistics are not updated
     **********************************************************************************************************/
-    static testMethod void manyDISameBatch() {
+    @IsTest static void manyDISameBatch() {
 
         DataImportBatch__c batch = BDI_DataImportAPI_TEST.newBatch('mybatch', false);
         List<DataImport__c> dataImports = new List<DataImport__c>();
@@ -902,7 +902,7 @@ public with sharing class BDI_DryRun_TEST {
     *    DonationCampaignImported__c is set on ID and name match
     *    Campaign Status is still matched instead of Matched by ID
     **********************************************************************************************************/
-    static testMethod void TwoDIWithDonationsAndCampaignIdsInDryRun() {
+    @IsTest static void TwoDIWithDonationsAndCampaignIdsInDryRun() {
         //skip the test if Advancement is installed
         if (ADV_PackageInfo_SVC.useAdv()) return;
 
@@ -946,7 +946,7 @@ public with sharing class BDI_DryRun_TEST {
     *    no campaign objects created during dry run
     *    correct campaign status for dry run matching
     **********************************************************************************************************/
-    static testMethod void TwoDIWithDonationsAndDuplicateCampaignNameInDryRun() {
+    @IsTest static void TwoDIWithDonationsAndDuplicateCampaignNameInDryRun() {
         //skip the test if Advancement is installed
         if (ADV_PackageInfo_SVC.useAdv()) return;
 

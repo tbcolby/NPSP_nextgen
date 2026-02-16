@@ -37,7 +37,7 @@
 @istest(IsParallel=True)
 private class CAO_Constants_API_TEST {
     
-    static testMethod void test_cao_api() {
+    @IsTest static void test_cao_api() {
         System.AssertEquals(CAO_Constants.ONE_TO_ONE_PROCESSOR, CAO_Constants_API.ONE_TO_ONE_PROCESSOR);
         System.AssertEquals(CAO_Constants.ONE_TO_ONE_ORGANIZATION_TYPE, CAO_Constants_API.ONE_TO_ONE_ORGANIZATION_TYPE);
         System.AssertEquals(CAO_Constants.BUCKET_PROCESSOR, CAO_Constants_API.BUCKET_PROCESSOR);

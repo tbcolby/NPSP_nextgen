@@ -44,7 +44,7 @@ private with sharing class HH_NameSpec_TEST {
     verify:
         HH Name, Formal Greeting, and Informal Greeting are correct
     **********************************************************************************************************/
-    static testMethod void OneContact() {
+    @IsTest static void OneContact() {
         Contact[] listCon = new Contact[] {
             new Contact (
                 Salutation = 'Skipper',
@@ -83,7 +83,7 @@ private with sharing class HH_NameSpec_TEST {
     verify:
         HH Name, Formal Greeting, and Informal Greeting are correct
     **********************************************************************************************************/
-    static testMethod void TwoContactSameLastname() {
+    @IsTest static void TwoContactSameLastname() {
         Contact[] listCon = new Contact[] {
             new Contact (
                 Salutation = 'Skipper',
@@ -129,7 +129,7 @@ private with sharing class HH_NameSpec_TEST {
     verify:
         HH Name, Formal Greeting, and Informal Greeting are correct
     **********************************************************************************************************/
-    static testMethod void TwoContactDifferentLastname() {
+    @IsTest static void TwoContactDifferentLastname() {
         Contact[] listCon = new Contact[] {
             new Contact (
                 Salutation = 'Skipper',
@@ -169,7 +169,7 @@ private with sharing class HH_NameSpec_TEST {
     verify:
         HH Name, Formal Greeting, and Informal Greeting are correct
     **********************************************************************************************************/
-    static testMethod void ThreeContactsTwoLastnames() {
+    @IsTest static void ThreeContactsTwoLastnames() {
         Contact[] listCon = new Contact[] {
             new Contact (
                 Salutation = 'Skipper',
@@ -219,7 +219,7 @@ private with sharing class HH_NameSpec_TEST {
     verify:
         HH Name, Formal Greeting, and Informal Greeting are correct
     **********************************************************************************************************/
-    static testMethod void ThreeContactsTwoLastNamesNotInSequenceWhenTheNameFormatHasLastName() {
+    @IsTest static void ThreeContactsTwoLastNamesNotInSequenceWhenTheNameFormatHasLastName() {
         Contact[] listCon = new Contact[] {
             new Contact (
                 Salutation = 'Mr',
@@ -277,7 +277,7 @@ private with sharing class HH_NameSpec_TEST {
     verify:
         HH Name, Formal Greeting, and Informal Greeting are correct
     **********************************************************************************************************/
-    static testMethod void ThreeContactsTwoLastNamesNotInSequenceWhenTheNameFormatHasNoLastName() {
+    @IsTest static void ThreeContactsTwoLastNamesNotInSequenceWhenTheNameFormatHasNoLastName() {
         Contact[] listCon = new Contact[] {
             new Contact (
                 Salutation = 'Mr',
@@ -332,7 +332,7 @@ private with sharing class HH_NameSpec_TEST {
     verify:
         HH Name, Formal Greeting, and Informal Greeting are correct
     **********************************************************************************************************/
-    static testMethod void ThreeContactsTwoLastnamesCustomFields() {
+    @IsTest static void ThreeContactsTwoLastnamesCustomFields() {
         Contact[] listCon = new Contact[] {
             new Contact (
                 Salutation = 'Skipper',
@@ -385,7 +385,7 @@ private with sharing class HH_NameSpec_TEST {
     verify:
         HH Name, Formal Greeting, and Informal Greeting are correct
     **********************************************************************************************************/
-    static testMethod void testHHNamingWhenContactFieldNamesAreCaseInsensitive() {
+    @IsTest static void testHHNamingWhenContactFieldNamesAreCaseInsensitive() {
         Contact[] listCon = new Contact[] {
             new Contact (
                 Salutation = 'Skipper',
@@ -429,7 +429,7 @@ private with sharing class HH_NameSpec_TEST {
     verify:
         HH Name, Formal Greeting, and Informal Greeting are correct
     **********************************************************************************************************/
-    static testMethod void SixContactsOneLastnamesContactOverrun() {
+    @IsTest static void SixContactsOneLastnamesContactOverrun() {
         list<Contact> listCon = new list<Contact>();
         Contact c1 = new Contact (
             Salutation = 'Skipper',
@@ -505,7 +505,7 @@ private with sharing class HH_NameSpec_TEST {
     verify:
         HH Name, Formal Greeting, and Informal Greeting are correct
     **********************************************************************************************************/
-    static testMethod void SixContactsTwoLastnamesContactOverrun() {
+    @IsTest static void SixContactsTwoLastnamesContactOverrun() {
         list<Contact> listCon = new list<Contact>();
         Contact c1 = new Contact (
             Salutation = 'Skipper',
@@ -617,7 +617,7 @@ private with sharing class HH_NameSpec_TEST {
     verify:
         HH Name, Formal Greeting, and Informal Greeting are correct
     **********************************************************************************************************/
-    static testMethod void testRefreshAllHHNaming() {
+    @IsTest static void testRefreshAllHHNaming() {
         //skip the test if Advancement is installed
         if(ADV_PackageInfo_SVC.useAdv()) return;
 
@@ -686,7 +686,7 @@ private with sharing class HH_NameSpec_TEST {
         HH Name, Formal Greeting, and Informal Greeting are correct
         names that were previously customized do not get updated
     **********************************************************************************************************/
-    static testMethod void testRefreshAllHHNamingWithCustom() {
+    @IsTest static void testRefreshAllHHNamingWithCustom() {
         //skip the test if Advancement is installed
         if(ADV_PackageInfo_SVC.useAdv()) return;
 
@@ -789,7 +789,7 @@ private with sharing class HH_NameSpec_TEST {
     verify:
         HH Name, Formal Greeting, and Informal Greeting are correct
     **********************************************************************************************************/
-    static testMethod void testRefreshAllHHNamingManyHH() {
+    @IsTest static void testRefreshAllHHNamingManyHH() {
         //skip the test if Advancement is installed
         if(ADV_PackageInfo_SVC.useAdv()) return;
 
@@ -848,7 +848,7 @@ private with sharing class HH_NameSpec_TEST {
     verify:
         HH Name, Formal Greeting, and Informal Greeting are correct
     **********************************************************************************************************/
-    static testMethod void OneAnonymousContact() {
+    @IsTest static void OneAnonymousContact() {
         list<Contact> listCon = new list<Contact>();
 
         HH_NameSpec namingImpl = new HH_NameSpec();
@@ -875,7 +875,7 @@ private with sharing class HH_NameSpec_TEST {
     verify:
         HH Name, Formal Greeting, and Informal Greeting are correct
     **********************************************************************************************************/
-    static testMethod void TwoContactSameLastnameAccountReference() {
+    @IsTest static void TwoContactSameLastnameAccountReference() {
         Account acc = new Account(
             Name = 'TestAcc',
             BillingCity = 'Seattle'
@@ -932,7 +932,7 @@ private with sharing class HH_NameSpec_TEST {
     verify:
         HH Name, Formal Greeting, and Informal Greeting are correct
     **********************************************************************************************************/
-    static testMethod void OneContactXReferences() {
+    @IsTest static void OneContactXReferences() {
         Account acc = new Account(Name='MyEmployer');
         insert acc;
 

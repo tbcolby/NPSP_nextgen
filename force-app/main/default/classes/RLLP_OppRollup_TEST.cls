@@ -121,7 +121,7 @@ public with sharing class RLLP_OppRollup_TEST {
     /*********************************************************************************************************
     * @description Runs testGivingRollupProcessor test method for the One to One account processor.
     */
-    static testMethod void testGivingRollupOne2One(){
+    @IsTest static void testGivingRollupOne2One(){
         //skip the test if Advancement is installed
         if(ADV_PackageInfo_SVC.useAdv()) return;
 
@@ -130,7 +130,7 @@ public with sharing class RLLP_OppRollup_TEST {
     /*********************************************************************************************************
     * @description Runs testGivingRollupProcessor test method for the household account processor.
     */
-    static testMethod void testGivingRollupHHAccount(){
+    @IsTest static void testGivingRollupHHAccount(){
         //skip the test if Advancement is installed
         if(ADV_PackageInfo_SVC.useAdv()) return;
 
@@ -220,7 +220,7 @@ public with sharing class RLLP_OppRollup_TEST {
     /*********************************************************************************************************
     * @description Runs testGivingRollupIndividualProcessor test method for the bucket account processor.
     */
-    static testMethod void testGivingRollupIndividualBucket(){
+    @IsTest static void testGivingRollupIndividualBucket(){
         //skip the test if Advancement is installed - Bucket Account not supported in ADV
         if(ADV_PackageInfo_SVC.useAdv()) return;
         testGivingRollupIndividualProcessor(CAO_Constants.BUCKET_PROCESSOR);
@@ -228,7 +228,7 @@ public with sharing class RLLP_OppRollup_TEST {
     /*********************************************************************************************************
     * @description Runs testGivingRollupIndividualProcessor test method for the household account processor.
     */
-    static testMethod void testGivingRollupIndividualHHAccount(){
+    @IsTest static void testGivingRollupIndividualHHAccount(){
         testGivingRollupIndividualProcessor(CAO_Constants.HH_ACCOUNT_PROCESSOR);
     }
     /*********************************************************************************************************
@@ -317,13 +317,13 @@ public with sharing class RLLP_OppRollup_TEST {
     /*********************************************************************************************************
     * @description Runs testGivingRollupExcludedRTProcessor test method for the one to one account processor.
     */
-    static testMethod void testGivingRollupExcludedRTOne2One(){
+    @IsTest static void testGivingRollupExcludedRTOne2One(){
         testGivingRollupExcludedRTProcessor(CAO_Constants.ONE_TO_ONE_PROCESSOR);
     }
     /*********************************************************************************************************
     * @description Runs testGivingRollupExcludedRTProcessor test method for the household account processor.
     */
-    static testMethod void testGivingRollupExcludedRTHHAccount(){
+    @IsTest static void testGivingRollupExcludedRTHHAccount(){
         testGivingRollupExcludedRTProcessor(CAO_Constants.HH_ACCOUNT_PROCESSOR);
     }
     /*********************************************************************************************************
@@ -412,13 +412,13 @@ public with sharing class RLLP_OppRollup_TEST {
     /*********************************************************************************************************
     * @description Runs testGivingRollupAlwaysPrimaryProcessor test method for the one to one account processor.
     */
-    static testMethod void testGivingRollupAlwaysPrimaryOne2One(){
+    @IsTest static void testGivingRollupAlwaysPrimaryOne2One(){
         testGivingRollupAlwaysPrimaryProcessor(CAO_Constants.ONE_TO_ONE_PROCESSOR);
     }
     /*********************************************************************************************************
     * @description Runs testGivingRollupAlwaysPrimaryProcessor test method for the household account processor.
     */
-    static testMethod void testGivingRollupAlwaysPrimaryHHAccount(){
+    @IsTest static void testGivingRollupAlwaysPrimaryHHAccount(){
         testGivingRollupAlwaysPrimaryProcessor(CAO_Constants.HH_ACCOUNT_PROCESSOR);
     }
     /*********************************************************************************************************
@@ -509,13 +509,13 @@ public with sharing class RLLP_OppRollup_TEST {
     /*********************************************************************************************************
     * @description
     */
-    static testMethod void testMemberRollupOne2One(){
+    @IsTest static void testMemberRollupOne2One(){
         testMemberRollupProcessor(CAO_Constants.ONE_TO_ONE_PROCESSOR);
     }
     /*********************************************************************************************************
     * @description
     */
-    static testMethod void testMemberRollupHHAccount(){
+    @IsTest static void testMemberRollupHHAccount(){
         testMemberRollupProcessor(CAO_Constants.HH_ACCOUNT_PROCESSOR);
     }
     /*********************************************************************************************************
@@ -588,13 +588,13 @@ public with sharing class RLLP_OppRollup_TEST {
     /*********************************************************************************************************
     * @description
     */
-    static testMethod void testGivingRollupAcctOne2One(){
+    @IsTest static void testGivingRollupAcctOne2One(){
         testGivingRollupAcct(CAO_Constants.ONE_TO_ONE_PROCESSOR);
     }
     /*********************************************************************************************************
     * @description
     */
-    static testMethod void testGivingRollupAcctHHAccount(){
+    @IsTest static void testGivingRollupAcctHHAccount(){
         testGivingRollupAcct(CAO_Constants.HH_ACCOUNT_PROCESSOR);
     }
 
@@ -669,10 +669,10 @@ public with sharing class RLLP_OppRollup_TEST {
                 'The rollup should not have made any record updates because nothing was changed');
     }
 
-    static testMethod void testGivingRollupAcctMembershipOne2One(){
+    @IsTest static void testGivingRollupAcctMembershipOne2One(){
         testGivingRollupAcctMembership(CAO_Constants.ONE_TO_ONE_PROCESSOR);
     }
-    static testMethod void testGivingRollupAcctMembershipHHAccount(){
+    @IsTest static void testGivingRollupAcctMembershipHHAccount(){
         testGivingRollupAcctMembership(CAO_Constants.HH_ACCOUNT_PROCESSOR);
     }
     static void testGivingRollupAcctMembership (string strProcessor) {
@@ -750,10 +750,10 @@ public with sharing class RLLP_OppRollup_TEST {
         }
 }
 
-    static testMethod void testGivingRollupBatchOne2One(){
+    @IsTest static void testGivingRollupBatchOne2One(){
         testGivingRollupBatch(CAO_Constants.ONE_TO_ONE_PROCESSOR);
     }
-    static testMethod void testGivingRollupBatchHHAccount(){
+    @IsTest static void testGivingRollupBatchHHAccount(){
         testGivingRollupBatch(CAO_Constants.HH_ACCOUNT_PROCESSOR);
     }
     static void testGivingRollupBatch (string strProcessor) {
@@ -795,10 +795,10 @@ public with sharing class RLLP_OppRollup_TEST {
             Test.StopTest();
     }
 
-    static testMethod void OneContactMultipleOppsOne2One_1(){
+    @IsTest static void OneContactMultipleOppsOne2One_1(){
         OneContactMultipleOpps_1(CAO_Constants.ONE_TO_ONE_PROCESSOR);
     }
-    static testMethod void OneContactMultipleOppsHHAccount_1(){
+    @IsTest static void OneContactMultipleOppsHHAccount_1(){
         OneContactMultipleOpps_1(CAO_Constants.HH_ACCOUNT_PROCESSOR);
     }
     public static void OneContactMultipleOpps_1(string strProcessor) {
@@ -827,10 +827,10 @@ public with sharing class RLLP_OppRollup_TEST {
         System.AssertEquals ( 25 , UpdatedCon.npo02__OppAmountLastYear__c );
     }
 
-    static testMethod void OneContactMultipleOppsOne2One_2(){
+    @IsTest static void OneContactMultipleOppsOne2One_2(){
         OneContactMultipleOpps_2(CAO_Constants.ONE_TO_ONE_PROCESSOR);
     }
-    static testMethod void OneContactMultipleOppsHHAccount_2(){
+    @IsTest static void OneContactMultipleOppsHHAccount_2(){
         OneContactMultipleOpps_2(CAO_Constants.HH_ACCOUNT_PROCESSOR);
     }
     public static void OneContactMultipleOpps_2(string strProcessor) {
@@ -860,10 +860,10 @@ public with sharing class RLLP_OppRollup_TEST {
         System.AssertEquals ( 10 , UpdatedCon.npo02__OppAmount2YearsAgo__c );
     }
 
-    static testMethod void OneContactMultipleOppsOne2One_3(){
+    @IsTest static void OneContactMultipleOppsOne2One_3(){
         OneContactMultipleOpps_3(CAO_Constants.ONE_TO_ONE_PROCESSOR);
     }
-    static testMethod void OneContactMultipleOppsHHAccount_3(){
+    @IsTest static void OneContactMultipleOppsHHAccount_3(){
         OneContactMultipleOpps_3(CAO_Constants.HH_ACCOUNT_PROCESSOR);
     }
     public static void OneContactMultipleOpps_3(string strProcessor) {
@@ -894,10 +894,10 @@ public with sharing class RLLP_OppRollup_TEST {
         System.AssertEquals ( 0 , UpdatedCon.npo02__OppAmount2YearsAgo__c );
     }
 
-    static testMethod void OneContactMultipleOppsOne2One_4(){
+    @IsTest static void OneContactMultipleOppsOne2One_4(){
         OneContactMultipleOpps_4(CAO_Constants.ONE_TO_ONE_PROCESSOR);
     }
-    static testMethod void OneContactMultipleOppsHHAccount_4(){
+    @IsTest static void OneContactMultipleOppsHHAccount_4(){
         OneContactMultipleOpps_4(CAO_Constants.HH_ACCOUNT_PROCESSOR);
     }
     public static void OneContactMultipleOpps_4(string strProcessor) {
@@ -928,10 +928,10 @@ public with sharing class RLLP_OppRollup_TEST {
         System.AssertEquals ( 0 , UpdatedCon.npo02__OppAmount2YearsAgo__c );
     }
 
-    static testMethod void OneContactMultipleOppsOne2One_5(){
+    @IsTest static void OneContactMultipleOppsOne2One_5(){
         OneContactMultipleOpps_5(CAO_Constants.ONE_TO_ONE_PROCESSOR);
     }
-    static testMethod void OneContactMultipleOppsHHAccount_5(){
+    @IsTest static void OneContactMultipleOppsHHAccount_5(){
         OneContactMultipleOpps_5(CAO_Constants.HH_ACCOUNT_PROCESSOR);
     }
     public static void OneContactMultipleOpps_5(string strProcessor) {
@@ -961,10 +961,10 @@ public with sharing class RLLP_OppRollup_TEST {
         System.AssertEquals ( 0 , UpdatedCon.npo02__OppAmount2YearsAgo__c );
     }
 
-    static testMethod void OneContactMultipleOppsOne2One_6(){
+    @IsTest static void OneContactMultipleOppsOne2One_6(){
         OneContactMultipleOpps_6(CAO_Constants.ONE_TO_ONE_PROCESSOR);
     }
-    static testMethod void OneContactMultipleOppsHHAccount_6(){
+    @IsTest static void OneContactMultipleOppsHHAccount_6(){
         OneContactMultipleOpps_6(CAO_Constants.HH_ACCOUNT_PROCESSOR);
     }
     public static void OneContactMultipleOpps_6(string strProcessor) {
@@ -994,10 +994,10 @@ public with sharing class RLLP_OppRollup_TEST {
         System.AssertEquals ( 0 , UpdatedCon.npo02__OppAmount2YearsAgo__c );
     }
 
-    static testMethod void OneContactOneInkindOne2One(){
+    @IsTest static void OneContactOneInkindOne2One(){
         OneContactOneInkind(CAO_Constants.ONE_TO_ONE_PROCESSOR);
     }
-    static testMethod void OneContactOneInkindHHAccount(){
+    @IsTest static void OneContactOneInkindHHAccount(){
         OneContactOneInkind(CAO_Constants.HH_ACCOUNT_PROCESSOR);
     }
     static void OneContactOneInkind(string strProcessor) {
@@ -1038,10 +1038,10 @@ public with sharing class RLLP_OppRollup_TEST {
             System.Assert(!(UpdatedCon.npo02__TotalOppAmount__c>0));
     }
 
-    static testMethod void testGivingRollupBulkOne2One(){
+    @IsTest static void testGivingRollupBulkOne2One(){
         testGivingRollupBulk(CAO_Constants.ONE_TO_ONE_PROCESSOR);
     }
-    static testMethod void testGivingRollupBulkHHAccount(){
+    @IsTest static void testGivingRollupBulkHHAccount(){
         testGivingRollupBulk(CAO_Constants.HH_ACCOUNT_PROCESSOR);
     }
     static void testGivingRollupBulk (string strProcessor) {

@@ -1,4 +1,4 @@
-import { LightningElement, api, track } from "lwc";
+import { LightningElement, api } from "lwc";
 import closeLabel from "@salesforce/label/c.commonClose";
 
 const CSS_CLASS = "modal-hidden";
@@ -33,7 +33,7 @@ export default class Modal extends LightningElement {
         return this._headerPrivate;
     }
 
-    @track hasHeaderString = false;
+    hasHeaderString = false;
     _headerPrivate;
 
     @api show() {

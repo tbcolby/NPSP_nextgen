@@ -42,7 +42,7 @@ private class CON_DoNotContact_TEST {
     * are set, but naming exclusions aren't set. Removes deceased flag, verifies DoNotCall and HasOptedOutOfEmail
     * have been removed, and naming exclusions are still not set.
     */
-    static testMethod void testDeceasedAlone() {
+    @IsTest static void testDeceasedAlone() {
         UTIL_CustomSettingsFacade.getContactsSettingsForTests(new npe01__Contacts_and_Orgs_Settings__c (npe01__Account_Processor__c = CAO_Constants.HH_ACCOUNT_PROCESSOR));
         
         Contact con = new Contact(LastName = CAO_Constants.CONTACT_LASTNAME_FOR_TESTS);
@@ -78,7 +78,7 @@ private class CON_DoNotContact_TEST {
     * HasOptedOutOfEmail are set, naming exclusions are set, and primary contact is changed to the remaining
     * household member.
     */
-    static testMethod void testDeceasedInHousehold() {
+    @IsTest static void testDeceasedInHousehold() {
         //skip the test if Advancement is installed
         if(ADV_PackageInfo_SVC.useAdv()) return;
         
@@ -115,7 +115,7 @@ private class CON_DoNotContact_TEST {
     * @description Marks a contact as Do Not Contact, verifies DoNotCall and HasOptedOutOfEmail are set.
     * Removes Do Not Contact flag, verifies DoNotCall and HasOptedOutOfEmail are no longer set.
     */
-    static testMethod void testDoNotContact() {
+    @IsTest static void testDoNotContact() {
         UTIL_CustomSettingsFacade.getContactsSettingsForTests(new npe01__Contacts_and_Orgs_Settings__c (npe01__Account_Processor__c = CAO_Constants.HH_ACCOUNT_PROCESSOR));
         
         Contact con = new Contact(LastName = CAO_Constants.CONTACT_LASTNAME_FOR_TESTS);

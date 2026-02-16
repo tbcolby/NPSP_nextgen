@@ -48,7 +48,7 @@ private class PMT_Payment_TEST {
      * @description Validate that new payment records created with an opportunity get the CurrencyIsoCode set
      * properly to the Opportunities currency code
      *******************************************************************************************************/
-    static testMethod void shouldVerifyThatNewPaymentCurrencyMatchesOpportunity() {
+    @IsTest static void shouldVerifyThatNewPaymentCurrencyMatchesOpportunity() {
 
         //only run test in multicurrency orgs
         if (!userInfo.isMultiCurrencyOrganization()) {
@@ -86,7 +86,7 @@ private class PMT_Payment_TEST {
      * @description Validate that a change to the CurrencyIsoCode on the Opportunity record is copied
      * down the Payment records.
      */
-    static testMethod void shouldVerifyThatPaymentCurrencyUpdatesFromOpportunity() {
+    @IsTest static void shouldVerifyThatPaymentCurrencyUpdatesFromOpportunity() {
 
         //only run test in multicurrency orgs
         if (!userInfo.isMultiCurrencyOrganization()) {
@@ -126,7 +126,7 @@ private class PMT_Payment_TEST {
      * @description Validate that an error is thrown when the CurrencyIsoCode is modified on Payment record directly
      * or when a new payment is added with a different currency code than the parent opportunity.
      */
-    static testMethod void shouldVerifyThatPaymentCurrencyChangesAreBlocked() {
+    @IsTest static void shouldVerifyThatPaymentCurrencyChangesAreBlocked() {
 
         //only run test in multicurrency orgs
         if (!userInfo.isMultiCurrencyOrganization()) {
@@ -185,7 +185,7 @@ private class PMT_Payment_TEST {
      * Payment to the Opportunity object do not work, so a trigger on the Payment object is used instead.
      * This test validates that logic by setting mock to pretend that ACM is enabled.
      */
-    private static testMethod void shouldVerifyThatOpportunityWillAutoCloseWithACMEnabled() {
+    @IsTest private static void shouldVerifyThatOpportunityWillAutoCloseWithACMEnabled() {
 
         // Pretend the advanced multi-currency is enabled
         // Note: Trigger methods need to use UserInfo.isMultiCurrencyOrganization() to determine if the

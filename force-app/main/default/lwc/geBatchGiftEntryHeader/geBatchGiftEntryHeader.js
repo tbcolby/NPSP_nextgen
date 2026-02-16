@@ -1,13 +1,12 @@
-import { LightningElement, api } from 'lwc';
-import CUSTOM_LABELS from './helpers/customLabels';
+import { LightningElement, api } from "lwc";
+import CUSTOM_LABELS from "./helpers/customLabels";
 
 export default class GeBatchGiftEntryHeader extends LightningElement {
-
     LABELS = CUSTOM_LABELS;
     ACTIONS = Object.freeze({
-        DRY_RUN_BATCH: 'DRY_RUN_BATCH',
-        PROCESS_BATCH: 'PROCESS_BATCH',
-        EDIT_BATCH: 'EDIT_BATCH'
+        DRY_RUN_BATCH: "DRY_RUN_BATCH",
+        PROCESS_BATCH: "PROCESS_BATCH",
+        EDIT_BATCH: "EDIT_BATCH",
     });
 
     @api giftBatchState;
@@ -34,13 +33,13 @@ export default class GeBatchGiftEntryHeader extends LightningElement {
     }
 
     handleClick(event) {
-        const action =  event.target.getAttribute('data-action');
+        const action = event.target.getAttribute("data-action");
         switch (action) {
             case this.ACTIONS.DRY_RUN_BATCH:
-                this.dispatchEvent(new CustomEvent('batchdryrun'));
+                this.dispatchEvent(new CustomEvent("batchdryrun"));
                 break;
             case this.ACTIONS.PROCESS_BATCH:
-                this.dispatchEvent(new CustomEvent('processbatch'));
+                this.dispatchEvent(new CustomEvent("processbatch"));
                 this.isGiftBatchProcessing = true;
                 break;
             case this.ACTIONS.EDIT_BATCH:
@@ -50,9 +49,7 @@ export default class GeBatchGiftEntryHeader extends LightningElement {
     }
 
     editBatch() {
-        this.dispatchEvent(new CustomEvent(
-            'edit', { detail: this.giftBatchState.id }
-        ));
+        this.dispatchEvent(new CustomEvent("edit", { detail: this.giftBatchState.id }));
     }
 
     get qaLocatorBatchDryRun() {

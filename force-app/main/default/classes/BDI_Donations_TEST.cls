@@ -265,7 +265,7 @@ public with sharing class BDI_Donations_TEST {
     * verify: 
     *       checkbox field is updated by Data Import
     */
-    static testMethod void TwoDIWithExistingDonationsSpecified_mapAndUpdateCheckbox() {
+    @IsTest static void TwoDIWithExistingDonationsSpecified_mapAndUpdateCheckbox() {
         //skip the test if Advancement is installed
         if (ADV_PackageInfo_SVC.useAdv()) return;
 
@@ -353,7 +353,7 @@ public with sharing class BDI_Donations_TEST {
     * verify: 
     *       checkbox field is not changed by Data Import
     */
-    static testMethod void TwoDIWithExistingDonationsSpecified_mapCheckboxNoUpdate() {
+    @IsTest static void TwoDIWithExistingDonationsSpecified_mapCheckboxNoUpdate() {
         //skip the test if Advancement is installed
         if (ADV_PackageInfo_SVC.useAdv()) return;
 
@@ -493,7 +493,7 @@ public with sharing class BDI_Donations_TEST {
     *       opportunity objects matched & closed
     *       payment objects updated
     */
-    static testMethod void TwoDIWithExistingDonations() {
+    @IsTest static void TwoDIWithExistingDonations() {
         //skip the test if Advancement is installed
         if (ADV_PackageInfo_SVC.useAdv()) return;
 
@@ -565,7 +565,7 @@ public with sharing class BDI_Donations_TEST {
     *       opportunity objects matched & closed
     *       payment objects updated
     */
-    static testMethod void TwoDIWithUserSelectedExistingDonations() {
+    @IsTest static void TwoDIWithUserSelectedExistingDonations() {
 
         //skip the test if Advancement is installed
         if (ADV_PackageInfo_SVC.useAdv()) return;
@@ -748,7 +748,7 @@ public with sharing class BDI_Donations_TEST {
     *       payment objects updated
     *       new payment created
     */
-    static testMethod void TwoDIWithUserSelectedExistingDonationsApplyNewPayment() {
+    @IsTest static void TwoDIWithUserSelectedExistingDonationsApplyNewPayment() {
         //skip the test if Advancement is installed
         if (ADV_PackageInfo_SVC.useAdv()) return;
 
@@ -1139,7 +1139,7 @@ public with sharing class BDI_Donations_TEST {
     *       opportunity objects matched & closed
     *       payment objects marked paid (even when no other payment fields need updating)
     */
-    static testMethod void TwoDIWithExistingDonationsNoExtraPaymentUpdates() {
+    @IsTest static void TwoDIWithExistingDonationsNoExtraPaymentUpdates() {
 
         createTestData();
 
@@ -1206,7 +1206,7 @@ public with sharing class BDI_Donations_TEST {
     *       payment objects marked paid (even when no other payment fields need updating)
     *       original payment date not changed
     */
-    static testMethod void TwoDIWithExistingDonationsPreservePaymentDate() {
+    @IsTest static void TwoDIWithExistingDonationsPreservePaymentDate() {
 
         createTestData();
 
@@ -1373,7 +1373,7 @@ public with sharing class BDI_Donations_TEST {
     *       opportunity objects matched & closed
     *       payment objects updated
     */
-    static testMethod void TwoDIWithExistingDonationsSpecified() {
+    @IsTest static void TwoDIWithExistingDonationsSpecified() {
         //skip the test if Advancement is installed
         if (ADV_PackageInfo_SVC.useAdv()) return;
 
@@ -1450,7 +1450,7 @@ public with sharing class BDI_Donations_TEST {
     *       opportunity objects matched & closed
     *       payment objects updated
     */
-    static testMethod void TwoDIWithExistingPaymentsSpecified() {
+    @IsTest static void TwoDIWithExistingPaymentsSpecified() {
         //skip the test if Advancement is installed
         if (ADV_PackageInfo_SVC.useAdv()) return;
         
@@ -1549,7 +1549,7 @@ public with sharing class BDI_Donations_TEST {
     *       duplicate Donation doesn't match to same Opp, but creates a new Opp
     *       payment objects updated
     */
-    static testMethod void TwoDIWithExistingDonationsOneDupe() {
+    @IsTest static void TwoDIWithExistingDonationsOneDupe() {
         //skip the test if Advancement is installed
         if (ADV_PackageInfo_SVC.useAdv()) return;
 
@@ -1701,7 +1701,7 @@ public with sharing class BDI_Donations_TEST {
     *    no new donation created
     *    error reported on bdi
     **********************************************************************************************************/            
-    static testMethod void matchPaymentIdToPaidClosedOppRequireExactMatch() {
+    @IsTest static void matchPaymentIdToPaidClosedOppRequireExactMatch() {
         matchDonationIdToPaidClosedOppWithBehavior(BDI_DataImport_API.RequireExactMatch, 
             label.bdiErrorDonationLookupMatch, true);
     }
@@ -1714,7 +1714,7 @@ public with sharing class BDI_Donations_TEST {
     *    no new donation created
     *    error reported on bdi
     **********************************************************************************************************/            
-    static testMethod void matchPaymentIdToPaidClosedOppRequireNoMatch() {
+    @IsTest static void matchPaymentIdToPaidClosedOppRequireNoMatch() {
         matchDonationIdToPaidClosedOppWithBehavior(BDI_DataImport_API.RequireNoMatch, 
             label.bdiErrorDonationLookupMatch, true);
     }
@@ -1727,7 +1727,7 @@ public with sharing class BDI_Donations_TEST {
     *    no new donation created
     *    error reported on bdi
     **********************************************************************************************************/            
-    static testMethod void matchPaymentIdToPaidClosedOppDoNotMatch() {
+    @IsTest static void matchPaymentIdToPaidClosedOppDoNotMatch() {
         matchDonationIdToPaidClosedOppWithBehavior(BDI_DataImport_API.DoNotMatch, null, true);
     }
 
@@ -1739,7 +1739,7 @@ public with sharing class BDI_Donations_TEST {
     *    no new donation created
     *    error reported on bdi
     **********************************************************************************************************/            
-    static testMethod void matchPaymentIdToPaidClosedOppBestMatchOrCreate() {
+    @IsTest static void matchPaymentIdToPaidClosedOppBestMatchOrCreate() {
         matchDonationIdToPaidClosedOppWithBehavior(BDI_DataImport_API.BestMatchOrCreate, 
             label.bdiErrorDonationLookupMatch, true);
     }
@@ -1752,7 +1752,7 @@ public with sharing class BDI_Donations_TEST {
     *    no new donation created
     *    error reported on bdi
     **********************************************************************************************************/            
-    static testMethod void matchPaymentIdToPaidClosedOppExactMatchOrCreate() {
+    @IsTest static void matchPaymentIdToPaidClosedOppExactMatchOrCreate() {
         matchDonationIdToPaidClosedOppWithBehavior(BDI_DataImport_API.ExactMatchOrCreate, 
             label.bdiErrorDonationLookupMatch, true);
     }
@@ -1765,7 +1765,7 @@ public with sharing class BDI_Donations_TEST {
     *    no new donation created
     *    error reported on bdi
     **********************************************************************************************************/            
-    static testMethod void matchPaymentIdToPaidClosedOppRequireBestMatch() {
+    @IsTest static void matchPaymentIdToPaidClosedOppRequireBestMatch() {
         matchDonationIdToPaidClosedOppWithBehavior(BDI_DataImport_API.RequireBestMatch, 
             label.bdiErrorDonationLookupMatch, true);
     }
@@ -1778,7 +1778,7 @@ public with sharing class BDI_Donations_TEST {
     *    no new donation created
     *    error reported on bdi
     **********************************************************************************************************/            
-    static testMethod void matchDonationIdToPaidClosedOppRequireExactMatch() {
+    @IsTest static void matchDonationIdToPaidClosedOppRequireExactMatch() {
         matchDonationIdToPaidClosedOppWithBehavior(BDI_DataImport_API.RequireExactMatch, 
             label.bdiErrorDonationLookupMatch, false);
     }
@@ -1791,7 +1791,7 @@ public with sharing class BDI_Donations_TEST {
     *    no new donation created
     *    error reported on bdi
     **********************************************************************************************************/            
-    static testMethod void matchDonationIdToPaidClosedOppRequireNoMatch() {
+    @IsTest static void matchDonationIdToPaidClosedOppRequireNoMatch() {
         matchDonationIdToPaidClosedOppWithBehavior(BDI_DataImport_API.RequireNoMatch, 
             label.bdiErrorDonationLookupMatch, false);
     }
@@ -1804,7 +1804,7 @@ public with sharing class BDI_Donations_TEST {
     *    no new donation created
     *    error reported on bdi
     **********************************************************************************************************/            
-    static testMethod void matchDonationIdToPaidClosedOppDoNotMatch() {
+    @IsTest static void matchDonationIdToPaidClosedOppDoNotMatch() {
         matchDonationIdToPaidClosedOppWithBehavior(BDI_DataImport_API.DoNotMatch, null, false);
     }
 
@@ -1816,7 +1816,7 @@ public with sharing class BDI_Donations_TEST {
     *    no new donation created
     *    error reported on bdi
     **********************************************************************************************************/            
-    static testMethod void matchDonationIdToPaidClosedOppBestMatchOrCreate() {
+    @IsTest static void matchDonationIdToPaidClosedOppBestMatchOrCreate() {
         matchDonationIdToPaidClosedOppWithBehavior(BDI_DataImport_API.BestMatchOrCreate, 
             label.bdiErrorDonationLookupMatch, false);
     }
@@ -1829,7 +1829,7 @@ public with sharing class BDI_Donations_TEST {
     *    no new donation created
     *    error reported on bdi
     **********************************************************************************************************/            
-    static testMethod void matchDonationIdToPaidClosedOppExactMatchOrCreate() {
+    @IsTest static void matchDonationIdToPaidClosedOppExactMatchOrCreate() {
         matchDonationIdToPaidClosedOppWithBehavior(BDI_DataImport_API.ExactMatchOrCreate, 
             label.bdiErrorDonationLookupMatch, false);
     }
@@ -1842,7 +1842,7 @@ public with sharing class BDI_Donations_TEST {
     *    no new donation created
     *    error reported on bdi
     **********************************************************************************************************/            
-    static testMethod void matchDonationIdToPaidClosedOppRequireBestMatch() {
+    @IsTest static void matchDonationIdToPaidClosedOppRequireBestMatch() {
         matchDonationIdToPaidClosedOppWithBehavior(BDI_DataImport_API.RequireBestMatch, 
             label.bdiErrorDonationLookupMatch, false);
     }

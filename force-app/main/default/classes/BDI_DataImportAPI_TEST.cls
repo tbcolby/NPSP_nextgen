@@ -92,7 +92,7 @@ public with sharing class BDI_DataImportAPI_TEST {
     *     only that non-batch's di records processed
     *     other di records left alone
     **********************************************************************************************************/
-    static testMethod void processNoBatch() {
+    @IsTest static void processNoBatch() {
         list<DataImport__c> listDI = new list<DataImport__c>();
 
         DataImportBatch__c batch1 = newBatch('b1', false);
@@ -140,7 +140,7 @@ public with sharing class BDI_DataImportAPI_TEST {
     *     only that batch's di records processed
     *     other di records left alone
     **********************************************************************************************************/
-    static testMethod void processSingleBatch() {
+    @IsTest static void processSingleBatch() {
         list<DataImport__c> listDI = new list<DataImport__c>();
 
         DataImportBatch__c batch1 = newBatch('b1', false);
@@ -194,7 +194,7 @@ public with sharing class BDI_DataImportAPI_TEST {
     *     only that batch's di records processed
     *     other di records left alone
     **********************************************************************************************************/
-    static testMethod void processTwoBatches() {
+    @IsTest static void processTwoBatches() {
         list<DataImport__c> listDI = new list<DataImport__c>();
 
         DataImportBatch__c batch1 = newBatch('b1', false);
@@ -244,7 +244,7 @@ public with sharing class BDI_DataImportAPI_TEST {
     *     error detected
     *     other di records left alone
     **********************************************************************************************************/
-    static testMethod void processErrorBatch() {
+    @IsTest static void processErrorBatch() {
         list<DataImport__c> listDI = new list<DataImport__c>();
 
         DataImportBatch__c batch1 = newBatch('b1', false);
@@ -294,7 +294,7 @@ public with sharing class BDI_DataImportAPI_TEST {
     *     only the provided di records processed
     *     other di records left alone
     **********************************************************************************************************/
-    static testMethod void processRecordsImport() {
+    @IsTest static void processRecordsImport() {
         // DI's to process
         list<DataImport__c> listDI = new list<DataImport__c>();
         listDI.add(newDI(null, 'c1', 'C1'));
@@ -331,7 +331,7 @@ public with sharing class BDI_DataImportAPI_TEST {
     *     only the provided di records processed
     *     other di records left alone
     **********************************************************************************************************/
-    static testMethod void processRecordsDryRun() {
+    @IsTest static void processRecordsDryRun() {
         // DI's to process
         list<DataImport__c> listDI = new list<DataImport__c>();
         listDI.add(newDI(null, 'c1', 'C1'));

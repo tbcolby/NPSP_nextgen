@@ -64,7 +64,7 @@ private class CMT_FilterRule_TEST {
      * @description Test the FilterGroup and FilterRule selector methods. Relies on hardcoded JSON deserialized
      * MDT data for these tests.
      */
-    private static testMethod void test_FilterRule_Selectors() {
+    @IsTest private static void test_FilterRule_Selectors() {
 
         mockFilterCMTValues();
 
@@ -94,7 +94,7 @@ private class CMT_FilterRule_TEST {
     /**
      * @description Test various User Interface methods in the UI Service class
      */
-    private static testMethod void test_OperationMethods() {
+    @IsTest private static void test_OperationMethods() {
         Integer OCR_FIELD_COUNT = 10;
         if (UserInfo.isMultiCurrencyOrganization()) {
             OCR_FIELD_COUNT++;
@@ -119,7 +119,7 @@ private class CMT_FilterRule_TEST {
      * @description Validate all of the date constant comparisons to ensure that each date constant matches the
      * expected value
      */
-    private static testMethod void test_DateConstantComparison() {
+    @IsTest private static void test_DateConstantComparison() {
         System.AssertEquals(true, CMT_FilterRuleEvaluation_SVC.compareDateTypeWithConstant(SoapType.DATE, Date.Today(), 'TODAY', CMT_FilterRule.FilterOperation.EQUALS),
                 'A Date comparison for TODAY should return true');
         System.AssertEquals(true, CMT_FilterRuleEvaluation_SVC.compareDateTypeWithConstant(SoapType.DATE, Date.Today().addDays(-1), 'YESTERDAY', CMT_FilterRule.FilterOperation.EQUALS),
@@ -161,7 +161,7 @@ private class CMT_FilterRule_TEST {
     /**
      * @description Validates constructor can handle when Constant__c is a string for instead of Id for RecordTypeId
      */
-    private static testMethod void constructorShouldHandleRecordTypeDeveloperName() {
+    @IsTest private static void constructorShouldHandleRecordTypeDeveloperName() {
         String filterRulesJSON =
             CMT_UnitTestData_TEST.createFilterRuleRecord(null, null, 'TestRule1', 'Opportunity', 'RecordTypeId', 'In_List', 'Membership');
 
@@ -176,7 +176,7 @@ private class CMT_FilterRule_TEST {
      * @description Validates constructor can handle when Constant__c is in a date format for instead of datetime for
      * a datetime field
      */
-    private static testMethod void constructorShouldHandleDateTimesStoredAsDates() {
+    @IsTest private static void constructorShouldHandleDateTimesStoredAsDates() {
         String filterRulesJSON =
             CMT_UnitTestData_TEST.createFilterRuleRecord(null, null, 'TestRule1', 'Opportunity', 'CreatedDate', 'Greater', '2018-01-01');
 
@@ -189,7 +189,7 @@ private class CMT_FilterRule_TEST {
     /**
      * @description Validates constructor can handle when Constant__c is null for a record type ID
      */
-    private static testMethod void constructorShouldHandleNullRecordTypeIds() {
+    @IsTest private static void constructorShouldHandleNullRecordTypeIds() {
         String filterRulesJSON =
             CMT_UnitTestData_TEST.createFilterRuleRecord(null, null, 'TestRule1', 'Opportunity', 'RecordTypeId', 'In_List', null);
 
@@ -205,7 +205,7 @@ private class CMT_FilterRule_TEST {
     /**
      * @description Validates constructor can handle when Constant__c is null for a datetime
      */
-    private static testMethod void constructorShouldHandleNullDates() {
+    @IsTest private static void constructorShouldHandleNullDates() {
         String filterRulesJSON =
             CMT_UnitTestData_TEST.createFilterRuleRecord(null, null, 'TestRule1', 'Opportunity', 'CreatedDate', 'Greater', null);
 
@@ -221,7 +221,7 @@ private class CMT_FilterRule_TEST {
     /**
      * @description Validates isIncluded handles null IDs
      */
-    private static testMethod void isIncludedShouldHandleNullIds() {
+    @IsTest private static void isIncludedShouldHandleNullIds() {
         String filterRulesJSON = '[' +
             CMT_UnitTestData_TEST.createFilterRuleRecord(null, null, 'TestRule1', 'Opportunity', 'RecordTypeId', 'In_List', null) + ',' +
             CMT_UnitTestData_TEST.createFilterRuleRecord(null, null, 'TestRule2', 'Opportunity', 'RecordTypeId', 'Not_In_List', null) + ',' +

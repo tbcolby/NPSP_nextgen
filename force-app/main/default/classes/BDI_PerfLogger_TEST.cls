@@ -56,7 +56,7 @@ public with sharing class BDI_PerfLogger_TEST {
     * @description tests creating PerfLogs, and validates timings correctly work
     * @return void
     */
-    static testMethod void testPerfLoggerTiming() {
+    @IsTest static void testPerfLoggerTiming() {
         BDI_PerfLogger perfLogger = new BDI_PerfLogger(TEST_BATCHID, 1);
 
         BDI_PerfLogger.PerfLog pl1 = perfLogger.newPerfLog('testLabel1');
@@ -79,7 +79,7 @@ public with sharing class BDI_PerfLogger_TEST {
     * correctly work
     * @return void
     */
-    static testMethod void testPerfLoggerMultipleCallsSameLabel() {
+    @IsTest static void testPerfLoggerMultipleCallsSameLabel() {
         BDI_PerfLogger perfLogger = new BDI_PerfLogger(TEST_BATCHID, 1);
 
         BDI_PerfLogger.PerfLog pl1 = perfLogger.newPerfLog('testLabel1');
@@ -103,7 +103,7 @@ public with sharing class BDI_PerfLogger_TEST {
     * @description test creating & timing PerfLogs, and then saving them.  Verifies saved logs are correct.
     * @return void
     */
-    static testMethod void testPerfLoggerSaving() {
+    @IsTest static void testPerfLoggerSaving() {
         BDI_PerfLogger perfLogger = new BDI_PerfLogger(TEST_BATCHID, 1);
 
         BDI_PerfLogger.PerfLog pl1 = perfLogger.newPerfLog('testLabel1');

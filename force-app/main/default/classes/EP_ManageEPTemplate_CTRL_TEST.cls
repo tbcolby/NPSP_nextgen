@@ -41,7 +41,7 @@ private with sharing class EP_ManageEPTemplate_CTRL_TEST {
     * @description Creates a template with two tasks, one the child of the other. Tests out buttons and
     * verifies results.
     */
-    static testMethod void testDependentPlan() {
+    @IsTest static void testDependentPlan() {
         Contact con = new Contact(LastName = 'foo');
         insert con;
 
@@ -103,7 +103,7 @@ private with sharing class EP_ManageEPTemplate_CTRL_TEST {
     * @description Creates a template with two tasks, one the child of the other. Clones it, and verifies
     * everything was cloned correctly.
     */
-    static testMethod void testClone() {
+    @IsTest static void testClone() {
         Contact con = new Contact(LastName = 'foo');
         insert con;
 
@@ -149,7 +149,7 @@ private with sharing class EP_ManageEPTemplate_CTRL_TEST {
         An error is displayed on the page since the new Task has no Name.
         The Template and Tasks are unchanged.
     **********************************************************************************************************/
-    private static testMethod void testSaveFailsWhenNewTaskHasNoName() {
+    @IsTest private static void testSaveFailsWhenNewTaskHasNoName() {
         Engagement_Plan_Template__c template = createTemplate();
         Engagement_Plan_Task__c epTask = createTask(template.Id);
 
@@ -184,7 +184,7 @@ private with sharing class EP_ManageEPTemplate_CTRL_TEST {
     verify:
         The transaction is completely rolled back and there is no partial commit.
     **********************************************************************************************************/
-    private static testMethod void testSaveRollsBackAllDmlsOnError() {
+    @IsTest private static void testSaveRollsBackAllDmlsOnError() {
         Engagement_Plan_Template__c template = createTemplate();
         Engagement_Plan_Task__c epTask = createTask(template.Id);
         Engagement_Plan_Task__c dependentEpTask = createDependentTask(template.Id, epTask.Id);
@@ -239,7 +239,7 @@ private with sharing class EP_ManageEPTemplate_CTRL_TEST {
     verify:
         Records are saved as expected
     **********************************************************************************************************/
-    private static testMethod void testResaveSucceedsWhenErrorIsFixed() {
+    @IsTest private static void testResaveSucceedsWhenErrorIsFixed() {
         Engagement_Plan_Template__c template = createTemplate();
         Engagement_Plan_Task__c epTask = createTask(template.Id);
         Engagement_Plan_Task__c dependentEpTask = createDependentTask(template.Id, epTask.Id);

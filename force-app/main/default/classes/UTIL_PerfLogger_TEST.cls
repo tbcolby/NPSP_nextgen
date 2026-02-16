@@ -54,7 +54,7 @@ public with sharing class UTIL_PerfLogger_TEST {
     * @description tests creating PerfLogs, and validates timings correctly work
     * @return void
     */
-    static testMethod void testPerfLoggerTiming() {
+    @IsTest static void testPerfLoggerTiming() {
         UTIL_PerfLogger perfLogger = new UTIL_PerfLogger(1);
 
         UTIL_PerfLogger.PerfLog pl1 = perfLogger.newPerfLog('TEST', 'testLabel1', UTIL_PerfLogger.METHOD);
@@ -77,7 +77,7 @@ public with sharing class UTIL_PerfLogger_TEST {
     * correctly work
     * @return void
     */
-    static testMethod void testPerfLoggerMultipleCallsSameLabel() {
+    @IsTest static void testPerfLoggerMultipleCallsSameLabel() {
         UTIL_PerfLogger perfLogger = new UTIL_PerfLogger(1);
 
         UTIL_PerfLogger.PerfLog pl1 = perfLogger.newPerfLog('TEST', 'testLabel1', UTIL_PerfLogger.METHOD);
@@ -101,7 +101,7 @@ public with sharing class UTIL_PerfLogger_TEST {
     * @description test creating & timing PerfLogs, and then saving them.  Verifies saved logs are correct.
     * @return void
     */
-    static testMethod void testPerfLoggerSaving() {
+    @IsTest static void testPerfLoggerSaving() {
         UTIL_PerfLogger perfLogger = new UTIL_PerfLogger(1);
 
         UTIL_PerfLogger.PerfLog pl1 = perfLogger.newPerfLog('TEST', 'testLabel1', UTIL_PerfLogger.METHOD);

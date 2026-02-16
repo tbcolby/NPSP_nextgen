@@ -52,7 +52,7 @@ private class HH_HouseholdNamingSettingValidator_TEST {
     verify:
         The notification contains an error
     **********************************************************************************************************/  
-    private static testMethod void testErrorWhenClassDoesNotExist() {
+    @IsTest private static void testErrorWhenClassDoesNotExist() {
     Household_Naming_Settings__c settings = UTIL_UnitTestData_TEST.setupHHNamingSettings();
         settings.Implementing_Class__c = 'foo'; 
 
@@ -69,7 +69,7 @@ private class HH_HouseholdNamingSettingValidator_TEST {
     verify:
         The notification contains an error
     **********************************************************************************************************/  
-    private static testMethod void testErrorWhenClassDoesNotImplementINamingInterface() {
+    @IsTest private static void testErrorWhenClassDoesNotImplementINamingInterface() {
         Household_Naming_Settings__c settings = UTIL_UnitTestData_TEST.setupHHNamingSettings();
         settings.Implementing_Class__c = 'HouseholdNamingService';
 
@@ -86,7 +86,7 @@ private class HH_HouseholdNamingSettingValidator_TEST {
     verify:
         The notification does not contain any error. Returned object is a HH_NameSpec instance.
     **********************************************************************************************************/  
-    private static testMethod void testSuccessWhenClassIsNotSpecified() {
+    @IsTest private static void testSuccessWhenClassIsNotSpecified() {
         Household_Naming_Settings__c settings = UTIL_UnitTestData_TEST.setupHHNamingSettings();
         settings.Implementing_Class__c = null; 
 
@@ -103,7 +103,7 @@ private class HH_HouseholdNamingSettingValidator_TEST {
     verify:
         The notification does not contain any error
     **********************************************************************************************************/  
-    private static testMethod void testSuccessWhenClassImplementsINamingInterface() {
+    @IsTest private static void testSuccessWhenClassImplementsINamingInterface() {
         Household_Naming_Settings__c settings = UTIL_UnitTestData_TEST.setupHHNamingSettings(); 
 
         HH_INaming hhNaming = validator.validateImplementingClass(settings, notification);
@@ -119,7 +119,7 @@ private class HH_HouseholdNamingSettingValidator_TEST {
     verify:
         The notification contains an error
     **********************************************************************************************************/  
-    private static testMethod void testErrorWhenHHNameFormatIsInvalid() {
+    @IsTest private static void testErrorWhenHHNameFormatIsInvalid() {
         Household_Naming_Settings__c settings = UTIL_UnitTestData_TEST.setupHHNamingSettings();
         settings.Household_Name_Format__c = 'The {!LastName}, {!{!FirstName}} {!npe01__WorkEmail__c}} Family'; 
 
@@ -134,7 +134,7 @@ private class HH_HouseholdNamingSettingValidator_TEST {
     verify:
         The notification contains an error
     **********************************************************************************************************/ 
-    private static testMethod void testErrorWhenFormalGreetingFormatIsInvalid() {
+    @IsTest private static void testErrorWhenFormalGreetingFormatIsInvalid() {
         Household_Naming_Settings__c settings = UTIL_UnitTestData_TEST.setupHHNamingSettings();
         settings.Formal_Greeting_Format__c = '{!{!Title} {!FirstName}}}{!LastName}'; 
 
@@ -149,7 +149,7 @@ private class HH_HouseholdNamingSettingValidator_TEST {
     verify:
         The notification contains an error
     **********************************************************************************************************/ 
-    private static testMethod void testErrorWhenInformalGreetingFormatIsInvalid() {
+    @IsTest private static void testErrorWhenInformalGreetingFormatIsInvalid() {
         Household_Naming_Settings__c settings = UTIL_UnitTestData_TEST.setupHHNamingSettings();
         settings.Informal_Greeting_Format__c = '{!{!FirstName}}}'; 
 
@@ -164,7 +164,7 @@ private class HH_HouseholdNamingSettingValidator_TEST {
     verify:
         The notification does not contain any error
     **********************************************************************************************************/ 
-    private static testMethod void testSuccessWhenFormatFieldIsNull() {
+    @IsTest private static void testSuccessWhenFormatFieldIsNull() {
         Household_Naming_Settings__c settings = UTIL_UnitTestData_TEST.setupHHNamingSettings();
         settings.Household_Name_Format__c = null;
 
@@ -180,7 +180,7 @@ private class HH_HouseholdNamingSettingValidator_TEST {
     verify:
         The notification contains an error
     **********************************************************************************************************/ 
-    private static testMethod void testInvalidClassErrorWhenClassAndFormatFieldsAreInvalid() {
+    @IsTest private static void testInvalidClassErrorWhenClassAndFormatFieldsAreInvalid() {
         Household_Naming_Settings__c settings = UTIL_UnitTestData_TEST.setupInvalidHHNamingSettings(); 
         settings.Implementing_Class__c = 'foo';
 
@@ -195,7 +195,7 @@ private class HH_HouseholdNamingSettingValidator_TEST {
     verify:
         The notification contains errors for all format fields
     **********************************************************************************************************/ 
-    private static testMethod void testErrorsWhenAllFormatFieldsAreInvalid() {
+    @IsTest private static void testErrorsWhenAllFormatFieldsAreInvalid() {
         Household_Naming_Settings__c settings = UTIL_UnitTestData_TEST.setupInvalidHHNamingSettings();
 
         notification = validator.validate(settings);
@@ -214,7 +214,7 @@ private class HH_HouseholdNamingSettingValidator_TEST {
     verify:
         The notification does not contain any error
     **********************************************************************************************************/ 
-    private static testMethod void testSuccessWhenAllHHSettingsFieldsAreValid() {
+    @IsTest private static void testSuccessWhenAllHHSettingsFieldsAreValid() {
         Household_Naming_Settings__c settings = UTIL_UnitTestData_TEST.setupHHNamingSettings(); 
 
         notification = validator.validate(settings);

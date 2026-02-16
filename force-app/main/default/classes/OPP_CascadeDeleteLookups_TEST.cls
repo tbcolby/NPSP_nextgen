@@ -42,7 +42,7 @@ private class OPP_CascadeDeleteLookups_TEST {
     * Verifies results: All the Allocations should be deleted after the Opportunities are deleted.
     * Then the Allocations will be undeleted after the Opportunities are undeleted.
     */
-    static testMethod void testOppCascade() {
+    @IsTest static void testOppCascade() {
         Integer maxRecords = 1;
 
         List<Account> accounts = CDL_CascadeDeleteLookups_TEST.buildAccounts(maxRecords);
@@ -70,7 +70,7 @@ private class OPP_CascadeDeleteLookups_TEST {
         System.assertEquals(deletedAllocations.size(), undeletedAllocations.size(), 'Allocations should be cascade undeleted when the Opportunity is deleted.');
     }
 
-    static testMethod void testOppCascadeWithPaymentAllocations() {
+    @IsTest static void testOppCascadeWithPaymentAllocations() {
         General_Accounting_Unit__c defaultAccountingUnit = 
           new General_Accounting_Unit__c(Name = 'DEFAULT_GAU');
         insert defaultAccountingUnit;

@@ -248,7 +248,7 @@ public with sharing class MTCH_FindGifts_TEST {
     verify:
         The transaction is completely rolled back and there is no partial commit
     **********************************************************************************************************/
-    private static testMethod void testSaveAndCloseRollsBackAllDmlsOnError() {
+    @IsTest private static void testSaveAndCloseRollsBackAllDmlsOnError() {
         initTestData();
         createMatchesWithTestData();
         Test.setCurrentPage(Page.MTCH_FindGifts);

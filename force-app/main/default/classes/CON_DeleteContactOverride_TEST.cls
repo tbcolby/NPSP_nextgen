@@ -151,7 +151,7 @@ private class CON_DeleteContactOverride_TEST {
         - Return URL
         - Fail (or Cancel) URL
     **********************************************************************************************************/
-    private static testMethod void testNavigationParametersAreSetInConstructor() {
+    @IsTest private static void testNavigationParametersAreSetInConstructor() {
         Contact con = new Contact(LastName = 'foo');
         insert con;
 
@@ -175,7 +175,7 @@ private class CON_DeleteContactOverride_TEST {
     verify:
         Return URL property is set to Contact Home
     **********************************************************************************************************/
-    private static testMethod void testRetUrlIsContactHomeIfNotProvided() {
+    @IsTest private static void testRetUrlIsContactHomeIfNotProvided() {
         Contact con = new Contact(LastName = 'foo');
         insert con;
 
@@ -196,7 +196,7 @@ private class CON_DeleteContactOverride_TEST {
     verify:
         Controller retUrl is retURL page param for Classic.
     **********************************************************************************************************/
-    private static testMethod void testRetUrlForClassic() {
+    @IsTest private static void testRetUrlForClassic() {
         Contact con = new Contact(LastName = 'foo');
         insert con;
 
@@ -218,7 +218,7 @@ private class CON_DeleteContactOverride_TEST {
         Cancel action navigates to failRetURL or retURL for Classic.
         Cancel action sets sfoceNav to "back" when in LEx.
     **********************************************************************************************************/
-    private static testMethod void testOnCancel() {
+    @IsTest private static void testOnCancel() {
         Contact con = new Contact(LastName = 'foo');
         insert con;
 
@@ -257,7 +257,7 @@ private class CON_DeleteContactOverride_TEST {
         The Contact is deleted.
         The Account is not deleted.
     **********************************************************************************************************/
-    private static testMethod void testDeleteContactAndLeaveEmptyAccount() {
+    @IsTest private static void testDeleteContactAndLeaveEmptyAccount() {
         Contact con = new Contact(LastName = 'foo');
         insert con;
 
@@ -286,7 +286,7 @@ private class CON_DeleteContactOverride_TEST {
     /*********************************************************************************************************
     * @description Attempts to delete contact with closed/won and org opps, verifies correct exception is thrown.
     */
-    static testMethod void testContactDeleteExceptionWithOverride() {
+    @IsTest static void testContactDeleteExceptionWithOverride() {
         //use a non-system account for the contact's account, so that the delete override doesn't redirect us to delete the account
         Account account = new Account(Name = 'TEST_ACCOUNT');
         insert account;
@@ -363,7 +363,7 @@ private class CON_DeleteContactOverride_TEST {
     * @description Attempts to delete contact with Recurring Donation, Opportunities and Relationships,
     * verifies Recurring Donation is deleted.
     */
-    static testMethod void testContactDeleteWithOverride() {
+    @IsTest static void testContactDeleteWithOverride() {
         //use a non-system account for the contact's account, so that the delete override doesn't redirect us to delete the account
         Account account = new Account(Name = 'TEST_ACCOUNT');
         insert account;
@@ -418,7 +418,7 @@ private class CON_DeleteContactOverride_TEST {
     /*********************************************************************************************************
     * @description Attempts to delete Account with closed/won opp and case, verifies correct exception is thrown.
     */
-    static testMethod void testAccountDeleteExceptionWithOverride() {
+    @IsTest static void testAccountDeleteExceptionWithOverride() {
         //use a non-system account for the contact's account, so that the delete override doesn't redirect us to delete the account
         Account account = new Account(
             Name = 'TESTACCOUNT',

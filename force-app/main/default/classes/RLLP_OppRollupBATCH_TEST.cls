@@ -62,7 +62,7 @@ private class RLLP_OppRollupBATCH_TEST {
         );
     }
     
-    static testMethod void testOppAcctRollupBatch() {
+    @IsTest static void testOppAcctRollupBatch() {
         //skip the test if Advancement is installed
         if(ADV_PackageInfo_SVC.useAdv()) return;
         
@@ -93,7 +93,7 @@ private class RLLP_OppRollupBATCH_TEST {
         System.assertEquals(acct.npo02__TotalOppAmount__c, giftAmount);
     }
 
-    static testMethod void testOppContactRollupBatch() {
+    @IsTest static void testOppContactRollupBatch() {
         setup();
         
         //The record type is an optional parameter when creating opps
@@ -128,7 +128,7 @@ private class RLLP_OppRollupBATCH_TEST {
         System.assertEquals(3, contact.npo02__NumberOfClosedOpps__c);
     }
     
-    static testMethod void testOppSoftCreditRollupBatch() {
+    @IsTest static void testOppSoftCreditRollupBatch() {
         setup();
         
         String giftRecordTypeNameForTests = UTIL_RecordTypes.getRecordTypeNameForGiftsTests(Opportunity.sObjectType);
@@ -167,7 +167,7 @@ private class RLLP_OppRollupBATCH_TEST {
         System.assertEquals(giftAmount, contact18.npo02__Soft_Credit_Total__c);
     }
 
-    static testMethod void testOppPartialSoftCreditRollupBatch() {
+    @IsTest static void testOppPartialSoftCreditRollupBatch() {
         setup();
         
         String giftRecordTypeNameForTests = UTIL_RecordTypes.getRecordTypeNameForGiftsTests(Opportunity.sObjectType);

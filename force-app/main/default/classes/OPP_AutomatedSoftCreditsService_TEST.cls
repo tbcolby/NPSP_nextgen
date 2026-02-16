@@ -156,7 +156,7 @@ private class OPP_AutomatedSoftCreditsService_TEST {
     *   Account's classification is not set to Individual.
     * @return void
     **********************************************************************************************************/
-    private static testMethod void testOpportunityAccountClassificationIsOrganization() {
+    @IsTest private static void testOpportunityAccountClassificationIsOrganization() {
         Boolean isOrganizationalAccount = false;
 
         Account acct = new Account(Name = 'Organization Account');
@@ -179,7 +179,7 @@ private class OPP_AutomatedSoftCreditsService_TEST {
     *   Account's classification is set to Individual.
     * @return void
     **********************************************************************************************************/
-    private static testMethod void testOpportunityAccountClassificationIsIndividual() {
+    @IsTest private static void testOpportunityAccountClassificationIsIndividual() {
         Boolean isOrganizationalAccount = false;
 
         Account acct = new Account(Name = 'Household Account');
@@ -203,7 +203,7 @@ private class OPP_AutomatedSoftCreditsService_TEST {
     *   Opportunity Contact Role records created for Related Contacts.
     * @return void
     **********************************************************************************************************/
-    private static testMethod void testCreateRelationshipOCRs() {
+    @IsTest private static void testCreateRelationshipOCRs() {
         Test.startTest();
 
         Contact testCon = returnContact('Primary1');
@@ -229,7 +229,7 @@ private class OPP_AutomatedSoftCreditsService_TEST {
     *   Relationship records were retrieved.
     * @return void
     **********************************************************************************************************/
-    private static testMethod void testRetrieveRelationships() {
+    @IsTest private static void testRetrieveRelationships() {
         Map<Id, List<npe4__Relationship__c>> relationshipRecords = new Map<Id, List<npe4__Relationship__c>>();
 
         Contact testCon0 = returnContact('Primary0');
@@ -258,7 +258,7 @@ private class OPP_AutomatedSoftCreditsService_TEST {
     *   Opportunity Contact Role records created with expected values.
     * @return void
     **********************************************************************************************************/
-    private static testMethod void testBuildRelationshipOCRs() {
+    @IsTest private static void testBuildRelationshipOCRs() {
         List<OpportunityContactRole> creatededOCRs = new List<OpportunityContactRole>();
 
         Map<Id, List<Id>> primaryContactIdToOpportunityIds = new Map<Id, List<Id>>();
@@ -311,7 +311,7 @@ private class OPP_AutomatedSoftCreditsService_TEST {
     *   Opportunity Contact Role records created for Related Contacts.
     * @return void
     **********************************************************************************************************/
-    private static testMethod void testCreateAffiliationOCRs() {
+    @IsTest private static void testCreateAffiliationOCRs() {
         Test.startTest();
 
         Contact testCon = returnContact('Affiliation5');
@@ -345,7 +345,7 @@ private class OPP_AutomatedSoftCreditsService_TEST {
     *   Affiliation records were retrieved.
     * @return void
     **********************************************************************************************************/
-    private static testMethod void testRetrieveAffiliations() {
+    @IsTest private static void testRetrieveAffiliations() {
         Map<Id, List<npe5__Affiliation__c>> affiliationRecords = new Map<Id, List<npe5__Affiliation__c>>();
 
         Contact testCon0 = returnContact('Affiliation5');
@@ -373,7 +373,7 @@ private class OPP_AutomatedSoftCreditsService_TEST {
     *   Opportunity Contact Role records created with expected values.
     * @return void
     **********************************************************************************************************/
-    private static testMethod void testBuildAffiliationOCRs() {
+    @IsTest private static void testBuildAffiliationOCRs() {
         List<OpportunityContactRole> creatededOCRs = new List<OpportunityContactRole>();
 
         Map<Id, List<Id>> accountIdToOpportunityIds = new Map<Id, List<Id>>();
@@ -428,7 +428,7 @@ private class OPP_AutomatedSoftCreditsService_TEST {
     *   Opportunity Contact Role records were retrieved.
     * @return void
     **********************************************************************************************************/
-    private static testMethod void testRetrieveOpportunityContactRoles() {
+    @IsTest private static void testRetrieveOpportunityContactRoles() {
         List<List<Id>> opptyIds = new List<List<Id>>();
         Map<Id, List<OpportunityContactRole>> transactionOCR = new Map<Id, List<OpportunityContactRole>>();
 
@@ -457,7 +457,7 @@ private class OPP_AutomatedSoftCreditsService_TEST {
     *   Relationship record is a duplicate.
     * @return void
     **********************************************************************************************************/
-    private static testMethod void testIsDuplicateOCR() {
+    @IsTest private static void testIsDuplicateOCR() {
         Boolean isDuplicate = false;
         List<List<Id>> opptyIds = new List<List<Id>>();
          Map<Id, List<OpportunityContactRole>> transactionOCR = new Map<Id, List<OpportunityContactRole>>();
@@ -493,7 +493,7 @@ private class OPP_AutomatedSoftCreditsService_TEST {
     *   Relationship record is not a duplicate.
     * @return void
     **********************************************************************************************************/
-    private static testMethod void testIsNotDuplicateOCR() {
+    @IsTest private static void testIsNotDuplicateOCR() {
         Boolean isDuplicate = false;
         List<List<Id>> opptyIds = new List<List<Id>>();
         Map<Id, List<OpportunityContactRole>> transactionOCR = new Map<Id, List<OpportunityContactRole>>();
@@ -531,7 +531,7 @@ private class OPP_AutomatedSoftCreditsService_TEST {
     *   Relationship records are unique based on Contac.
     * @return void
     **********************************************************************************************************/
-    private static testMethod void testRemoveDuplicateAssociatedRecordsForRelationships() {
+    @IsTest private static void testRemoveDuplicateAssociatedRecordsForRelationships() {
         Map<Id, List<npe4__Relationship__c>> relationshipRecords = new Map<Id, List<npe4__Relationship__c>>();
 
         Contact testCon0 = returnContact('Primary0');
@@ -569,7 +569,7 @@ private class OPP_AutomatedSoftCreditsService_TEST {
     *   Affiliation records are unique based on Contac.
     * @return void
     **********************************************************************************************************/
-    private static testMethod void testRemoveDuplicateAssociatedRecordsForAffiliations() {
+    @IsTest private static void testRemoveDuplicateAssociatedRecordsForAffiliations() {
         Map<Id, List<npe5__Affiliation__c>> affiliationRecords = new Map<Id, List<npe5__Affiliation__c>>();
 
         Contact testCon0 = returnContact('Affiliation5');

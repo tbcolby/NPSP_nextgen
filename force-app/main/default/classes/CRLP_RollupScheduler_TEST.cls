@@ -40,7 +40,7 @@ private class CRLP_RollupScheduler_TEST {
      * @description Test that when Customizable Rollups is enabled, the correct number of jobs are scheduled for
      * the CRLP_RollupScheduler class.
      */
-    static testMethod void test_schedule_CRLPJobs() {
+    @IsTest static void test_schedule_CRLPJobs() {
 
         // Enable Customizable Rollups
         UTIL_CustomSettingsFacade.getRollupSettingsForTests(
@@ -98,7 +98,7 @@ private class CRLP_RollupScheduler_TEST {
      * iteration, the only way this method can schedule and execute multiple batches is if there is no data to
      * query/process.
      */
-    static testMethod void test_scheduled_jobs() {
+    @IsTest static void test_scheduled_jobs() {
         // Start by enabling Customizable Rollups (which disables all legacy rollup operations)
         UTIL_CustomSettingsFacade.getRollupSettingsForTests(new Customizable_Rollup_Settings__c (
                 Customizable_Rollups_Enabled__c = true
@@ -130,7 +130,7 @@ private class CRLP_RollupScheduler_TEST {
      * with the number of batch iterations, it's not possible to have this job execute and then call another
      * batch job to execute that will actually roll up data.
      */
-    static testMethod void test_skewdispatcher_job() {
+    @IsTest static void test_skewdispatcher_job() {
 
         // Start by enabling Customizable Rollups (which disables all legacy rollup operations)
         UTIL_CustomSettingsFacade.getRollupSettingsForTests(new Customizable_Rollup_Settings__c (

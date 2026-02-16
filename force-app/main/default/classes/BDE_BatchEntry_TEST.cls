@@ -40,7 +40,7 @@ private class BDE_BatchEntry_TEST {
     * @description load the batch data entry page for a new opportunity batch, save and validate the 
     * batch and batch items were saved
     */
-    static testMethod void testBatchDataEntryController() {
+    @IsTest static void testBatchDataEntryController() {
 
         Test.setCurrentPageReference(new PageReference('Page.BDE_BatchEntry'));
         system.currentPageReference().getParameters().put('obj', 'Opportunity');
@@ -51,7 +51,7 @@ private class BDE_BatchEntry_TEST {
     * @description load the batch data entry page for a new contact batch, save and reload the page with
     * the saved item
     */
-    static testMethod void testBatchWithSave() {
+    @IsTest static void testBatchWithSave() {
 
         ApexPages.StandardController sc = new ApexPages.standardController( new Batch__c() );
         Test.setCurrentPage(Page.BDE_BatchEntry);
@@ -63,7 +63,7 @@ private class BDE_BatchEntry_TEST {
     /*******************************************************************************************************
     * @description load the batch data entry page for a new object
     */
-    static testMethod void testNewObjectLoad(){
+    @IsTest static void testNewObjectLoad(){
         ApexPages.StandardController sc = new ApexPages.standardController( new Batch__c() );
         Test.setCurrentPage(Page.BDE_BatchEntry);
         BDE_BatchEntry_CTRL ext = new BDE_BatchEntry_CTRL(sc);
@@ -74,7 +74,7 @@ private class BDE_BatchEntry_TEST {
     /*******************************************************************************************************
     * @description load the batch data entry page with existing batches
     */
-    static testMethod void testExistingBatchObjects(){
+    @IsTest static void testExistingBatchObjects(){
 
         Batch__c b1 = new Batch__c(Name='New Batch', Object_Name__c = 'opportunity', Batch_Status__c = 'In Progress');
         Batch__c b2 = new Batch__c(Name='New Batch', Object_Name__c = 'opportunity', Batch_Status__c = 'Complete');
@@ -91,7 +91,7 @@ private class BDE_BatchEntry_TEST {
     /*******************************************************************************************************
     * @description load the batch data entry page for an opportunity with an opportunity contact role
     */
-    static testMethod void testOtherConfig(){
+    @IsTest static void testOtherConfig(){
         Batch__c b = new Batch__c(Name = 'Opp Batch', Object_Name__c = 'opportunity');
         insert b;
         Opportunity oppinbatch = new Opportunity(Name='MyTestOpp', CloseDate=system.today(), StageName='Closed Won', Batch__c = b.id);

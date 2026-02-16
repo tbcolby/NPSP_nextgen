@@ -44,7 +44,7 @@ private with sharing class EP_TaskDependency_TEST {
     * parent task to closed, and verifies that the direct children are updated to open, and that grandchildren
     * have their date updated due to the template "Delay Type" setting of "After Date Completed".
     */
-    static testMethod void testDependentPlan() {
+    @IsTest static void testDependentPlan() {
 
         Contact con = new Contact(LastName = 'foo');
         insert con;
@@ -160,7 +160,7 @@ private with sharing class EP_TaskDependency_TEST {
     * and verifies that the child is updated to open, but that the activity date is not updated due to the
     * template Delay Type setting of "After Due Date".
     */
-    static testMethod void testDelayType() {
+    @IsTest static void testDelayType() {
 
         Contact con = new Contact(LastName = 'foo');
         insert con;
@@ -235,7 +235,7 @@ private with sharing class EP_TaskDependency_TEST {
     * Plan using the template. Verifies that tasks are created correctly. Deletes the Engagement Plan, then 
     * updates the parent task to closed, and verifies that no exception is thrown.
     */
-    static testMethod void testDeletedPlan() {
+    @IsTest static void testDeletedPlan() {
 
         Contact con = new Contact(LastName = 'foo');
         insert con;
@@ -310,7 +310,7 @@ private with sharing class EP_TaskDependency_TEST {
     * template, creating two dependent tasks. Then deletes the child task and verifies the parent can be 
     * closed without error.
     */
-    static testMethod void testDeleteDependentTask() {
+    @IsTest static void testDeleteDependentTask() {
 
         Contact con = new Contact(LastName = 'foo');
         insert con;

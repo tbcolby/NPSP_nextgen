@@ -99,7 +99,7 @@ private class LD_LeadConvertOverride_TEST {
     /*******************************************************************************************************
     * @description Runs newLead_Conversion_Test with the 1x1 account model
     */
-    static testMethod void newLeadConversion_TestOne2One(){
+    @IsTest static void newLeadConversion_TestOne2One(){
         //skip the test if Advancement is installed
         if(ADV_PackageInfo_SVC.useAdv()) return;
 
@@ -108,7 +108,7 @@ private class LD_LeadConvertOverride_TEST {
     /*******************************************************************************************************
     * @description Runs newLead_Conversion_Test with the Household account model
     */
-    static testMethod void newLeadConversion_TestHHAccount(){
+    @IsTest static void newLeadConversion_TestHHAccount(){
         //skip the test if Advancement is installed
         if(ADV_PackageInfo_SVC.useAdv()) return;
 
@@ -117,7 +117,7 @@ private class LD_LeadConvertOverride_TEST {
     /*******************************************************************************************************
     * @description Runs newLead_Conversion_Test with the Individual account model
     */
-    static testMethod void newLeadConversion_TestBucketAccount(){
+    @IsTest static void newLeadConversion_TestBucketAccount(){
         if (UTIL_UnitTestData_TEST.isAccountNameEncrypted()) return;
 
         newLeadConversion_Test(CAO_Constants.BUCKET_PROCESSOR);
@@ -186,19 +186,19 @@ private class LD_LeadConvertOverride_TEST {
     /*******************************************************************************************************
     * @description Runs newLeadConversionMerge_Test with the 1x1 account model
     */
-    static testMethod void newLeadConversionMerge_TestOne2One() {
+    @IsTest static void newLeadConversionMerge_TestOne2One() {
         newLeadConversionMerge_Test(CAO_Constants.ONE_TO_ONE_PROCESSOR);
     }
     /*******************************************************************************************************
     * @description Runs newLeadConversionMerge_Test with the Household account model
     */
-    static testMethod void newLeadConversionMerge_TestHHAccount(){
+    @IsTest static void newLeadConversionMerge_TestHHAccount(){
         newLeadConversionMerge_Test(CAO_Constants.HH_ACCOUNT_PROCESSOR);
     }
     /*******************************************************************************************************
     * @description Runs newLeadConversionMerge_Test with the Individual account model
     */
-    static testMethod void newLeadConversionMerge_TestBucketAccount(){
+    @IsTest static void newLeadConversionMerge_TestBucketAccount(){
         if (UTIL_UnitTestData_TEST.isAccountNameEncrypted()) return;
 
         //skip the test if Advancement is installed - Bucket Account not supported in ADV
@@ -268,19 +268,19 @@ private class LD_LeadConvertOverride_TEST {
     /*******************************************************************************************************
     * @description Runs newLeadConversionNewNameCompany with the 1x1 account model
     */
-    static testMethod void newLeadConversionNewNamedCompany_TestOne2One(){
+    @IsTest static void newLeadConversionNewNamedCompany_TestOne2One(){
         newLeadConversionNewNamedCompany_Test(CAO_Constants.ONE_TO_ONE_PROCESSOR);
     }
     /*******************************************************************************************************
     * @description Runs newLeadConversionNewNameCompany with the Household account model
     */
-    static testMethod void newLeadConversionNewNamedCompany_TestHHAccount(){
+    @IsTest static void newLeadConversionNewNamedCompany_TestHHAccount(){
         newLeadConversionNewNamedCompany_Test(CAO_Constants.HH_ACCOUNT_PROCESSOR);
     }
     /*******************************************************************************************************
     * @description Runs newLeadConversionNewNameCompany with the Individual account model
     */
-    static testMethod void newLeadConversionNewNamedCompany_TestBucketAccount(){
+    @IsTest static void newLeadConversionNewNamedCompany_TestBucketAccount(){
         if (UTIL_UnitTestData_TEST.isAccountNameEncrypted()) return;
 
         newLeadConversionNewNamedCompany_Test(CAO_Constants.BUCKET_PROCESSOR);
@@ -339,19 +339,19 @@ private class LD_LeadConvertOverride_TEST {
     /*******************************************************************************************************
     * @description Runs newLeadConversionExistingNamedCompany with the 1x1 account model
     */
-    static testMethod void newLeadConversionExistingNamedCompany_TestOne2One(){
+    @IsTest static void newLeadConversionExistingNamedCompany_TestOne2One(){
         newLeadConversionExistingNamedCompany_Test(CAO_Constants.ONE_TO_ONE_PROCESSOR);
     }
     /*******************************************************************************************************
     * @description Runs newLeadConversionExistingNamedCompany with the Household account model
     */
-    static testMethod void newLeadConversionExistingNamedCompany_TestHHAccount(){
+    @IsTest static void newLeadConversionExistingNamedCompany_TestHHAccount(){
         newLeadConversionExistingNamedCompany_Test(CAO_Constants.HH_ACCOUNT_PROCESSOR);
     }
     /*******************************************************************************************************
     * @description Runs newLeadConversionExistingNamedCompany with the Individual account model
     */
-    static testMethod void newLeadConversionExistingNamedCompany_TestBucketAccount(){
+    @IsTest static void newLeadConversionExistingNamedCompany_TestBucketAccount(){
         if (UTIL_UnitTestData_TEST.isAccountNameEncrypted()) return;
 
         newLeadConversionExistingNamedCompany_Test(CAO_Constants.BUCKET_PROCESSOR);
@@ -416,19 +416,19 @@ private class LD_LeadConvertOverride_TEST {
     /*******************************************************************************************************
     * @description Runs newLeadConversionExistingNamedCompanyAffl with the 1x1 account model
     */
-    static testMethod void newLeadConversionExistingNamedCompanyAffl_TestOne2One(){
+    @IsTest static void newLeadConversionExistingNamedCompanyAffl_TestOne2One(){
         newLeadConversionExistingNamedCompanyAffl_Test(CAO_Constants.ONE_TO_ONE_PROCESSOR);
     }
     /*******************************************************************************************************
     * @description Runs newLeadConversionExistingNamedCompanyAffl with the Household account model
     */
-    static testMethod void newLeadConversionExistingNamedCompanyAffl_TestHHAccount(){
+    @IsTest static void newLeadConversionExistingNamedCompanyAffl_TestHHAccount(){
         newLeadConversionExistingNamedCompanyAffl_Test(CAO_Constants.HH_ACCOUNT_PROCESSOR);
     }
     /*******************************************************************************************************
     * @description Runs newLeadConversionExistingNamedCompany with the Individual account model
     */
-    static testMethod void newLeadConversionExistingNamedCompanyAffl_TestBucketAccount(){
+    @IsTest static void newLeadConversionExistingNamedCompanyAffl_TestBucketAccount(){
         if (UTIL_UnitTestData_TEST.isAccountNameEncrypted()) return;
 
         newLeadConversionExistingNamedCompanyAffl_Test(CAO_Constants.BUCKET_PROCESSOR);
@@ -495,7 +495,7 @@ private class LD_LeadConvertOverride_TEST {
     /*******************************************************************************************************
     * @description Runs newLeadConversionHHObj with the 1x1 account model
     */
-    static testMethod void newLeadConversionHHObjOne2One(){
+    @IsTest static void newLeadConversionHHObjOne2One(){
         //skip the test if Advancement is installed
         if(ADV_PackageInfo_SVC.useAdv()) return;
 
@@ -504,7 +504,7 @@ private class LD_LeadConvertOverride_TEST {
     /*******************************************************************************************************
     * @description Runs newLeadConversionHHObj with the Individual account model
     */
-    static testMethod void newLeadConversionHHObjBucket(){
+    @IsTest static void newLeadConversionHHObjBucket(){
         if (UTIL_UnitTestData_TEST.isAccountNameEncrypted()) return;
 
         newLeadConversionHHObj(CAO_Constants.BUCKET_PROCESSOR);
@@ -574,7 +574,7 @@ private class LD_LeadConvertOverride_TEST {
     /*******************************************************************************************************
     * @description Runs newLead_Conversion_Test with the 1x1 account model
     */
-    static testMethod void newNativeLeadConversion_TestOne2One(){
+    @IsTest static void newNativeLeadConversion_TestOne2One(){
         //skip the test if Advancement is installed
         if(ADV_PackageInfo_SVC.useAdv()) return;
 
@@ -583,7 +583,7 @@ private class LD_LeadConvertOverride_TEST {
     /*******************************************************************************************************
     * @description Runs newLead_Conversion_Test with the Household account model
     */
-    static testMethod void newNativeLeadConversion_TestHHAccount(){
+    @IsTest static void newNativeLeadConversion_TestHHAccount(){
         //skip the test if Advancement is installed
         if(ADV_PackageInfo_SVC.useAdv()) return;
 
@@ -592,7 +592,7 @@ private class LD_LeadConvertOverride_TEST {
     /*******************************************************************************************************
     * @description Runs newLead_Conversion_Test with the Individual account model
     */
-    static testMethod void newNativeLeadConversion_TestBucketAccount(){
+    @IsTest static void newNativeLeadConversion_TestBucketAccount(){
         //skip the test if Advancement is installed
         if(ADV_PackageInfo_SVC.useAdv()) return;
 
@@ -750,13 +750,13 @@ private class LD_LeadConvertOverride_TEST {
     /*******************************************************************************************************
     * @description Runs newLead_Conversion_Test with the 1x1 account model and verify Opp OCRs and Primary Contact are correct.
     */
-    static testMethod void newLeadConversion_TestOne2OneOppOCR(){
+    @IsTest static void newLeadConversion_TestOne2OneOppOCR(){
         newLeadConversion_TestOppOCR(CAO_Constants.ONE_TO_ONE_PROCESSOR);
     }
     /*******************************************************************************************************
     * @description Runs newLead_Conversion_Test with the Household account model and verify Opp OCRs and Primary Contact are correct.
     */
-    static testMethod void newLeadConversion_TestHHAccountOppOCR(){
+    @IsTest static void newLeadConversion_TestHHAccountOppOCR(){
         //skip the test if Advancement is installed
         if(ADV_PackageInfo_SVC.useAdv()) return;
 
@@ -765,7 +765,7 @@ private class LD_LeadConvertOverride_TEST {
     /*******************************************************************************************************
     * @description Runs newLead_Conversion_Test with the Individual account model and verify Opp OCRs and Primary Contact are correct.
     */
-    static testMethod void newLeadConversion_TestBucketAccountOppOCR(){
+    @IsTest static void newLeadConversion_TestBucketAccountOppOCR(){
         if (UTIL_UnitTestData_TEST.isAccountNameEncrypted()) return;
 
         newLeadConversion_TestOppOCR(CAO_Constants.BUCKET_PROCESSOR);
@@ -845,7 +845,7 @@ private class LD_LeadConvertOverride_TEST {
     /*******************************************************************************************************
     * @description Runs mergeLeadConversion_TestOppOCR with the 1x1 account model and verify Opp OCRs and Primary Contact are correct.
     */
-    static testMethod void mergeLeadConversion_TestOne2OneOppOCR(){
+    @IsTest static void mergeLeadConversion_TestOne2OneOppOCR(){
         //skip the test if Advancement is installed
         if(ADV_PackageInfo_SVC.useAdv()) return;
 
@@ -854,7 +854,7 @@ private class LD_LeadConvertOverride_TEST {
     /*******************************************************************************************************
     * @description Runs mergeLeadConversion_TestOppOCR with the Household account model and verify  Opp OCRs and Primary Contact are correct.
     */
-    static testMethod void mergeLeadConversion_TestHHAccountOppOCR(){
+    @IsTest static void mergeLeadConversion_TestHHAccountOppOCR(){
         //skip the test if Advancement is installed
         if(ADV_PackageInfo_SVC.useAdv()) return;
 
@@ -863,7 +863,7 @@ private class LD_LeadConvertOverride_TEST {
     /*******************************************************************************************************
     * @description Runs mergeLeadConversion_TestOppOCR with the Individual account model and verify Opp OCRs and Primary Contact are correct.
     */
-    static testMethod void mergeLeadConversion_TestBucketAccountOppOCR(){
+    @IsTest static void mergeLeadConversion_TestBucketAccountOppOCR(){
         //skip the test if Advancement is installed
         if(ADV_PackageInfo_SVC.useAdv()) return;
 
@@ -958,7 +958,7 @@ private class LD_LeadConvertOverride_TEST {
     /*******************************************************************************************************
     * @description Runs newLeadConversion_TestOppAFF with the 1x1 account model and verify Opp created for affiliation.
     */
-    static testMethod void newLeadConversion_TestOne2OneOppAFF(){
+    @IsTest static void newLeadConversion_TestOne2OneOppAFF(){
         //skip the test if Advancement is installed
         if(ADV_PackageInfo_SVC.useAdv()) return;
 
@@ -967,7 +967,7 @@ private class LD_LeadConvertOverride_TEST {
     /*******************************************************************************************************
     * @description Runs newLeadConversion_TestOppAFF with the Household account model and verify Opp created for affiliation.
     */
-    static testMethod void newLeadConversion_TestHHAccountOppAFF(){
+    @IsTest static void newLeadConversion_TestHHAccountOppAFF(){
         //skip the test if Advancement is installed
         if(ADV_PackageInfo_SVC.useAdv()) return;
 
@@ -976,7 +976,7 @@ private class LD_LeadConvertOverride_TEST {
     /*******************************************************************************************************
     * @description Runs newLeadConversion_TestOppAFF with the Individual account model and verify Opp created for affiliation.
     */
-    static testMethod void newLeadConversion_TestBucketAccountOppAFF(){
+    @IsTest static void newLeadConversion_TestBucketAccountOppAFF(){
         if (UTIL_UnitTestData_TEST.isAccountNameEncrypted()) return;
 
         newLeadConversion_TestOppAFF(CAO_Constants.BUCKET_PROCESSOR);

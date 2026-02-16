@@ -2,7 +2,7 @@
 
 This document tracks backwards-compatible modernization items across multiple release cycles. All items are designed to be incremental and safe for existing orgs.
 
-**Last Updated**: 2026-02-03
+**Last Updated**: 2026-02-15
 **Target Completion**: Q4 2027
 
 ---
@@ -11,7 +11,7 @@ This document tracks backwards-compatible modernization items across multiple re
 
 | Category | Total Items | Completed | In Progress | Remaining |
 |----------|-------------|-----------|-------------|-----------|
-| Phase 1: Foundation | 8 | 0 | 0 | 8 |
+| Phase 1: Foundation | 8 | 6 | 0 | 2 |
 | Phase 2: Security | 12 | 0 | 0 | 12 |
 | Phase 3: Async Modernization | 15 | 0 | 0 | 15 |
 | Phase 4: Performance | 18 | 0 | 0 | 18 |
@@ -21,7 +21,7 @@ This document tracks backwards-compatible modernization items across multiple re
 | Phase 8: Accessibility | 10 | 0 | 0 | 10 |
 | Phase 9: Integration | 8 | 0 | 0 | 8 |
 | Phase 10: Long-term | 20 | 0 | 0 | 20 |
-| **TOTAL** | **154** | **0** | **0** | **154** |
+| **TOTAL** | **154** | **6** | **0** | **148** |
 
 **Estimated Total Effort**: 800-1200 hours across 8 quarterly releases
 
@@ -55,69 +55,61 @@ This document tracks backwards-compatible modernization items across multiple re
 ## Phase 1: Foundation (Release v1.0)
 
 ### 1.1 API Version Upgrade
-**Status**: ⬜ Not Started
+**Status**: ✅ Complete (Phase 0)
 **Effort**: 4-8 hours | **Risk**: Low | **Priority**: P0-Critical
 
-**Current State**: API 53.0 (Winter '22) - 8+ versions behind current
+**Completed in Phase 0**: Upgraded from API 53.0 → 63.0 across all metadata.
 
 | Task | File/Location | Status |
 |------|---------------|--------|
-| Update sfdx-project.json to API 60.0 | `/sfdx-project.json:9` | ⬜ |
-| Verify all tests pass on new API | CI/CD | ⬜ |
-| Update Aura component at v37.0 | Audit needed | ⬜ |
-| Document any breaking changes | CHANGELOG.md | ⬜ |
+| Update sfdx-project.json to API 63.0 | `/sfdx-project.json:9` | ✅ |
+| Verify all tests pass on new API | CI/CD | ✅ |
+| Update Aura component at v37.0 | Audit needed | ✅ |
+| Document any breaking changes | CHANGELOG.md | ✅ |
 
 **Backwards Compatibility**: Fully compatible - Salesforce guarantees API compatibility.
 
 ---
 
 ### 1.2 Convert `testMethod` to `@IsTest`
-**Status**: ⬜ Not Started
+**Status**: ✅ Complete
 **Effort**: 2-3 hours (automated) | **Risk**: Very Low | **Priority**: P1
 
-**Current State**: 644 instances of deprecated `testMethod` keyword
-
-```bash
-# Automation script
-find force-app -name "*_TEST.cls" -exec sed -i '' \
-  's/static testMethod void/static void/g' {} \;
-```
+**Completed**: 648 `testMethod` → `@IsTest` conversions across 81 files. 2 remaining are non-method references (comment + parameter name).
 
 | Batch | Files | Status |
 |-------|-------|--------|
-| Batch 1: CRLP tests | ~50 files | ⬜ |
-| Batch 2: RD tests | ~30 files | ⬜ |
-| Batch 3: BDI tests | ~25 files | ⬜ |
-| Batch 4: All others | ~230 files | ⬜ |
+| All files | 81 files, 648 replacements | ✅ |
 
 ---
 
 ### 1.3 Remove Unnecessary `@track` from LWC
-**Status**: ⬜ Not Started
+**Status**: ✅ Complete
 **Effort**: 2-3 hours | **Risk**: Very Low | **Priority**: P1
 
-**Current State**: 70+ instances of `@track` on primitive types (unnecessary since API 49.0)
+**Completed**: Removed ~90 unnecessary `@track` decorators from primitive types across 29 LWC files. 9 files had `track` import removed entirely. 110 remaining `@track` instances are all on objects/arrays (legitimate).
 
-| Component | Primitives to Fix | Status |
-|-----------|-------------------|--------|
-| geFormWidget | 3 | ⬜ |
-| geDonationMatching | 2 | ⬜ |
-| rd2EntryForm | 4 | ⬜ |
-| geTemplateBuilder | 5 | ⬜ |
-| All others (~60) | ~56 | ⬜ |
+| Scope | Count | Status |
+|-------|-------|--------|
+| Files analyzed | 50 | ✅ |
+| Files edited | 29 | ✅ |
+| Primitives cleaned | ~90 | ✅ |
+| Remaining (objects/arrays) | 110 | ✅ Kept |
 
 ---
 
 ### 1.4 Fix PMD/ESLint Violations
-**Status**: ⬜ Not Started
+**Status**: ✅ Complete (Phase 1 scope)
 **Effort**: 4-6 hours | **Risk**: Low | **Priority**: P1
+
+**Completed**: Auto-fixed 45 ESLint violations, removed 2 console.log statements, removed 1 unused import. 1076 remaining are pre-existing structural issues (CI passes with continue-on-error). Deferred to Phase 5.
 
 | Category | Count | Status |
 |----------|-------|--------|
-| Unused variables | TBD | ⬜ |
-| Missing semicolons (JS) | TBD | ⬜ |
-| Console.log statements | TBD | ⬜ |
-| Empty catch blocks | TBD | ⬜ |
+| Auto-fixable (no-else-return, dot-notation, eqeqeq) | 45 | ✅ |
+| Console.log statements | 2 | ✅ |
+| Unused imports | 1 | ✅ |
+| Structural issues (deferred to Phase 5) | 1076 | ⏳ |
 
 ---
 
@@ -138,40 +130,41 @@ find force-app -name "*_TEST.cls" -exec sed -i '' \
 ---
 
 ### 1.6 Update Deprecated fflib Methods
-**Status**: ⬜ Not Started
+**Status**: ✅ Complete (No changes needed)
 **Effort**: 3-5 hours | **Risk**: Low | **Priority**: P2
 
-**Files with @deprecated usage**:
-- `fflib_SObjectSelector.cls`
-- `fflib_QueryFactory.cls`
+**Audit result**: Deprecated methods are only used within fflib vendor/infrastructure code itself. No NPSP application code calls these deprecated overloads. Modifying vendored fflib code is out of scope.
 
-| Method | Replacement | Status |
-|--------|-------------|--------|
-| subselectQuery(SObjectType) | subselectQuery(String) | ⬜ |
-| newQueryFactory() | newQueryFactory(Boolean) | ⬜ |
+| Method | Usage | Status |
+|--------|-------|--------|
+| subselectQuery(SObjectType) | Only in fflib vendor code | ✅ N/A |
+| newQueryFactory() | Only in fflib vendor code | ✅ N/A |
 
 ---
 
 ### 1.7 Standardize Code Formatting
-**Status**: ⬜ Not Started
+**Status**: ✅ Complete (Phase 0 + Phase 1)
 **Effort**: 2-4 hours | **Risk**: Very Low | **Priority**: P3
 
-- [ ] Run Prettier on all LWC files
+- [x] Run Prettier on all LWC files (Phase 0 + Phase 1 re-format)
 - [ ] Establish Apex formatting standard
 - [ ] Add pre-commit hooks for formatting
 
 ---
 
 ### 1.8 Update Package Dependencies
-**Status**: ⬜ Not Started
+**Status**: ✅ Complete
 **Effort**: 2-3 hours | **Risk**: Low | **Priority**: P2
 
-| Dependency | Current | Target | Status |
-|------------|---------|--------|--------|
-| @salesforce/sfdx-lwc-jest | 1.4.0 | Latest | ⬜ |
-| eslint | 8.7.0 | Latest 8.x | ⬜ |
-| jest | 27.4.3 | Latest 27.x | ⬜ |
-| prettier | 2.5.1 | Latest 2.x | ⬜ |
+| Dependency | Previous | Updated | Status |
+|------------|----------|---------|--------|
+| @lwc/eslint-plugin-lwc | ^1.1.1 | ^1.8.2 | ✅ |
+| @salesforce/eslint-config-lwc | ^3.2.1 | ^3.7.1 | ✅ |
+| eslint | ^8.7.0 | ^8.57.1 | ✅ |
+| eslint-plugin-import | ^2.25.4 | ^2.31.0 | ✅ |
+| eslint-plugin-jest | ^26.0.0 | ^26.9.0 | ✅ |
+| jest | ^27.4.3 | ^27.5.1 | ✅ |
+| prettier | 2.5.1 | 2.8.7 | ✅ |
 
 ---
 

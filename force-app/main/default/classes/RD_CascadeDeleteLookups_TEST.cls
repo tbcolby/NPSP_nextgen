@@ -40,7 +40,7 @@ private class RD_CascadeDeleteLookups_TEST {
     * @description Deletes recurring donation, which deletes opportunities and allocations. Verifies results.
     * Then undeletes recurring donation, which undeletes opportunities and allocation. Verifies results.
     */
-    static testMethod void testRDCascade(){
+    @IsTest static void testRDCascade(){
         List<Account> accounts = CDL_CascadeDeleteLookups_TEST.buildAccounts(1);
         insert accounts;
 
@@ -93,7 +93,7 @@ private class RD_CascadeDeleteLookups_TEST {
     * @description Attempts to delete recurring donation with closed/won and org opps, verifies
     * exception is thrown.
     */
-    static testMethod void testRDDeleteException(){
+    @IsTest static void testRDDeleteException(){
         List<Account> accounts = CDL_CascadeDeleteLookups_TEST.buildAccounts(1);
         insert accounts;
 
@@ -130,7 +130,7 @@ private class RD_CascadeDeleteLookups_TEST {
     * with Closed Lost Opportunity. The first one should have an error, and its Closed Won Opportunity should
     * not be deleted. The other one should be deleted, and its Closed Lost Opportunity deleted.
     */
-    static testMethod void testRDDeleteWithMixExceptionAndSuccess(){
+    @IsTest static void testRDDeleteWithMixExceptionAndSuccess(){
         List<Account> accounts = CDL_CascadeDeleteLookups_TEST.buildAccounts(2);
         insert accounts;
 
@@ -219,7 +219,7 @@ private class RD_CascadeDeleteLookups_TEST {
     * @description Attempts to delete recurring donation with closed/won and org opps, verifies correct Lightning
     * exception is thrown.
     */
-    static testMethod void testRDDeleteException_LightningThemeContext(){
+    @IsTest static void testRDDeleteException_LightningThemeContext(){
         List<Account> accounts = CDL_CascadeDeleteLookups_TEST.buildAccounts(1);
         insert accounts;
 
@@ -258,7 +258,7 @@ private class RD_CascadeDeleteLookups_TEST {
     * @description Attempts to delete recurring donation with closed/won and org opps, verifies correct Classic Theme
     * exception is thrown.
     */
-    static testMethod void testRDDeleteException_ClassicThemeContext(){
+    @IsTest static void testRDDeleteException_ClassicThemeContext(){
         List<Account> accounts = CDL_CascadeDeleteLookups_TEST.buildAccounts(1);
         insert accounts;
 

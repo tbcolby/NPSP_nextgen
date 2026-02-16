@@ -49,7 +49,7 @@ class Rd2Service {
             const action = { type: ACTIONS.INITIAL_VIEW_LOAD, payload: initialView };
             return this.dispatch(state, action);
         } catch (ex) {
-            console.log("Error: ", ex);
+            // Dispatch error is swallowed; state is returned unchanged
             return state;
         }
     }

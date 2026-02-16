@@ -40,7 +40,7 @@ private class CRLP_Query_SEL_TEST {
      * @description Test that the Results Query Builder returns valid SOQL statements for the Opportunity and Account
      * objects.
      */
-    private static testMethod void test_ResultsQueryBuilder() {
+    @IsTest private static void test_ResultsQueryBuilder() {
         // Create mock instances of the CMT objects to use for the tests
         CMT_UnitTestData_TEST.mockRollupCmtForAccountHC();
 
@@ -81,7 +81,7 @@ private class CRLP_Query_SEL_TEST {
     /**
      * @description Test that buildCommonQueryFilterOnOpportunity returns no WHERE clause when there are no rollups
      */
-    private static testMethod void test_buildCommonQueryFilterOnOpportunity_NoRollups() {
+    @IsTest private static void test_buildCommonQueryFilterOnOpportunity_NoRollups() {
         CRLP_Rollup_SEL.cachedRollups = new List<Rollup__mdt>();
         String whereClause = CRLP_Query_SEL.buildCommonQueryFilterOnOpportunity(Account.SObjectType, Opportunity.SObjectType);
         System.assert(String.isEmpty(whereClause), 'No WHERE clause should be returned when there are no rollups: ' + whereClause);
@@ -91,7 +91,7 @@ private class CRLP_Query_SEL_TEST {
      * @description Test that buildCommonQueryFilterOnOpportunity returns no WHERE clause when rollups are not
      * associated to a filter group.
      */
-    private static testMethod void test_buildCommonQueryFilterOnOpportunity_NoFilterGroups() {
+    @IsTest private static void test_buildCommonQueryFilterOnOpportunity_NoFilterGroups() {
         CMT_UnitTestData_TEST.mockRollupCmtForAccountHC();
         Id filterGroupId = CMT_FilterRule_SEL.cachedFilterGroups[0].Id;
 
@@ -113,7 +113,7 @@ private class CRLP_Query_SEL_TEST {
      * @description Test that the buildCommonQueryFilterOnOpportunity returns valid WHERE clause in SOQL statements
      * objects.
      */
-    private static testMethod void test_buildCommonQueryFilterOnOpportunity_BuildsValidWhereClause() {
+    @IsTest private static void test_buildCommonQueryFilterOnOpportunity_BuildsValidWhereClause() {
         CMT_UnitTestData_TEST.mockRollupCmtForAccountHC();
         Id filterGroupId = CMT_FilterRule_SEL.cachedFilterGroups[0].Id;
 

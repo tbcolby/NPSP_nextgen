@@ -109,10 +109,10 @@ private class CRLP_RollupAccSoftCredit_TEST {
         CRLP_Rollup_SEL.cachedRollups = (List<Rollup__mdt>) JSON.deserialize(rollupsJSON, List<Rollup__mdt>.class);
     }
 
-    static testMethod void test_Rollups_Batch() {
+    @IsTest static void test_Rollups_Batch() {
         testRollupsServices(TestType.TestBatch);
     }
-    static testMethod void test_Rollups_SkewBatch() {
+    @IsTest static void test_Rollups_SkewBatch() {
         testRollupsServices(TestType.testSkewBatch);
     }
 

@@ -1,4 +1,4 @@
-import { fireEvent } from 'c/pubsubNoPageRef';
+import { fireEvent } from "c/pubsubNoPageRef";
 
 class ElevateWidgetDisplay {
     _state = DISPLAY_DEFINITIONS.initialState;
@@ -15,8 +15,8 @@ class ElevateWidgetDisplay {
             return;
         }
 
-        this.dispatchApplicationEvent('widgetStateChange', {
-            state: nextState
+        this.dispatchApplicationEvent("widgetStateChange", {
+            state: nextState,
         });
 
         const destinationState = destinationTransition.target;
@@ -39,7 +39,7 @@ class ElevateWidgetDisplay {
 }
 
 const DISPLAY_DEFINITIONS = Object.freeze({
-    initialState: 'charge',
+    initialState: "charge",
     loading: {
         actions: {
             onEnter() {
@@ -51,17 +51,17 @@ const DISPLAY_DEFINITIONS = Object.freeze({
         },
         transitions: {
             charge: {
-                target: 'charge',
+                target: "charge",
             },
             deactivated: {
-                target: 'deactivated',
+                target: "deactivated",
             },
             readOnly: {
-                target: 'readOnly',
+                target: "readOnly",
             },
             criticalError: {
-                target: 'criticalError',
-            }
+                target: "criticalError",
+            },
         },
     },
     charge: {
@@ -75,20 +75,20 @@ const DISPLAY_DEFINITIONS = Object.freeze({
         },
         transitions: {
             loading: {
-                target: 'loading'
+                target: "loading",
             },
             deactivated: {
-                target: 'deactivated'
+                target: "deactivated",
             },
             userOriginatedDoNotCharge: {
-                target: 'doNotCharge'
+                target: "doNotCharge",
             },
             readOnly: {
-                target: 'readOnly'
+                target: "readOnly",
             },
             criticalError: {
-                target: 'criticalError'
-            }
+                target: "criticalError",
+            },
         },
     },
     deactivated: {
@@ -100,14 +100,14 @@ const DISPLAY_DEFINITIONS = Object.freeze({
         },
         transitions: {
             loading: {
-                target: 'loading'
+                target: "loading",
             },
             charge: {
-                target: 'charge'
+                target: "charge",
             },
             readOnly: {
-                target: 'readOnly'
-            }
+                target: "readOnly",
+            },
         },
     },
     doNotCharge: {
@@ -120,17 +120,17 @@ const DISPLAY_DEFINITIONS = Object.freeze({
         },
         transitions: {
             loading: {
-                target: 'loading'
+                target: "loading",
             },
             userOriginatedCharge: {
-                target: 'charge'
+                target: "charge",
             },
             userOriginatedDeactivated: {
-                target: 'deactivated'
+                target: "deactivated",
             },
             readOnly: {
-                target: 'readOnly'
-            }
+                target: "readOnly",
+            },
         },
     },
     readOnly: {
@@ -142,23 +142,23 @@ const DISPLAY_DEFINITIONS = Object.freeze({
         },
         transitions: {
             loading: {
-                target: 'loading'
+                target: "loading",
             },
             edit: {
-                target: 'edit'
+                target: "edit",
             },
             editExpiredTransaction: {
-                target: 'edit'
+                target: "edit",
             },
             resetToCharge: {
-                target: 'charge'
+                target: "charge",
             },
             resetToDeactivated: {
-                target: 'deactivated'
+                target: "deactivated",
             },
             userOriginatedDoNotCharge: {
-                target: 'doNotCharge'
-            }
+                target: "doNotCharge",
+            },
         },
     },
     criticalError: {
@@ -168,7 +168,7 @@ const DISPLAY_DEFINITIONS = Object.freeze({
             },
             onExit() {},
         },
-        transitions: {}
+        transitions: {},
     },
     edit: {
         actions: {
@@ -181,19 +181,19 @@ const DISPLAY_DEFINITIONS = Object.freeze({
         },
         transitions: {
             readOnly: {
-                target: 'readOnly'
+                target: "readOnly",
             },
             resetToCharge: {
-                target: 'charge'
+                target: "charge",
             },
             resetToDeactivated: {
-                target: 'deactivated'
+                target: "deactivated",
             },
             deactivated: {
-                target: 'deactivated'
-            }
-        }
-    }
+                target: "deactivated",
+            },
+        },
+    },
 });
 
 export default ElevateWidgetDisplay;

@@ -456,7 +456,7 @@ describe("c-rd2-entry-form", () => {
 
         it("when Bank Payment is enabled, displays ACH option for Payment Methods field", async () => {
             getInitialView.mockResolvedValue({
-                isBankPaymentAllowed: true
+                isBankPaymentAllowed: true,
             });
 
             const element = createRd2EntryForm();
@@ -475,7 +475,7 @@ describe("c-rd2-entry-form", () => {
 
         it("when Bank Payment is not enabled, do not displays ACH option for Payment Methods field", async () => {
             getInitialView.mockResolvedValue({
-                isBankPaymentAllowed: false
+                isBankPaymentAllowed: false,
             });
 
             const element = createRd2EntryForm();

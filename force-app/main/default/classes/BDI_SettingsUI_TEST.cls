@@ -44,7 +44,7 @@ private with sharing class BDI_SettingsUI_TEST {
     * verify: 
     *    all code tested in controller
     **********************************************************************************************************/            
-    static testMethod void testBDISettingsUI() {
+    @IsTest static void testBDISettingsUI() {
         
         // instantiate the controller
         BDI_SettingsUI_CTRL ctrl = new BDI_SettingsUI_CTRL();

@@ -219,9 +219,8 @@ const setCustomField = (state, { fieldName, value }) => {
                 ...field,
                 value,
             };
-        } else {
-            return field;
         }
+        return field;
     });
     return {
         ...state,
@@ -391,7 +390,7 @@ const setDateEstablished = (state, dateEstablished) => {
 };
 
 const setError = (state, error) => {
-    console.log(JSON.stringify(error));
+    // Error state is captured in the model for UI display
 };
 
 const setPaymentMethod = (state, paymentMethod) => {

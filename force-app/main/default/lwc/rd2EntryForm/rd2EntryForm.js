@@ -145,9 +145,9 @@ export default class rd2EntryForm extends LightningElement {
 
     @track error = {};
 
-    cssComponent = 'slds-section slds-is-open';
-    cssModalContent = 'slds-modal__content slds-p-top_none slds-p-horizontal_medium slds-p-bottom_medium';
-    cssCurrencyExperienceSite = '';
+    cssComponent = "slds-section slds-is-open";
+    cssModalContent = "slds-modal__content slds-p-top_none slds-p-horizontal_medium slds-p-bottom_medium";
+    cssCurrencyExperienceSite = "";
     ariaHidden = false;
 
     @api isBankPaymentAllowed;
@@ -291,25 +291,25 @@ export default class rd2EntryForm extends LightningElement {
      * @description Apply component updates only for Experience Sites
      */
     applyExperienceSiteChanges() {
-        if(this.isExperienceSite) {
-            this.cssComponent = 'slds-hide';
+        if (this.isExperienceSite) {
+            this.cssComponent = "slds-hide";
             this.ariaHidden = true;
             this.determineACHpaymentMethodAndAddAsOption();
-            this.cssModalContent += ' experienceCombo';
-            this.cssHideExperienceSite = this.isExperienceSite ? 'slds-hide' : '';
-            this.cssHideOnlyPaymentModal = this.isPaymentModal ? 'slds-hide' : '';
-            this.cssHideOnlyAmountFrequencyModal = this.isAmountFrequencyModal ? 'slds-hide' : '';
-            if(this.isAmountFrequencyModal) {
-                this.rd2State.periodType = 'Advanced';
-                this.cssExperienceElevate = 'slds-hide';
-                this.cssCurrencyExperienceSite = 'experienceCurrency';
+            this.cssModalContent += " experienceCombo";
+            this.cssHideExperienceSite = this.isExperienceSite ? "slds-hide" : "";
+            this.cssHideOnlyPaymentModal = this.isPaymentModal ? "slds-hide" : "";
+            this.cssHideOnlyAmountFrequencyModal = this.isAmountFrequencyModal ? "slds-hide" : "";
+            if (this.isAmountFrequencyModal) {
+                this.rd2State.periodType = "Advanced";
+                this.cssExperienceElevate = "slds-hide";
+                this.cssCurrencyExperienceSite = "experienceCurrency";
             }
-            if(this.isPaymentModal && this.mappedStatus === 'Lapsed') {
-                this.rd2State.recurringStatus = 'Active';
-                this.rd2State.initialViewState.recurringStatus = 'Active';
+            if (this.isPaymentModal && this.mappedStatus === "Lapsed") {
+                this.rd2State.recurringStatus = "Active";
+                this.rd2State.initialViewState.recurringStatus = "Active";
             }
-            if(this.isPaymentModal) {
-                this.cssCurrencyExperienceSite = 'slds-hide';
+            if (this.isPaymentModal) {
+                this.cssCurrencyExperienceSite = "slds-hide";
             }
         }
     }
@@ -655,7 +655,7 @@ export default class rd2EntryForm extends LightningElement {
         this.isLoading = true;
         this.loadingText = this.customLabels.waitMessage;
         this.isSaveButtonDisabled = true;
-        
+
         if (this.isFormValid()) {
             const allFields = this.getAllFields();
             if (this.shouldSendToElevate(allFields)) {
@@ -676,8 +676,10 @@ export default class rd2EntryForm extends LightningElement {
     async processCommitmentSubmit(allFields) {
         try {
             if (this.isElevateWidgetDisplayed()) {
-                
-                this.loadingText = this.isExperienceSite && String.valueOf(this.rd2State.paymentMethod) === String.valueOf(this.ACH) ? '' : this.rd2Service.getPaymentProcessingMessage(this.rd2State.paymentMethod);
+                this.loadingText =
+                    this.isExperienceSite && String.valueOf(this.rd2State.paymentMethod) === String.valueOf(this.ACH)
+                        ? ""
+                        : this.rd2Service.getPaymentProcessingMessage(this.rd2State.paymentMethod);
                 const elevateWidget = this.template.querySelector('[data-id="elevateWidget"]');
                 const paymentToken = await elevateWidget.returnToken().payload;
                 this.perform({
@@ -691,9 +693,9 @@ export default class rd2EntryForm extends LightningElement {
             return;
         }
 
-        if(!this.isExperienceSite) {
+        if (!this.isExperienceSite) {
             this.loadingText = this.customLabels.savingCommitmentMessage;
-        }    
+        }
 
         try {
             const rd = this.rd2Service
@@ -862,14 +864,14 @@ export default class rd2EntryForm extends LightningElement {
             ? updateSuccessMessage.replace("{0}", this.rd2State.recordName)
             : insertSuccessMessage.replace("{0}", this.rd2State.recordName);
 
-        if(this.isPaymentModal) {
+        if (this.isPaymentModal) {
             message = this.customLabels.RD2_Payment_method_was_updated;
         }
 
-        if(this.isAmountFrequencyModal) {
+        if (this.isAmountFrequencyModal) {
             message = this.customLabels.RD2_Recurring_Donation_was_updated;
         }
-        
+
         showToast(message, "", "success");
 
         this.closeModal(this.rd2State.recordId);
@@ -881,9 +883,9 @@ export default class rd2EntryForm extends LightningElement {
     closeModal(recordId) {
         this.resetAllValues();
 
-        if(this.isPaymentModal) {
+        if (this.isPaymentModal) {
             this.dispatchEvent(new CustomEvent("close", { detail: "updatePaymentMethod" }));
-        } else if(this.isAmountFrequencyModal) {
+        } else if (this.isAmountFrequencyModal) {
             this.dispatchEvent(new CustomEvent("close", { detail: "changeAmountOrFrequency" }));
         } else {
             const closeModalEvent = new CustomEvent("closemodal", {
@@ -891,7 +893,6 @@ export default class rd2EntryForm extends LightningElement {
             });
             this.dispatchEvent(closeModalEvent);
         }
-        
     }
 
     /**

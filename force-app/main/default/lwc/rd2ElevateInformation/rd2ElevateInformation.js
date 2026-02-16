@@ -1,53 +1,53 @@
-import { LightningElement, api, wire, track } from 'lwc';
-import { NavigationMixin } from 'lightning/navigation';
-import { getObjectInfo } from 'lightning/uiObjectInfoApi';
-import { getRecord } from 'lightning/uiRecordApi';
-import { constructErrorMessage, extractFieldInfo, isNull, isUndefined, getNamespace } from 'c/utilCommon';
-import { Rd2Service } from 'c/rd2Service';
-import { PAYMENT_METHOD_CREDIT_CARD, PAYMENT_METHOD_ACH } from 'c/geConstants';
+import { LightningElement, api, wire, track } from "lwc";
+import { NavigationMixin } from "lightning/navigation";
+import { getObjectInfo } from "lightning/uiObjectInfoApi";
+import { getRecord } from "lightning/uiRecordApi";
+import { constructErrorMessage, extractFieldInfo, isNull, isUndefined, getNamespace } from "c/utilCommon";
+import { Rd2Service } from "c/rd2Service";
+import { PAYMENT_METHOD_CREDIT_CARD, PAYMENT_METHOD_ACH } from "c/geConstants";
 
-import RECURRING_DONATION_OBJECT from '@salesforce/schema/npe03__Recurring_Donation__c';
-import FIELD_NAME from '@salesforce/schema/npe03__Recurring_Donation__c.Name';
-import FIELD_COMMITMENT_ID from '@salesforce/schema/npe03__Recurring_Donation__c.CommitmentId__c';
-import FIELD_STATUS from '@salesforce/schema/npe03__Recurring_Donation__c.Status__c';
-import FIELD_PAYMENT_METHOD from '@salesforce/schema/npe03__Recurring_Donation__c.PaymentMethod__c';
-import FIELD_CC_EXP_MONTH from '@salesforce/schema/npe03__Recurring_Donation__c.CardExpirationMonth__c';
-import FIELD_CC_EXP_YEAR from '@salesforce/schema/npe03__Recurring_Donation__c.CardExpirationYear__c';
-import FIELD_CC_LAST_4 from '@salesforce/schema/npe03__Recurring_Donation__c.CardLast4__c';
-import FIELD_ACH_LAST_4 from '@salesforce/schema/npe03__Recurring_Donation__c.ACH_Last_4__c';
-import FIELD_STATUS_REASON from '@salesforce/schema/npe03__Recurring_Donation__c.ClosedReason__c';
-import FIELD_NEXT_DONATION_DATE from '@salesforce/schema/npe03__Recurring_Donation__c.npe03__Next_Payment_Date__c';
-import FIELD_RD_ACCOUNT_NAME from '@salesforce/schema/npe03__Recurring_Donation__c.npe03__Organization__r.Name';
-import FIELD_RD_PRIMARY_CONTACT_LAST_NAME from '@salesforce/schema/npe03__Recurring_Donation__c.npe03__Organization__r.npe01__One2OneContact__r.LastName';
-import FIELD_RD_CONTACT_FIRST_NAME from '@salesforce/schema/npe03__Recurring_Donation__c.npe03__Contact__r.FirstName';
-import FIELD_RD_CONTACT_LAST_NAME from '@salesforce/schema/npe03__Recurring_Donation__c.npe03__Contact__r.LastName';
-import FIELD_RD_CONTACT_ID from '@salesforce/schema/npe03__Recurring_Donation__c.npe03__Contact__c';
-import FIELD_RD_ACCOUNT_ID from '@salesforce/schema/npe03__Recurring_Donation__c.npe03__Organization__c';
-import ERROR_OBJECT from '@salesforce/schema/Error__c';
+import RECURRING_DONATION_OBJECT from "@salesforce/schema/npe03__Recurring_Donation__c";
+import FIELD_NAME from "@salesforce/schema/npe03__Recurring_Donation__c.Name";
+import FIELD_COMMITMENT_ID from "@salesforce/schema/npe03__Recurring_Donation__c.CommitmentId__c";
+import FIELD_STATUS from "@salesforce/schema/npe03__Recurring_Donation__c.Status__c";
+import FIELD_PAYMENT_METHOD from "@salesforce/schema/npe03__Recurring_Donation__c.PaymentMethod__c";
+import FIELD_CC_EXP_MONTH from "@salesforce/schema/npe03__Recurring_Donation__c.CardExpirationMonth__c";
+import FIELD_CC_EXP_YEAR from "@salesforce/schema/npe03__Recurring_Donation__c.CardExpirationYear__c";
+import FIELD_CC_LAST_4 from "@salesforce/schema/npe03__Recurring_Donation__c.CardLast4__c";
+import FIELD_ACH_LAST_4 from "@salesforce/schema/npe03__Recurring_Donation__c.ACH_Last_4__c";
+import FIELD_STATUS_REASON from "@salesforce/schema/npe03__Recurring_Donation__c.ClosedReason__c";
+import FIELD_NEXT_DONATION_DATE from "@salesforce/schema/npe03__Recurring_Donation__c.npe03__Next_Payment_Date__c";
+import FIELD_RD_ACCOUNT_NAME from "@salesforce/schema/npe03__Recurring_Donation__c.npe03__Organization__r.Name";
+import FIELD_RD_PRIMARY_CONTACT_LAST_NAME from "@salesforce/schema/npe03__Recurring_Donation__c.npe03__Organization__r.npe01__One2OneContact__r.LastName";
+import FIELD_RD_CONTACT_FIRST_NAME from "@salesforce/schema/npe03__Recurring_Donation__c.npe03__Contact__r.FirstName";
+import FIELD_RD_CONTACT_LAST_NAME from "@salesforce/schema/npe03__Recurring_Donation__c.npe03__Contact__r.LastName";
+import FIELD_RD_CONTACT_ID from "@salesforce/schema/npe03__Recurring_Donation__c.npe03__Contact__c";
+import FIELD_RD_ACCOUNT_ID from "@salesforce/schema/npe03__Recurring_Donation__c.npe03__Organization__c";
+import ERROR_OBJECT from "@salesforce/schema/Error__c";
 
-import header from '@salesforce/label/c.RD2_ElevateInformationHeader';
-import loadingMessage from '@salesforce/label/c.labelMessageLoading';
-import statusSuccess from '@salesforce/label/c.RD2_ElevateInformationStatusSuccess';
-import statusElevatePending from '@salesforce/label/c.RD2_ElevatePendingStatus';
-import statusElevateCancelInProgress from '@salesforce/label/c.RD2_ElevateCancelInProgress';
-import textSuccess from '@salesforce/label/c.commonAssistiveSuccess';
-import textError from '@salesforce/label/c.AssistiveTextError';
-import textWarning from '@salesforce/label/c.AssistiveTextWarning';
-import textNewWindow from '@salesforce/label/c.AssistiveTextNewWindow';
-import flsErrorHeader from '@salesforce/label/c.geErrorFLSHeader';
-import flsErrorDetail from '@salesforce/label/c.RD2_EntryFormMissingPermissions';
-import insufficientPermissions from '@salesforce/label/c.commonInsufficientPermissions';
-import contactSystemAdmin from '@salesforce/label/c.commonContactSystemAdminMessage';
-import elevateDisabledHeader from '@salesforce/label/c.RD2_ElevateDisabledHeader';
-import elevateDisabledMessage from '@salesforce/label/c.RD2_ElevateDisabledMessage';
-import elevateRecordCreateFailed from '@salesforce/label/c.RD2_ElevateRecordCreateFailed';
-import commonUnknownError from '@salesforce/label/c.commonUnknownError';
-import viewErrorLogLabel from '@salesforce/label/c.commonViewErrorLog';
-import updatePaymentInformation from '@salesforce/label/c.commonEditPaymentInformation';
-import commonExpirationDate from '@salesforce/label/c.commonMMYY';
+import header from "@salesforce/label/c.RD2_ElevateInformationHeader";
+import loadingMessage from "@salesforce/label/c.labelMessageLoading";
+import statusSuccess from "@salesforce/label/c.RD2_ElevateInformationStatusSuccess";
+import statusElevatePending from "@salesforce/label/c.RD2_ElevatePendingStatus";
+import statusElevateCancelInProgress from "@salesforce/label/c.RD2_ElevateCancelInProgress";
+import textSuccess from "@salesforce/label/c.commonAssistiveSuccess";
+import textError from "@salesforce/label/c.AssistiveTextError";
+import textWarning from "@salesforce/label/c.AssistiveTextWarning";
+import textNewWindow from "@salesforce/label/c.AssistiveTextNewWindow";
+import flsErrorHeader from "@salesforce/label/c.geErrorFLSHeader";
+import flsErrorDetail from "@salesforce/label/c.RD2_EntryFormMissingPermissions";
+import insufficientPermissions from "@salesforce/label/c.commonInsufficientPermissions";
+import contactSystemAdmin from "@salesforce/label/c.commonContactSystemAdminMessage";
+import elevateDisabledHeader from "@salesforce/label/c.RD2_ElevateDisabledHeader";
+import elevateDisabledMessage from "@salesforce/label/c.RD2_ElevateDisabledMessage";
+import elevateRecordCreateFailed from "@salesforce/label/c.RD2_ElevateRecordCreateFailed";
+import commonUnknownError from "@salesforce/label/c.commonUnknownError";
+import viewErrorLogLabel from "@salesforce/label/c.commonViewErrorLog";
+import updatePaymentInformation from "@salesforce/label/c.commonEditPaymentInformation";
+import commonExpirationDate from "@salesforce/label/c.commonMMYY";
 
-import getAppConfigurationData from '@salesforce/apex/RD2_ElevateInformation_CTRL.getAppConfigurationData';
-import getError from '@salesforce/apex/RD2_ElevateInformation_CTRL.getLatestErrorMessage';
+import getAppConfigurationData from "@salesforce/apex/RD2_ElevateInformation_CTRL.getAppConfigurationData";
+import getError from "@salesforce/apex/RD2_ElevateInformation_CTRL.getLatestErrorMessage";
 
 const FIELDS = [
     FIELD_NAME,
@@ -61,20 +61,14 @@ const FIELDS = [
     FIELD_RD_CONTACT_LAST_NAME,
     FIELD_RD_CONTACT_FIRST_NAME,
     FIELD_RD_CONTACT_ID,
-    FIELD_RD_ACCOUNT_ID
+    FIELD_RD_ACCOUNT_ID,
 ];
 
-const OPTIONAL_FIELDS = [
-    FIELD_CC_LAST_4,
-    FIELD_ACH_LAST_4,
-    FIELD_CC_EXP_MONTH,
-    FIELD_CC_EXP_YEAR
-];
-const TEMP_PREFIX = '_PENDING_';
-const STATUS_SUCCESS = 'success';
+const OPTIONAL_FIELDS = [FIELD_CC_LAST_4, FIELD_ACH_LAST_4, FIELD_CC_EXP_MONTH, FIELD_CC_EXP_YEAR];
+const TEMP_PREFIX = "_PENDING_";
+const STATUS_SUCCESS = "success";
 
 export default class rd2ElevateInformation extends NavigationMixin(LightningElement) {
-
     @api recordId;
 
     labels = Object.freeze({
@@ -97,7 +91,7 @@ export default class rd2ElevateInformation extends NavigationMixin(LightningElem
         commonUnknownError,
         viewErrorLogLabel,
         updatePaymentInformation,
-        commonExpirationDate
+        commonExpirationDate,
     });
 
     @track rdRecord;
@@ -106,17 +100,17 @@ export default class rd2ElevateInformation extends NavigationMixin(LightningElem
         message: this.labels.statusSuccess,
         isProgress: false,
         value: STATUS_SUCCESS,
-        icon: 'utility:success',
-        assistiveText: this.labels.textSuccess
+        icon: "utility:success",
+        assistiveText: this.labels.textSuccess,
     };
     @track error = {};
     @track permissions = {
         hasAccess: null,
-        hasKeyFieldsUpdateAccess : null,
+        hasKeyFieldsUpdateAccess: null,
         hasKeyFieldsAccess: null,
         showLastFourDigits: null,
         showExpirationDate: null,
-        alert: ''
+        alert: "",
     };
 
     rd2Service = new Rd2Service();
@@ -151,9 +145,7 @@ export default class rd2ElevateInformation extends NavigationMixin(LightningElem
     }
 
     get canEditPaymentInformation() {
-        return this.isElevateCustomer
-            && this.permissions.hasKeyFieldsUpdateAccess
-            && this.recurringDonationIsNotClosed;
+        return this.isElevateCustomer && this.permissions.hasKeyFieldsUpdateAccess && this.recurringDonationIsNotClosed;
     }
 
     /***
@@ -167,34 +159,33 @@ export default class rd2ElevateInformation extends NavigationMixin(LightningElem
     }
 
     populateAppConfigurationData() {
-        getAppConfigurationData({recordId: this.recordId})
-            .then(response => {
+        getAppConfigurationData({ recordId: this.recordId })
+            .then((response) => {
                 this.isElevateCustomer = response.isElevateCustomer;
                 this.permissions.alert = response.alert;
                 this.commitmentURLPrefix = response.commitmentURLPrefix;
                 this.closedStatuses = response.closedStatuses;
 
-                this.permissions.hasKeyFieldsAccess = this.isElevateCustomer === true
-                    && response.hasFieldPermissions === true
-                    && isNull(this.permissions.alert);
+                this.permissions.hasKeyFieldsAccess =
+                    this.isElevateCustomer === true &&
+                    response.hasFieldPermissions === true &&
+                    isNull(this.permissions.alert);
 
-                this.permissions.hasKeyFieldsUpdateAccess = response.hasRDSObjectUpdatePermission
-                    && response.hasFieldUpdatePermission;
+                this.permissions.hasKeyFieldsUpdateAccess =
+                    response.hasRDSObjectUpdatePermission && response.hasFieldUpdatePermission;
                 this.permissions.showExpirationDate = response.showExpirationDate;
                 this.permissions.showLastFourDigits = response.showLastFourDigits;
 
                 if (this.isElevateCustomer === true) {
                     if (!isNull(this.permissions.alert)) {
                         this.handleError({
-                            detail: this.permissions.alert
+                            detail: this.permissions.alert,
                         });
-
                     } else if (response.hasFieldPermissions === false) {
                         this.handleError({
                             header: this.labels.flsErrorHeader,
-                            detail: this.labels.flsErrorDetail
+                            detail: this.labels.flsErrorDetail,
                         });
-
                     } else {
                         this.getLatestErrorMessage();
                     }
@@ -209,8 +200,8 @@ export default class rd2ElevateInformation extends NavigationMixin(LightningElem
     }
 
     /***
-    * @description Retrieves Recurring Donation Object and fields labels/help text
-    */
+     * @description Retrieves Recurring Donation Object and fields labels/help text
+     */
     @wire(getObjectInfo, { objectApiName: RECURRING_DONATION_OBJECT.objectApiName })
     wiredRecurringDonationObjectInfo(response) {
         if (response.data) {
@@ -230,9 +221,9 @@ export default class rd2ElevateInformation extends NavigationMixin(LightningElem
      * this method is called to force refresh of the data and the component.
      */
     @wire(getRecord, {
-        recordId: '$recordId',
+        recordId: "$recordId",
         fields: FIELDS,
-        optionalFields: OPTIONAL_FIELDS
+        optionalFields: OPTIONAL_FIELDS,
     })
     wiredRecurringDonation(response) {
         if (response.data) {
@@ -253,11 +244,11 @@ export default class rd2ElevateInformation extends NavigationMixin(LightningElem
     }
 
     /**
-    * @description Get the lateset relevant error message for the Elevate Recurring Donation 
-    */
+     * @description Get the lateset relevant error message for the Elevate Recurring Donation
+     */
     getLatestErrorMessage() {
-        getError({recordId: this.recordId})
-            .then(response => {
+        getError({ recordId: this.recordId })
+            .then((response) => {
                 if (!isNull(response)) {
                     this.setErrorStatus(response);
                 }
@@ -273,26 +264,29 @@ export default class rd2ElevateInformation extends NavigationMixin(LightningElem
      * @description Checks if record detail page or user has access to the Elevate Information data fields
      */
     hasKeyFieldsAccess() {
-        return this.isTrue(this.permissions.isElevateCustomer)
-            && this.isTrue(this.permissions.hasKeyFieldsAccess);
+        return this.isTrue(this.permissions.isElevateCustomer) && this.isTrue(this.permissions.hasKeyFieldsAccess);
     }
 
     /***
      * @description Is the payment type ACH and the user has read perms to the two last4 fields?
      */
     shouldShowLastFourACH() {
-        return this.paymentMethod === PAYMENT_METHOD_ACH
-            && this.isTrue(this.isElevateCustomer)
-            && this.isTrue(this.permissions.showLastFourDigits);
+        return (
+            this.paymentMethod === PAYMENT_METHOD_ACH &&
+            this.isTrue(this.isElevateCustomer) &&
+            this.isTrue(this.permissions.showLastFourDigits)
+        );
     }
 
     /***
      * @description Is the payment type CreditCard and the user has read perms to the last4 fields?
      */
     shouldShowLastFourCreditCard() {
-        return this.paymentMethod === PAYMENT_METHOD_CREDIT_CARD
-            && this.isTrue(this.isElevateCustomer)
-            && this.isTrue(this.permissions.showLastFourDigits);
+        return (
+            this.paymentMethod === PAYMENT_METHOD_CREDIT_CARD &&
+            this.isTrue(this.isElevateCustomer) &&
+            this.isTrue(this.permissions.showLastFourDigits)
+        );
     }
 
     /***
@@ -303,14 +297,16 @@ export default class rd2ElevateInformation extends NavigationMixin(LightningElem
     }
 
     isRecurringDonationNotClosed() {
-        return this.isTrue(!isNull(this.closedStatuses) && !this.closedStatuses.includes(this.getValue(FIELD_STATUS.fieldApiName)));
+        return this.isTrue(
+            !isNull(this.closedStatuses) && !this.closedStatuses.includes(this.getValue(FIELD_STATUS.fieldApiName))
+        );
     }
 
     /***
      * @description Returns the expiration date as string in the format of MM/YYYY
      */
     get expirationDate() {
-        return this.getValue(FIELD_CC_EXP_MONTH.fieldApiName) + '/' + this.getValue(FIELD_CC_EXP_YEAR.fieldApiName);
+        return this.getValue(FIELD_CC_EXP_MONTH.fieldApiName) + "/" + this.getValue(FIELD_CC_EXP_YEAR.fieldApiName);
     }
 
     /***
@@ -328,26 +324,27 @@ export default class rd2ElevateInformation extends NavigationMixin(LightningElem
     }
 
     /**
-    * @desciprtion launch Update Payment Information Modal
-    */
+     * @desciprtion launch Update Payment Information Modal
+     */
     openUpdatePaymentInformationModal() {
         this.displayEditModal = true;
     }
 
     closeUpdatePaymentInformationModal() {
         this.displayEditModal = false;
-      }
+    }
 
     /***
      * @description Generates URL for Elevate commitment
      */
     navigateToCommitment() {
         // Navigate to a URL
-        this[NavigationMixin.Navigate]({
-                type: 'standard__webPage',
+        this[NavigationMixin.Navigate](
+            {
+                type: "standard__webPage",
                 attributes: {
-                    url: this.commitmentURL
-                }
+                    url: this.commitmentURL,
+                },
             },
             false
         );
@@ -359,11 +356,9 @@ export default class rd2ElevateInformation extends NavigationMixin(LightningElem
     checkLoading() {
         if (this.isNot(this.isElevateCustomer) || this.isNot(this.permissions.hasKeyFieldsAccess)) {
             this.isLoading = false;
-
         } else {
-            this.isLoading = !this.isSet(this.isElevateCustomer)
-                || !this.isSet(this.rdRecord)
-                || !this.isSet(this.fields.name);
+            this.isLoading =
+                !this.isSet(this.isElevateCustomer) || !this.isSet(this.rdRecord) || !this.isSet(this.fields.name);
         }
 
         this.checkElevateStatus();
@@ -384,12 +379,9 @@ export default class rd2ElevateInformation extends NavigationMixin(LightningElem
         this.showExpirationDate = this.shouldShowExpirationDate();
         this.recurringDonationIsNotClosed = this.isRecurringDonationNotClosed();
 
-        if (this.isElevateCustomer === true
-            && this.isElevateRecord
-            && !this.isElevateConnected
-        ) {
+        if (this.isElevateCustomer === true && this.isElevateRecord && !this.isElevateConnected) {
             this.handleError({
-                detail: this.labels.elevateRecordCreateFailed
+                detail: this.labels.elevateRecordCreateFailed,
             });
 
             if (this.status.value === STATUS_SUCCESS) {
@@ -403,8 +395,8 @@ export default class rd2ElevateInformation extends NavigationMixin(LightningElem
      */
     setErrorStatus(errorMessage) {
         this.status.message = errorMessage;
-        this.status.value = 'error';
-        this.status.icon = 'utility:error';
+        this.status.value = "error";
+        this.status.icon = "utility:error";
         this.status.assistiveText = this.labels.textError;
     }
 
@@ -433,9 +425,7 @@ export default class rd2ElevateInformation extends NavigationMixin(LightningElem
      * @description Returns the Recurring Donation field value if the field is set and populated
      */
     getValue(fieldName) {
-        return this.hasValue(fieldName)
-            ? this.rdRecord.fields[fieldName].value
-            : null;
+        return this.hasValue(fieldName) ? this.rdRecord.fields[fieldName].value : null;
     }
 
     /**
@@ -443,10 +433,12 @@ export default class rd2ElevateInformation extends NavigationMixin(LightningElem
      * its fields defined and populated
      */
     hasValue(fieldName) {
-        return this.rdRecord
-            && this.rdRecord.fields
-            && !isUndefined(this.rdRecord.fields[fieldName])
-            && !isNull(this.rdRecord.fields[fieldName].value);
+        return (
+            this.rdRecord &&
+            this.rdRecord.fields &&
+            !isUndefined(this.rdRecord.fields[fieldName]) &&
+            !isNull(this.rdRecord.fields[fieldName].value)
+        );
     }
 
     /**
@@ -471,36 +463,34 @@ export default class rd2ElevateInformation extends NavigationMixin(LightningElem
      */
     navigateToErrorLog() {
         const namespace = getNamespace(ERROR_OBJECT.objectApiName);
-        const compName = (namespace ? namespace : 'c') + "__ERR_RecordLog";
+        const compName = (namespace ? namespace : "c") + "__ERR_RecordLog";
 
         this[NavigationMixin.Navigate]({
             type: "standard__component",
             attributes: {
-                componentName: compName
+                componentName: compName,
             },
             state: {
-                c__recordId: this.recordId
-            }
+                c__recordId: this.recordId,
+            },
         });
     }
 
     /**
-    * @description Clears the error notification
-    */
+     * @description Clears the error notification
+     */
     clearError() {
         this.error = {};
     }
 
     /***
-    * @description Handles error construction and its display
-    * @param error: Error Event
-    */
+     * @description Handles error construction and its display
+     * @param error: Error Event
+     */
     handleError(error) {
-        this.error = (error && error.detail)
-            ? error
-            : constructErrorMessage(error);
+        this.error = error && error.detail ? error : constructErrorMessage(error);
 
-        if (this.error.detail && this.error.detail.includes('RD2_ElevateInformation_CTRL')) {
+        if (this.error.detail && this.error.detail.includes("RD2_ElevateInformation_CTRL")) {
             this.permissions.hasKeyFieldsAccess = false;
             this.permissions.showLastFourDigits = false;
             this.permissions.showExpirationDate = false;
@@ -509,10 +499,9 @@ export default class rd2ElevateInformation extends NavigationMixin(LightningElem
         }
     }
 
-
     /***
-    * @description data-qa-locator values for elements on the component
-    */
+     * @description data-qa-locator values for elements on the component
+     */
     get qaLocatorHeader() {
         return `text Header`;
     }
@@ -580,5 +569,4 @@ export default class rd2ElevateInformation extends NavigationMixin(LightningElem
     get qaLocatorUpdatePaymentInformation() {
         return `link Update Payment Information`;
     }
-
 }
