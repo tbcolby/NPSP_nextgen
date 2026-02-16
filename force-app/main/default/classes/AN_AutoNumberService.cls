@@ -77,10 +77,10 @@ public inherited sharing class AN_AutoNumberService {
         }
 
         autoNumbersToUpdate.add(new AutoNumber__c(Id = autoNumberId, IsActive__c = true));
-        update autoNumbersToUpdate;
+        UTIL_DMLService.updateRecords(autoNumbersToUpdate);
 
         if (!isTriggerHandlerEnabled) {
-            insert triggerHandler;
+            UTIL_DMLService.insertRecord(triggerHandler);
         }
     }
 
@@ -88,7 +88,7 @@ public inherited sharing class AN_AutoNumberService {
      * @description Deactivates the AutoNumber record associated with the passed in Id.
      */
     public void deactivate(String autoNumberId) {
-        update new AutoNumber__c(Id = autoNumberId, IsActive__c = false);
+        UTIL_DMLService.updateRecord(new AutoNumber__c(Id = autoNumberId, IsActive__c = false));
     }
 
     /**
@@ -119,7 +119,7 @@ public inherited sharing class AN_AutoNumberService {
             nextAutoNumberInSequence++;
         }
 
-        update sObjectsToUpdate;
+        UTIL_DMLService.updateRecords(sObjectsToUpdate);
 
         // Update the AutoNumber record AFTER Successful Save
         an.setMaxUsedNumber(nextAutoNumberInSequence - 1);
@@ -214,13 +214,13 @@ public inherited sharing class AN_AutoNumberService {
         }
 
         public AutoNumber__c save() {
-            insert record;
+            UTIL_DMLService.insertRecord(record);
             return record;
         }
 
         public void setMaxUsedNumber(Integer num) {
             record.Max_Used_Number__c = num;
-            update record;
+            UTIL_DMLService.updateRecord(record);
         }
 
         private AutoNumber__c convertJSONToAutoNumber(String autoNumber) {
@@ -411,10 +411,10 @@ public inherited sharing class AN_AutoNumberService {
                     IsActive__c = isActive,
                     Description__c = 'test description'
             );
-            insert a;
+            UTIL_DMLService.insertRecord(a);
 
             if (insertTriggerHandler) {
-                insert new AN_AutoNumberService(sObjType).triggerHandler;
+                UTIL_DMLService.insertRecord(new AN_AutoNumberService(sObjType).triggerHandler);
             }
 
             return a.Id;

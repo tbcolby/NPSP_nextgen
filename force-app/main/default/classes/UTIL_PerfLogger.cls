@@ -108,7 +108,7 @@ public virtual with sharing class UTIL_PerfLogger {
         }
 
         if (listPL.size() > 0) {
-            insert listPL;
+            UTIL_DMLService.insertRecords(listPL);
         }
     }
 

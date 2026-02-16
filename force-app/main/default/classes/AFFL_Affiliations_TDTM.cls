@@ -734,7 +734,7 @@ public inherited sharing class AFFL_Affiliations_TDTM extends TDTM_Runnable {
             affl = listAffl[0];
             if (affl.npe5__Primary__c != true && isPrimary) {
                 affl.npe5__Primary__c = true;
-                update affl;
+                UTIL_DMLService.updateRecord(affl);
             }
         } else {
             affl = new npe5__Affiliation__c();
@@ -742,7 +742,7 @@ public inherited sharing class AFFL_Affiliations_TDTM extends TDTM_Runnable {
             affl.npe5__Organization__c = accId;
             affl.npe5__Primary__c = isPrimary;
             affl.npe5__Role__c = ld.Title;
-            insert affl;
+            UTIL_DMLService.insertRecord(affl);
         }
     }
 

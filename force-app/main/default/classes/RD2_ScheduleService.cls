@@ -1117,7 +1117,7 @@ public without sharing class RD2_ScheduleService {
                 cancelPauseSchedule(rdId);
 
                 if (isNewPause(pauseSchedule)) {
-                    insert pauseSchedule;
+                    UTIL_DMLService.insertRecord(pauseSchedule);
                 }
 
             } catch (Exception e) {
@@ -1146,7 +1146,7 @@ public without sharing class RD2_ScheduleService {
             }
 
             deactivatePauseSchedule(schedule);
-            update schedule;
+            UTIL_DMLService.updateRecord(schedule);
         }
 
         public RecurringDonationSchedule__c deactivatePauseSchedule(RecurringDonationSchedule__c schedule) {

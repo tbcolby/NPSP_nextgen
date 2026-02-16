@@ -280,7 +280,7 @@ public inherited sharing class RD_RecurringDonations {
             if (dmlWrapper != null) {
                 dmlWrapper.objectsToUpdate.addAll((List<SObject>) updateMap.values());
             } else {
-                update updateMap.values();
+                UTIL_DMLService.updateRecords(updateMap.values());
             }
         }
     }
@@ -344,7 +344,7 @@ public inherited sharing class RD_RecurringDonations {
     */
     @future
     public static void insertOppsOnRecurringDonationInsertFuture(Set<Id> recids) {
-        delete [SELECT id FROM Opportunity WHERE isClosed = false AND npe03__Recurring_Donation__c IN :recids];
+        Database.delete([SELECT id FROM Opportunity WHERE isClosed = false AND npe03__Recurring_Donation__c IN :recids], true);
 
         List<npe03__Recurring_Donation__c> reclist = requeryListRD(recids);
         insertOppsOnRecurringDonationInsert(reclist);
@@ -495,7 +495,7 @@ public inherited sharing class RD_RecurringDonations {
 
                     if (opportunityInserts.size() == 100 ) {
                        //all or nothing so errors not lost
-                       insert opportunityInserts;
+                       UTIL_DMLService.insertRecords(opportunityInserts);
                        opportunityInserts.clear();
                     }
                 }
@@ -690,7 +690,7 @@ public inherited sharing class RD_RecurringDonations {
 
                     if (contactRoleInserts.size() == 100) {
                         // all or nothing so errors not lost
-                        insert contactRoleInserts;
+                        UTIL_DMLService.insertRecords(contactRoleInserts);
                         contactRoleInserts.clear();
                     }
                 }
@@ -699,7 +699,7 @@ public inherited sharing class RD_RecurringDonations {
 
         if (!contactRoleInserts.isEmpty()) {
             // all or nothing so errors not lost
-            insert contactRoleInserts;
+            UTIL_DMLService.insertRecords(contactRoleInserts);
         }
     }
 
@@ -801,7 +801,7 @@ public inherited sharing class RD_RecurringDonations {
             if (dmlWrapper != null) {
                 dmlWrapper.objectsToUpdate.addAll((List<SObject>) updateOppsList);
             } else {
-                update updateOppsList;
+                UTIL_DMLService.updateRecords(updateOppsList);
             }
         }
 
@@ -885,7 +885,7 @@ public inherited sharing class RD_RecurringDonations {
         //needs a total reinsert, not an update
         if (!reinsertopps.isEmpty()) {
             //clear existing open opps and recreate
-            delete [SELECT Id FROM Opportunity WHERE npe03__Recurring_Donation__c IN :reinsertopps AND isClosed = false];
+            Database.delete([SELECT Id FROM Opportunity WHERE npe03__Recurring_Donation__c IN :reinsertopps AND isClosed = false], true);
 
             if (reinsertopps.size() == 1 || System.isFuture() || System.isBatch()) {
                 insertOppsOnRecurringDonationInsert(reinsertopps);
@@ -941,7 +941,7 @@ public inherited sharing class RD_RecurringDonations {
 
         if (listRDNonOpen.size() > 0) {
             //clear existing open opps and recreate
-            delete [SELECT Id FROM Opportunity WHERE npe03__Recurring_Donation__c IN :listRDNonOpen AND isClosed = false];
+            Database.delete([SELECT Id FROM Opportunity WHERE npe03__Recurring_Donation__c IN :listRDNonOpen AND isClosed = false], true);
 
             insertOppsOnRecurringDonationInsert(listRDNonOpen);
             recurringDonationsToEvaluate = listRDOpen;
@@ -1150,7 +1150,7 @@ public inherited sharing class RD_RecurringDonations {
                 if (dmlWrapper != null) {
                     dmlWrapper.objectsToUpdate.addAll((List<SObject>) mapIdOpp.values());
                 } else {
-                    update mapIdOpp.values();
+                    UTIL_DMLService.updateRecords(mapIdOpp.values());
                 }
             }
         }

@@ -51,7 +51,7 @@ public with sharing class GE_Template {
         if (giftEntryIsEnabled() && !hasDefaultTemplate()) {
             Form_Template__c newDefaultTemplate = buildDefaultTemplate();
             
-            insert newDefaultTemplate;
+            UTIL_DMLService.insertRecord(newDefaultTemplate);
 
             Gift_Entry_Settings__c giftEntryCustomSetting = UTIL_CustomSettingsFacade.getGiftEntrySettings();
             giftEntryCustomSetting.Default_Gift_Entry_Template__c = newDefaultTemplate.Id;

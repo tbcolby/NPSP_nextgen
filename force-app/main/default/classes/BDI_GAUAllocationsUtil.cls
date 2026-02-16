@@ -313,7 +313,7 @@ public with sharing class BDI_GAUAllocationsUtil {
             // Delete any allocations that were created for an oppt that had related allocation errors.
             if (allocForDelete.size() > 0) {
                 if (UTIL_Permissions.canDelete(String.valueOf(Allocation__c.getSObjectType()), false)) {
-                    delete allocForDelete;
+                    Database.delete(allocForDelete, true);
                 }
             }
         }

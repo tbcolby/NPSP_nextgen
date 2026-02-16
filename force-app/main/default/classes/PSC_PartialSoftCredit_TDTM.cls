@@ -149,7 +149,7 @@ public inherited sharing class PSC_PartialSoftCredit_TDTM extends TDTM_Runnable 
         } 
         
         // now we must create the new OCR's so we can then store their Id back in the PSC's
-        insert listOCRNew;
+        UTIL_DMLService.insertRecords(listOCRNew);
         
         // add these new OCR's to our OCR map
         for (OpportunityContactRole ocr : listOCRNew) {

@@ -686,6 +686,6 @@ public abstract inherited sharing class CRLP_Batch_Base {
                 '\nRollups State:\n' + CRLP_Debug_UTIL.getCurrentRollupState()
             ).left(32768)
         );
-        insert logEntry;
+        UTIL_DMLService.insertRecord(logEntry);
     }
 }

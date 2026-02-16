@@ -106,7 +106,7 @@ public with sharing class Gift {
     }
 
     public void deleteRecord() {
-        delete this.dataImport;
+        Database.delete(this.dataImport, true);
     }
 
     public void saveRecord() {
