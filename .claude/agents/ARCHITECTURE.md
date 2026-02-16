@@ -25,18 +25,19 @@ This document defines the autonomous agent system for maintaining and evolving t
 │  └─────────────────────────────────────────────────────────────────────────┘│
 └─────────────────────────────────────────────────────────────────────────────┘
                                               │
-              ┌───────────────┬───────────────┼───────────────┬───────────────┐
-              ▼               ▼               ▼               ▼               ▼
-    ┌─────────────┐ ┌─────────────┐ ┌─────────────┐ ┌─────────────┐ ┌─────────────┐
-    │    APEX     │ │     LWC     │ │   TESTING   │ │  SECURITY   │ │   DEVOPS    │
-    │    AGENT    │ │    AGENT    │ │    AGENT    │ │    AGENT    │ │    AGENT    │
-    └─────────────┘ └─────────────┘ └─────────────┘ └─────────────┘ └─────────────┘
-              │               │               │               │               │
-              └───────────────┴───────────────┼───────────────┴───────────────┘
-                                              ▼
+              ┌──────────┬──────────┼──────────┬──────────┬──────────┬──────────┐
+              ▼          ▼          ▼          ▼          ▼          ▼          ▼
+    ┌──────────┐┌──────────┐┌──────────┐┌──────────┐┌──────────┐┌──────────┐┌──────────┐
+    │   APEX   ││   LWC    ││ TESTING  ││ SECURITY ││  DEVOPS  ││  DOCS    ││ MODERN.  │
+    │  AGENT   ││  AGENT   ││  AGENT   ││  AGENT   ││  AGENT   ││  AGENT   ││  AGENT   │
+    └──────────┘└──────────┘└──────────┘└──────────┘└──────────┘└──────────┘└──────────┘
+              │          │          │          │          │          │          │
+              └──────────┴──────────┴──────────┼──────────┴──────────┴──────────┘
+                                               ▼
                     ┌─────────────────────────────────────────────────────┐
                     │                  KNOWLEDGE LAYER                     │
                     │  NPSP Patterns │ Salesforce Best Practices │ History │
+                    │  Planning Docs │ Modernization Burndown             │
                     └─────────────────────────────────────────────────────┘
 ```
 
@@ -107,6 +108,14 @@ routing_rules:
   - pattern: "Aura to LWC migration"
     route_to: lwc_agent
     consult: [apex_agent]
+
+  - pattern: "modernization, burndown, phase planning"
+    route_to: modernization_agent
+    consult: [relevant domain agents]
+
+  - pattern: "cross-cutting modernization (API version, annotations, etc)"
+    route_to: modernization_agent
+    post_route: [testing_agent]
 ```
 
 ### State Management
@@ -189,8 +198,17 @@ START
   │   │         └─ Always include: security_agent (review mode)
   │   └─ NO → Continue
   │
-  └─ Is this maintenance/refactoring?
-      ├─ YES → Analyze scope and impact
+  ├─ Is this maintenance/refactoring?
+  │   ├─ YES → Analyze scope and impact
+  │   │         ├─ Modernization item → modernization_agent
+  │   │         ├─ Single-domain refactor → relevant domain agent
+  │   │         └─ Cross-cutting → modernization_agent + coordinator
+  │   └─ NO → Continue
+  │
+  └─ Is this tech debt / modernization?
+      ├─ YES → modernization_agent
+      │         ├─ Check burndown alignment
+      │         └─ Route sub-tasks to domain agents
       └─ NO → escalate_to_human
 ```
 

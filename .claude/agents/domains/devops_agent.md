@@ -24,21 +24,22 @@
 ```yaml
 tools:
   cumulusci:
-    version: ">=3.74.0"
+    version: ">=4.6.0"
     config_file: cumulusci.yml (1961 lines)
     tasks: 40+ custom tasks
     flows: 25+ defined flows
 
   github_actions:
     workflows:
-      - jest.yml: LWC testing
+      - pr-validation.yml: PR validation (jest, lint, prettier, PMD, security)
+      - code-quality.yml: Code quality checks (ESLint, PMD)
+      - jest.yml: LWC testing (52 suites, 422 tests)
       - compliance.yml: Instrumentation check
-      - codeowners.yml: Review assignment
 
   sfdx:
     project_file: sfdx-project.json
-    namespace: npsp
-    api_version: "53.0"
+    namespace: npsp2
+    api_version: "63.0"
 
 environments:
   scratch_orgs:

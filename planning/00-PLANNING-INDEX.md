@@ -6,7 +6,7 @@ This directory contains CTA-level architectural planning documents for the NPSP_
 
 | # | Document | Domain | Status |
 |---|----------|--------|--------|
-| 01 | [Foundation & API Modernization](01-FOUNDATION-API-MODERNIZATION.md) | Platform Foundation | Draft |
+| 01 | [Foundation & API Modernization](01-FOUNDATION-API-MODERNIZATION.md) | Platform Foundation | **Complete** |
 | 02 | [Security Architecture](02-SECURITY-ARCHITECTURE.md) | Security & Trust | Draft |
 | 03 | [Async Apex Modernization](03-ASYNC-APEX-MODERNIZATION.md) | Performance & Scalability | Draft |
 | 04 | [Performance Optimization](04-PERFORMANCE-OPTIMIZATION.md) | Performance & Scalability | Draft |
@@ -16,6 +16,14 @@ This directory contains CTA-level architectural planning documents for the NPSP_
 | 08 | [Accessibility Compliance](08-ACCESSIBILITY-COMPLIANCE.md) | User Experience & Compliance | Draft |
 | 09 | [Integration Architecture](09-INTEGRATION-ARCHITECTURE.md) | Integration & Extensibility | Draft |
 | 10 | [Testing Strategy](10-TESTING-STRATEGY.md) | Quality & Reliability | Draft |
+
+## Implementation Progress
+
+| Phase | PR | Status | Key Changes |
+|-------|-----|--------|-------------|
+| Phase 0 | [PR #1](https://github.com/tbcolby/NPSP_nextgen/pull/1) (merged) | **Complete** | Namespace npsp→npsp2, API 53→63, Elevate removal, CCI 4.6.0, CI fixes |
+| Phase 1 | [PR #2](https://github.com/tbcolby/NPSP_nextgen/pull/2) | **Complete** | testMethod→@IsTest (648), @track cleanup (90), deps update, ESLint fixes |
+| Phase 2+ | — | Not started | Security, Async, Performance, Code Quality, UI, Config, A11y, Integration |
 
 ## Salesforce Well-Architected Framework Alignment
 
@@ -97,4 +105,4 @@ These are living documents. To propose changes:
 
 ---
 
-*Last Updated: 2026-02-03*
+*Last Updated: 2026-02-15*

@@ -11,6 +11,7 @@ This document tracks backwards-compatible modernization items across multiple re
 
 | Category | Total Items | Completed | In Progress | Remaining |
 |----------|-------------|-----------|-------------|-----------|
+| Phase 0: Packaging & Setup | 4 | 4 | 0 | 0 |
 | Phase 1: Foundation | 8 | 6 | 0 | 2 |
 | Phase 2: Security | 12 | 0 | 0 | 12 |
 | Phase 3: Async Modernization | 15 | 0 | 0 | 15 |
@@ -21,7 +22,7 @@ This document tracks backwards-compatible modernization items across multiple re
 | Phase 8: Accessibility | 10 | 0 | 0 | 10 |
 | Phase 9: Integration | 8 | 0 | 0 | 8 |
 | Phase 10: Long-term | 20 | 0 | 0 | 20 |
-| **TOTAL** | **154** | **6** | **0** | **148** |
+| **TOTAL** | **158** | **10** | **0** | **148** |
 
 **Estimated Total Effort**: 800-1200 hours across 8 quarterly releases
 
@@ -49,6 +50,42 @@ This document tracks backwards-compatible modernization items across multiple re
 | v2.1 | Q2 2027 | UI Modernization (Tier 1) | 70 |
 | v2.2 | Q3 2027 | Configuration, Accessibility | 50 |
 | v2.3 | Q4 2027 | Integration, Final Polish | 40 |
+
+---
+
+## Phase 0: Packaging & Setup ([PR #1](https://github.com/tbcolby/NPSP_nextgen/pull/1), merged 2026-02-14)
+
+### 0.1 Namespace Migration (npsp → npsp2)
+**Status**: ✅ Complete
+**Effort**: 4 hours | **Risk**: Low | **Priority**: P0-Critical
+
+Renamed namespace from `npsp` to `npsp2` across all metadata for 2GP unlocked packaging. Enables side-by-side installation with the original NPSP managed package.
+
+---
+
+### 0.2 Elevate Payment Processor Removal
+**Status**: ✅ Complete
+**Effort**: 8 hours | **Risk**: Low | **Priority**: P0-Critical
+
+Community forks cannot authenticate to Elevate APIs. Removed ~120 Elevate-specific Apex classes and test classes, Elevate references from ~50 mixed-concern classes, and Elevate LWC components. A generic payment processor interface may be added in the future.
+
+---
+
+### 0.3 CumulusCI Update (→ 4.6.0)
+**Status**: ✅ Complete
+**Effort**: 1 hour | **Risk**: Very Low | **Priority**: P1
+
+Updated CumulusCI configuration to 4.6.0 for API 63.0 support.
+
+---
+
+### 0.4 CI Pipeline Fixes
+**Status**: ✅ Complete
+**Effort**: 4 hours | **Risk**: Very Low | **Priority**: P1
+
+Fixed 6 LWC test suites broken by Elevate removal. Fixed pre-existing rd2EntryForm test. Added `.prettierignore` for vendored static resources. Formatted all 207 LWC JS/CSS files with Prettier. Removed redundant ESLint CI step. Regenerated `yarn.lock`.
+
+**CI result**: All checks pass — ESLint, PMD, 45 LWC test suites (279 tests), Prettier, Security Scan.
 
 ---
 
@@ -323,7 +360,7 @@ List<Account> accounts = (List<Account>) Security.stripInaccessible(
 | CRLP_RollupQueueable | Yes - for error recovery | ⬜ |
 | ERR_AsyncErrors | Yes - for monitoring | ⬜ |
 | RD2_QueueableService (inner classes) | Yes - for cleanup | ⬜ |
-| ElevateBatchCapturer | Yes - for callout recovery | ⬜ |
+| ~~ElevateBatchCapturer~~ | ~~callout recovery~~ | N/A (removed in Phase 0) |
 | New converted @future → Queueable | Yes | ⬜ |
 
 ---
@@ -626,7 +663,7 @@ List<Account> accounts = (List<Account>) Security.stripInaccessible(
 | HH_AddressMgr.cmp | High | Maps, APIs | ⬜ |
 | HH_Container.cmp | High | Multiple | ⬜ |
 | HH_Canvas.cmp | High | D3/Canvas | ⬜ |
-| RD2_EntryForm.cmp | High | Elevate | ⬜ |
+| RD2_EntryForm.cmp | High | Payment (Elevate removed) | ⬜ |
 | BGE_DonationSelector.cmp | High | Multiple | ⬜ |
 | BGE_DataImportBatchEntry.cmp | High | Multiple | ⬜ |
 | BGE_ConfigurationWizard.cmp | High | Multiple | ⬜ |
@@ -785,7 +822,7 @@ List<Account> accounts = (List<Account>) Security.stripInaccessible(
 
 | Integration | Current | Target | Status |
 |-------------|---------|--------|--------|
-| Elevate Payment Services | Hardcoded endpoints | Named Credential | ⬜ |
+| ~~Elevate Payment Services~~ | ~~Hardcoded endpoints~~ | ~~Named Credential~~ | Removed (Phase 0) |
 | Address Validation (SmartyStreets) | Hardcoded | Named Credential | ⬜ |
 | Address Validation (Cicero) | Hardcoded | Named Credential | ⬜ |
 | Address Validation (Google) | Hardcoded | Named Credential | ⬜ |
@@ -799,7 +836,7 @@ List<Account> accounts = (List<Account>) Security.stripInaccessible(
 
 | Service | OpenAPI Spec | Status |
 |---------|--------------|--------|
-| Elevate Payment API | Create spec | ⬜ |
+| ~~Elevate Payment API~~ | ~~Create spec~~ | Removed (Phase 0) |
 | Address Validation | Create spec | ⬜ |
 
 ---
@@ -886,15 +923,17 @@ Each release should include:
 
 | Date | Total | Completed | Remaining | Velocity |
 |------|-------|-----------|-----------|----------|
-| 2026-02-03 | 154 | 0 | 154 | - |
-| | | | | |
+| 2026-02-03 | 158 | 0 | 158 | - |
+| 2026-02-14 | 158 | 5 | 153 | Phase 0 (4 items) + Phase 1 item 1.1 (API upgrade) |
+| 2026-02-15 | 158 | 10 | 148 | Phase 1 items 1.2-1.8 (+5 completed) |
 
 ### Sprint Velocity History
 
 | Sprint | Planned | Completed | Notes |
 |--------|---------|-----------|-------|
-| | | | |
+| Phase 0 | 4 | 5 | 4 Phase 0 items + 1 Phase 1 item (API upgrade bundled) |
+| Phase 1 | 7 | 5 | 1 deferred (TODO/FIXME → Phase 5), 1 was N/A (fflib = no app usage) |
 
 ---
 
-*Document maintained by NPSP_nextgen community. Last updated: 2026-02-03*
+*Document maintained by NPSP_nextgen community. Last updated: 2026-02-15*

@@ -131,10 +131,10 @@ vulnerabilities:
 ```yaml
 npsp_security:
   payment_data:
-    classes:
-      - GE_PaymentServices
-      - PS_IntegrationService
-      - psElevateTokenHandler
+    note: >
+      Elevate payment integration was removed in Phase 0 (Feb 2026).
+      If a generic payment processor is added in the future, these
+      requirements apply to any payment-handling code.
     requirements:
       - Never log card data
       - Tokenization only

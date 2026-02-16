@@ -24,14 +24,18 @@
 ```yaml
 existing_docs:
   - README.md: Project overview
+  - CLAUDE.md: Claude Code guidance (namespace, API version, patterns)
   - CONTRIBUTING.md: Contribution guidelines
   - CODE_OF_CONDUCT.md: Community standards
   - documentation/automation.md: Automation inventory
+  - documentation/MODERNIZATION_BURNDOWN.md: Phase tracking (158 items, 10 complete)
+  - documentation/CTA_MODERNIZATION_ANALYSIS.md: CTA-level analysis
+  - planning/00-PLANNING-INDEX.md: Master index for 10 planning documents
+  - planning/01-10: Detailed planning docs (Foundation through Testing)
   - CODEOWNERS: Code ownership
 
 documentation_gaps:
-  - No comprehensive architecture docs
-  - Limited inline code documentation
+  - Limited inline code documentation (ApexDoc ~40%, JSDoc ~30%)
   - No API documentation
   - No deployment runbooks
   - No troubleshooting guides
