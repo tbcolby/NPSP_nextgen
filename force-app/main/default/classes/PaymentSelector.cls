@@ -69,14 +69,13 @@ public with sharing class PaymentSelector {
     private Set<String> getRefundFields() {
         return new Set<String>{
             'Id',
-            String.valueOf(npe01__OppPayment__c.Elevate_Payment_ID__c),
             'npe01__Payment_Amount__c',
             'npe01__Opportunity__c',
             'npe01__Opportunity__r.Amount',
             'npe01__Payment_Date__c',
             'npe01__Paid__c',
             String.valueOf(npe01__OppPayment__c.DebitType__c)
-        }; 
+        };
     }
     private String getRefundSubQuery() {
         Set<String> refundFields = new Set<String>{

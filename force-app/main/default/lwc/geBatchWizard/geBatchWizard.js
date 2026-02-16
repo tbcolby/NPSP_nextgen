@@ -20,11 +20,9 @@ import {
 } from "c/utilTemplateBuilder";
 import { getNamespace, getNestedProperty, isNotEmpty, isNull, stripNamespace } from "c/utilCommon";
 import GeLabelService from "c/geLabelService";
-import psPaymentGateway from "@salesforce/label/c.psPaymentGateway";
 
 import getAllFormTemplates from "@salesforce/apex/GE_GiftEntryController.getAllFormTemplates";
 import getDonationMatchingValues from "@salesforce/apex/GE_GiftEntryController.getDonationMatchingValues";
-import getGatewayAssignmentSettingsWithDefaultGatewayName from "@salesforce/apex/GE_GiftEntryController.getGatewayAssignmentSettingsWithDefaultGatewayName";
 
 import DATA_IMPORT_BATCH_INFO from "@salesforce/schema/DataImportBatch__c";
 import DATA_IMPORT_BATCH_ID_INFO from "@salesforce/schema/DataImportBatch__c.Id";
@@ -56,12 +54,12 @@ export default class geBatchWizard extends NavigationMixin(LightningElement) {
     @track templates;
     @track selectedBatchHeaderFields = [];
     @track formSections = [];
-    selectedTemplateId;
+    @track selectedTemplateId;
     isLoading = true;
     @track donationMatchingBehaviors;
     hasInvalidBatchFields = false;
     @track missingBatchHeaderFieldLabels = [];
-    missingRequiredFieldsMessage;
+    @track missingRequiredFieldsMessage;
     allowFirstInstallment = false;
 
     dataImportBatchFieldInfos;
@@ -70,8 +68,6 @@ export default class geBatchWizard extends NavigationMixin(LightningElement) {
     templatesById = {};
     templateOptions;
     isLoaded = false;
-    gatewayName;
-    gatewaySettings = {};
 
     headers = {
         0: this.CUSTOM_LABELS.geHeaderBatchSelectTemplate,
@@ -253,8 +249,8 @@ export default class geBatchWizard extends NavigationMixin(LightningElement) {
             this.dataImportBatchRecord.fields[DATA_IMPORT_BATCH_DEFAULTS_INFO.fieldApiName].value
         );
 
-        this.allowFirstInstallment = batchLevelDefaults.AllowFirstInstallment__f
-            ? batchLevelDefaults.AllowFirstInstallment__f.value
+        this.allowFirstInstallment = batchLevelDefaults["AllowFirstInstallment__f"]
+            ? batchLevelDefaults["AllowFirstInstallment__f"].value
             : false;
 
         this.formSections.forEach((section) => {
@@ -309,10 +305,6 @@ export default class geBatchWizard extends NavigationMixin(LightningElement) {
                 await GeFormService.getFieldMappings();
             }
 
-            if (Settings.isElevateCustomer()) {
-                this.gatewaySettings = JSON.parse(await getGatewayAssignmentSettingsWithDefaultGatewayName());
-            }
-
             if (!this.recordId) {
                 this.templates = await getAllFormTemplates();
                 this.templates = this.templates.sort();
@@ -358,7 +350,6 @@ export default class geBatchWizard extends NavigationMixin(LightningElement) {
 
     handleTemplateChange(event) {
         this.selectedTemplateId = event.detail.value;
-        this.gatewayName = this.selectedTemplate.elevateSettings?.gatewayName;
         this.selectedBatchHeaderFields = [];
 
         this.selectedBatchHeaderFields = addKeyToCollectionItems(this.selectedTemplate.batchHeaderFields);
@@ -556,14 +547,6 @@ export default class geBatchWizard extends NavigationMixin(LightningElement) {
     resetValidations() {
         this.hasInvalidBatchFields = false;
         this.missingBatchHeaderFieldLabels = [];
-    }
-
-    get gatewayNameMessage() {
-        if (this.gatewaySettings?.gatewayAssignmentEnabled && this.selectedTemplateId) {
-            let gatewayName = this.gatewayName ? this.gatewayName : this.gatewaySettings?.defaultGatewayName;
-            return psPaymentGateway + " " + gatewayName;
-        }
-        return "";
     }
 
     /*******************************************************************************

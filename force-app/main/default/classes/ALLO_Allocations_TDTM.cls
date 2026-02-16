@@ -298,7 +298,7 @@ public class ALLO_Allocations_TDTM extends TDTM_Runnable {
         List<npe01__OppPayment__c> refunds = new List<npe01__OppPayment__c>();
         List<npe01__OppPayment__c> oldRefunds = new List<npe01__OppPayment__c>();
         for (Integer i = 0; i < newList.size(); i++) {
-            if (newList[i].npe01__Payment_Amount__c < 0 && String.isBlank(newList[i].Elevate_Payment_ID__c) && hasRefundDebitType(newList[i])) {
+            if (newList[i].npe01__Payment_Amount__c < 0 && hasRefundDebitType(newList[i])) {
                 refunds.add(newList[i]);
                 if ( oldList != null) {
                     oldRefunds.add(oldList[i]);
@@ -795,7 +795,7 @@ public class ALLO_Allocations_TDTM extends TDTM_Runnable {
 
                     for (Allocation__c allo : oppWrap.listAllo) {
                         // if the Opportunity is for $0, we can safely update fixed Allocations to be $0
-                        // This fixes a bug with Elevate refunds when non-default Allocations have fixed (not percent based) Amounts
+                        // This fixes a bug with refunds when non-default Allocations have fixed (not percent based) Amounts
                         if (oppWrap.parentAmount == 0 && allo.Percent__c == null) {
                             oppWrap.totalAmount -= allo.Amount__c;
                             allo.Amount__c = 0;

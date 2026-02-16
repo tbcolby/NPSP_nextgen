@@ -2,8 +2,6 @@ import { LightningElement, api } from "lwc";
 import stopRecurringDonation from "@salesforce/label/c.stopRecurringDonation";
 import stopRecurringDonationModalTitle from "@salesforce/label/c.stopRecurringDonationModalTitle";
 import upsertDonation from "@salesforce/apex/RD2_ETableController.upsertDonation";
-import RD2_ElevateRDCancellingTitle from "@salesforce/label/c.RD2_ElevateRDCancellingTitle";
-import RD2_ElevateRDCancellingMessage from "@salesforce/label/c.RD2_ElevateRDCancellingMessage";
 import RD2_NonElevateRDCancellingTitle from "@salesforce/label/c.RD2_NonElevateRDCancellingTitle";
 import commonClose from "@salesforce/label/c.commonClose";
 import stopRecurringDonationMessage from "@salesforce/label/c.RD2_ElevateRDStopDonationMessage";
@@ -24,28 +22,21 @@ export default class StopRecurringDonationModal extends LightningElement {
         commonCancelAndClose,
         stopRecurringDonationMessage,
     };
-    isElevate;
     @api openStopRecurringDonation;
     @api currentRecord;
     isFirstRender = true;
 
     /**
-     * @description Returns title label for toast based on elevate or non elevate RD
+     * @description Returns title label for toast
      */
     get title() {
-        if (this.isElevate) {
-            return RD2_ElevateRDCancellingTitle;
-        }
         return RD2_NonElevateRDCancellingTitle;
     }
 
     /**
-     * @description Returns message label for toast based on elevate or non elevate RD
+     * @description Returns message label for toast
      */
     get message() {
-        if (this.isElevate) {
-            return RD2_ElevateRDCancellingMessage;
-        }
         return "";
     }
 
@@ -87,7 +78,6 @@ export default class StopRecurringDonationModal extends LightningElement {
         let record = Object.assign({}, this.currentRecord.recurringDonation);
         record.Status__c = STATUS_CLOSED;
         upsertDonation({ recurringDonation: record }).then(() => {
-            this.isElevate = record.CommitmentId__c ? true : false;
             const event = new ShowToastEvent({
                 title: this.title,
                 message: this.message,

@@ -873,74 +873,6 @@
         <name>RD2_DisabledRD2Error</name>
     </customLabels>
     <customLabels>
-        <label><!-- Indicates Elevate recurring commitment cancel is in progress --></label>
-        <name>RD2_ElevateCancelInProgress</name>
-    </customLabels>
-    <customLabels>
-        <label><!-- Label indicating user can hide the credit card and not use Elevate --></label>
-        <name>RD2_ElevateDisableButtonLabel</name>
-    </customLabels>
-    <customLabels>
-        <label><!-- Header indicating the org is not connected to Elevate --></label>
-        <name>RD2_ElevateDisabledHeader</name>
-    </customLabels>
-    <customLabels>
-        <label><!-- Text indicating the Recurring Donation will not be committed to Elevate --></label>
-        <name>RD2_ElevateDisabledMessage</name>
-    </customLabels>
-    <customLabels>
-        <label><!-- Link text to toggle and enable commitment creation in Elevate --></label>
-        <name>RD2_ElevateEnableButtonLabel</name>
-    </customLabels>
-    <customLabels>
-        <label><!-- Elevate information widget header --></label>
-        <name>RD2_ElevateInformationHeader</name>
-    </customLabels>
-    <customLabels>
-        <label><!-- Status description displayed when no error is active --></label>
-        <name>RD2_ElevateInformationStatusSuccess</name>
-    </customLabels>
-    <customLabels>
-        <label><!-- Validation message for installment period on Elevate Recurring Donations --></label>
-        <name>RD2_ElevateInstallmentPeriodMustBeValid</name>
-    </customLabels>
-    <customLabels>
-        <label><!-- Error when the functionality is not supported for Elevate Recurring Donation. --></label>
-        <name>RD2_ElevateNotSupported</name>
-    </customLabels>
-    <customLabels>
-        <label><!-- Cannot change payment method to a non-Elevate payment method --></label>
-        <name>RD2_ElevatePaymentMethodChangeError</name>
-    </customLabels>
-    <customLabels>
-        <label><!-- Status Reason to indicates Elevate Service is in progress. --></label>
-        <name>RD2_ElevatePendingStatus</name>
-    </customLabels>
-    <customLabels>
-        <label><!-- Checks if an Elevate Recurring Donation&apos;s amount is valid or not --></label>
-        <name>RD2_ElevateRDAmountMustBeValid</name>
-    </customLabels>
-    <customLabels>
-        <label><!-- Checks if Elevate Recurring Donation&apos;s Campaign update is valid or not --></label>
-        <name>RD2_ElevateRDCampaignCannotUpdateToNull</name>
-    </customLabels>
-    <customLabels>
-        <label><!-- Error when an attempt is made to change the Status of a Closed Elevate RD --></label>
-        <name>RD2_ElevateRDClosedStatusCannotBeChanged</name>
-    </customLabels>
-    <customLabels>
-        <label><!-- Checks if Elevate Recurring Donation&apos;s Day of Month Changed --></label>
-        <name>RD2_ElevateRDDayOfMonthCannotChange</name>
-    </customLabels>
-    <customLabels>
-        <label><!-- Checks if Elevate Recurring Donation&apos;s Effective Date is valid or not --></label>
-        <name>RD2_ElevateRDEffectiveDateMustBeValid</name>
-    </customLabels>
-    <customLabels>
-        <label><!-- Text indicating the Recurring Donation could not be created in Elevate --></label>
-        <name>RD2_ElevateRecordCreateFailed</name>
-    </customLabels>
-    <customLabels>
         <label><!-- Enablement page header displayed due to missing prerequisites --></label>
         <name>RD2_EnablementDisabledHeader</name>
     </customLabels>
@@ -1109,10 +1041,6 @@
         <name>RD2_EnablementSimpleIntro</name>
     </customLabels>
     <customLabels>
-        <label><!-- Elevate connected Recurring Donation End Date must be valid. --></label>
-        <name>RD2_EndDateElevateCannotBeInFuture</name>
-    </customLabels>
-    <customLabels>
         <label><!-- Recurring Donation End Date must be valid. --></label>
         <name>RD2_EndDateMustBeLaterThanCloseWonOpp</name>
     </customLabels>
@@ -1187,14 +1115,6 @@
     <customLabels>
         <label><!-- Spinner text when credit card is validated on Recurring Donation save --></label>
         <name>RD2_EntryFormSaveACHMessage</name>
-    </customLabels>
-    <customLabels>
-        <label><!-- Message displayed as prefix to errors returned from Elevate API --></label>
-        <name>RD2_EntryFormSaveCommitmentFailedMessage</name>
-    </customLabels>
-    <customLabels>
-        <label><!-- Spinner text when Elevate Commitment is being created or updated --></label>
-        <name>RD2_EntryFormSaveCommitmentMessage</name>
     </customLabels>
     <customLabels>
         <label><!-- Spinner text when credit card is validated on Recurring Donation save --></label>
@@ -1315,10 +1235,6 @@
     <customLabels>
         <label><!-- Paused Reason field label on the Recurring Donation Pause page --></label>
         <name>RD2_PausedReasonLabel</name>
-    </customLabels>
-    <customLabels>
-        <label><!-- Elevate Payment Information Title --></label>
-        <name>RD2_PaymentInformation</name>
     </customLabels>
     <customLabels>
         <label><!-- The end date of the recurring donation schedule --></label>
@@ -2891,14 +2807,6 @@
         <name>commonEdit</name>
     </customLabels>
     <customLabels>
-        <label><!-- Text to edit elevate payment information --></label>
-        <name>commonEditPaymentInformation</name>
-    </customLabels>
-    <customLabels>
-        <label><!-- Failure message if a customer fails to get onboarded --></label>
-        <name>commonElevateFailedOnboarding</name>
-    </customLabels>
-    <customLabels>
         <label><!-- Error --></label>
         <name>commonError</name>
     </customLabels>
@@ -2973,10 +2881,6 @@
     <customLabels>
         <label><!-- Payment Processing Errors --></label>
         <name>commonPaymentProcessingErrors</name>
-    </customLabels>
-    <customLabels>
-        <label><!-- Common label for Elevate Payment Services --></label>
-        <name>commonPaymentServices</name>
     </customLabels>
     <customLabels>
         <label><!-- Percent --></label>
@@ -5889,10 +5793,6 @@
     <customLabels>
         <label><!-- pmtWrittenOffPaymentDateRequired --></label>
         <name>pmtWrittenOffPaymentDateRequired</name>
-    </customLabels>
-    <customLabels>
-        <label><!-- How to activate the Elevate field bundle to enter payment information --></label>
-        <name>psSelectValidPaymentMethod</name>
     </customLabels>
     <customLabels>
         <label>מחק שורה</label>

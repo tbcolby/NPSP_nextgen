@@ -47,7 +47,6 @@ private class BDI_RecurringDonations_TEST {
                     Recurring_Donation_Card_Expiration_Year__c = '2022',
                     Recurring_Donation_Card_Expiration_Month__c = '10',
                     Recurring_Donation_ACH_Last_4__c = '1234',
-                    Recurring_Donation_Elevate_Event_Version__c = 5,
                     Recurring_Donation_Card_Last_4__c = '1234',
                     Donation_Donor__c = 'Contact1',
                     Donation_Amount__c = 100,
@@ -304,14 +303,8 @@ private class BDI_RecurringDonations_TEST {
                                                         npe03__Installment_Period__c,
                                                         npe03__Recurring_Donation_Campaign__c,
                                                         RecurringType__c,
-                                                        CommitmentId__c,
                                                         StartDate__c,
                                                         npe03__Date_Established__c,
-                                                        LastElevateVersionPlayed__c,
-                                                        ACH_Last_4__c,
-                                                        CardLast4__c,
-                                                        CardExpirationMonth__c,
-                                                        CardExpirationYear__c,
                                                         Day_of_Month__c,
                                                         Status__c,
                                                         npe03__Installments__c,
@@ -332,23 +325,16 @@ private class BDI_RecurringDonations_TEST {
         System.assertNotEquals(null,rdA);
         System.assertEquals(testDIResultA.Contact1Imported__c, rdA.npe03__Contact__c);
         System.assertEquals(100, rdA.npe03__Amount__c);
-        System.assertEquals(null,rdA.CommitmentId__c);
         System.assertEquals(testDIResultA.HouseholdAccountImported__c,rdA.npe03__Organization__c);
         System.assertEquals('Active',rdA.Status__c);
         System.assertEquals('Monthly',rdA.npe03__Installment_Period__c);
         System.assertEquals(testDIResultA.DonationCampaignImported__c,rdA.npe03__Recurring_Donation_Campaign__c);
         System.assertEquals(testDIResultA.Recurring_Donation_Day_Of_Month__c,rdA.Day_Of_Month__c);
         System.assertEquals(1,rdA.InstallmentFrequency__c);
-        System.assertEquals('2022',rdA.CardExpirationYear__c);
-        System.assertEquals('10',rdA.CardExpirationMonth__c);
-        System.assertEquals('1234',rdA.ACH_Last_4__c);
-        System.assertEquals('1234',rdA.CardLast4__c);
-        System.assertEquals(5,rdA.LastElevateVersionPlayed__c);
 
         System.assertNotEquals(null,rdB);
         System.assertEquals(testDIResultB.Contact1Imported__c, rdB.npe03__Contact__c);
         System.assertEquals(200, rdB.npe03__Amount__c);
-        System.assertEquals(null,rdB.CommitmentId__c);
         System.assertEquals(testDIResultB.HouseholdAccountImported__c,rdB.npe03__Organization__c);
         System.assertEquals(testDIResultB.DonationCampaignImported__c,rdB.npe03__Recurring_Donation_Campaign__c);
         System.assertEquals('Active',rdB.Status__c);
@@ -358,7 +344,6 @@ private class BDI_RecurringDonations_TEST {
         System.assertNotEquals(null,rdC);
         System.assertEquals(null, rdC.npe03__Contact__c);
         System.assertEquals(300, rdC.npe03__Amount__c);
-        System.assertEquals(null,rdC.CommitmentId__c);
         System.assertEquals(testDIResultC.Account1Imported__c,rdC.npe03__Organization__c);
         System.assertEquals('Active',rdC.Status__c);
         System.assertEquals('Monthly',rdC.npe03__Installment_Period__c);
@@ -480,7 +465,6 @@ private class BDI_RecurringDonations_TEST {
                                                         InstallmentFrequency__c,
                                                         npe03__Installment_Period__c,
                                                         RecurringType__c,
-                                                        CommitmentId__c,
                                                         ClosedReason__c,
                                                         StartDate__c,
                                                         EndDate__c,

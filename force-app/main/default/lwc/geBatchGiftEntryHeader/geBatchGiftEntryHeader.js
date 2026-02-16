@@ -20,16 +20,8 @@ export default class GeBatchGiftEntryHeader extends LightningElement {
         return this.giftBatchState.hasValuesGreaterThanZero;
     }
 
-    get hasFailedPayments() {
-        return this.giftBatchState.failedPaymentsCount > 0;
-    }
-
     get processBatchButtonName() {
-        let buttonName = this.LABELS.bgeProcessBatch;
-        if (this.giftBatchState.authorizedPaymentsCount) {
-            buttonName = this.LABELS.bgeProcessBatchAndPayments;
-        }
-        return buttonName;
+        return this.LABELS.bgeProcessBatch;
     }
 
     handleClick(event) {
@@ -66,6 +58,5 @@ export default class GeBatchGiftEntryHeader extends LightningElement {
     @api isPermissionError;
     @api batchId;
     @api batchTotals = {};
-    @api isElevateCustomer;
     @api isBatchProcessing;
 }

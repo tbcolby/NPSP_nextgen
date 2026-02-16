@@ -1,16 +1,6 @@
 import { LightningElement, api, track, wire } from "lwc";
-import { registerListener } from "c/pubsubNoPageRef";
 import { Rd2Service, ACTIONS } from "c/rd2Service";
-import {
-    isNull,
-    showToast,
-    constructErrorMessage,
-    format,
-    extractFieldInfo,
-    buildFieldDescribes,
-    isEmpty,
-} from "c/utilCommon";
-import { HTTP_CODES } from "c/geConstants";
+import { isNull, showToast, constructErrorMessage, extractFieldInfo, buildFieldDescribes } from "c/utilCommon";
 
 import { getObjectInfo } from "lightning/uiObjectInfoApi";
 import { getRecord, getFieldValue, getRecordNotifyChange } from "lightning/uiRecordApi";
@@ -44,13 +34,10 @@ import insertSuccessMessage from "@salesforce/label/c.RD2_EntryFormInsertSuccess
 import updateSuccessMessage from "@salesforce/label/c.RD2_EntryFormUpdateSuccessMessage";
 import flsErrorDetail from "@salesforce/label/c.RD2_EntryFormMissingPermissions";
 import flsErrorHeader from "@salesforce/label/c.geErrorFLSHeader";
-import elevateWidgetLabel from "@salesforce/label/c.commonPaymentServices";
 import spinnerAltText from "@salesforce/label/c.geAssistiveSpinner";
 import loadingMessage from "@salesforce/label/c.labelMessageLoading";
 import waitMessage from "@salesforce/label/c.commonWaitMessage";
 import savingRDMessage from "@salesforce/label/c.RD2_EntryFormSaveRecurringDonationMessage";
-import savingCommitmentMessage from "@salesforce/label/c.RD2_EntryFormSaveCommitmentMessage";
-import commitmentFailedMessage from "@salesforce/label/c.RD2_EntryFormSaveCommitmentFailedMessage";
 import contactAdminMessage from "@salesforce/label/c.commonContactSystemAdminMessage";
 import unknownError from "@salesforce/label/c.commonUnknownError";
 import paymentMethodLabel from "@salesforce/label/c.RD2_Payment_Method";
@@ -62,20 +49,12 @@ import ACHPaymentMethodLabel from "@salesforce/label/c.RD2_ACH_Payment_Method_La
 import updatePaymentMethod from "@salesforce/label/c.updatePaymentMethod";
 import changeAmountOrFrequency from "@salesforce/label/c.changeAmountOrFrequency";
 
-import handleCommitment from "@salesforce/apex/RD2_EntryFormController.handleCommitment";
-import logError from "@salesforce/apex/RD2_EntryFormController.logError";
-
 import MAILING_COUNTRY_FIELD from "@salesforce/schema/Contact.MailingCountry";
 import CONTACT_FIRST_NAME from "@salesforce/schema/Contact.FirstName";
 import CONTACT_LAST_NAME from "@salesforce/schema/Contact.LastName";
 import ACCOUNT_NAME from "@salesforce/schema/Account.Name";
 import ACCOUNT_PRIMARY_CONTACT_LAST_NAME from "@salesforce/schema/Account.npe01__One2OneContact__r.LastName";
 
-/***
- * @description Event name fired when the Elevate credit card widget
- * is displayed or hidden on the RD2 entry form
- */
-const ELEVATE_WIDGET_EVENT_NAME = "rd2ElevateCreditCardForm";
 const CREDIT_CARD = "Credit Card";
 const ACH = "ACH";
 
@@ -98,13 +77,10 @@ export default class rd2EntryForm extends LightningElement {
         currencyFieldLabel,
         flsErrorHeader,
         flsErrorDetail,
-        elevateWidgetLabel,
         spinnerAltText,
         loadingMessage,
         waitMessage,
         savingRDMessage,
-        savingCommitmentMessage,
-        commitmentFailedMessage,
         contactAdminMessage,
         unknownError,
     });
@@ -113,12 +89,10 @@ export default class rd2EntryForm extends LightningElement {
     @api recordId;
     @api isPaymentModal = false;
     @api isAmountFrequencyModal = false;
-    @api isElevateDonation = false;
     @api isInitiallyMonthlyDonation = false;
     @api isExperienceSite = false;
     @api mappedStatus;
     style = document.createElement("style");
-    cssExperienceElevate;
     cssHideExperienceSite;
     cssHideOnlyPaymentModal;
     cssHideOnlyAmountFrequencyModal;
@@ -135,10 +109,6 @@ export default class rd2EntryForm extends LightningElement {
     isRecordReady = false;
     isSettingReady = false;
     isSaveButtonDisabled = true;
-
-    isElevateWidgetEnabled = false;
-    isElevateEditWidgetEnabled = false;
-    hasUserDisabledElevateWidget = false;
 
     rd2Service = new Rd2Service();
     @track rd2State = this.rd2Service.init();
@@ -274,8 +244,6 @@ export default class rd2EntryForm extends LightningElement {
         this.isSettingReady = true;
         this.isLoading = false;
 
-        this.evaluateElevateEditWidget();
-
         if (!this.rd2State.hasRequiredPermissions) {
             this.handleError({
                 header: this.customLabels.flsErrorHeader,
@@ -283,7 +251,6 @@ export default class rd2EntryForm extends LightningElement {
             });
         }
 
-        registerListener(ELEVATE_WIDGET_EVENT_NAME, this.handleElevateWidgetDisplayState, this);
         this.applyExperienceSiteChanges();
     }
 
@@ -301,7 +268,6 @@ export default class rd2EntryForm extends LightningElement {
             this.cssHideOnlyAmountFrequencyModal = this.isAmountFrequencyModal ? "slds-hide" : "";
             if (this.isAmountFrequencyModal) {
                 this.rd2State.periodType = "Advanced";
-                this.cssExperienceElevate = "slds-hide";
                 this.cssCurrencyExperienceSite = "experienceCurrency";
             }
             if (this.isPaymentModal && this.mappedStatus === "Lapsed") {
@@ -316,22 +282,6 @@ export default class rd2EntryForm extends LightningElement {
 
     perform(action) {
         this.rd2State = this.rd2Service.dispatch(this.rd2State, action);
-    }
-
-    /**
-     * @description Set variable that informs the RD form when the
-     *  credit card widget is displayed or hidden by a user
-     * @param event
-     */
-    handleElevateWidgetDisplayState(event) {
-        if (this.shouldResetPaymentMethodOnStateChange(event)) {
-            this.resetPaymentMethod();
-        }
-        this.hasUserDisabledElevateWidget = event.isDisabled;
-    }
-
-    shouldResetPaymentMethodOnStateChange(event) {
-        return event.isDisabled && this.isEdit && this.isPaymentMethodChanged() && this.isCommitmentEdit;
     }
 
     /***
@@ -376,18 +326,13 @@ export default class rd2EntryForm extends LightningElement {
         if (response.data) {
             this.record = response.data;
             this.isRecordReady = true;
-
-            this.evaluateElevateEditWidget();
-            this.evaluateElevateWidget();
         } else if (response.error) {
             this.handleError(response.error);
         }
     }
 
     /**
-     * @description Handles contact change only when the org is connected to Elevate
-     * and a new Recurring Donation is being created.
-     * Otherwise, contact data should not be retrieved from database.
+     * @description Handles contact change when a new Recurring Donation is being created.
      */
     handleContactChange(event) {
         this._contactId = event.detail;
@@ -464,7 +409,6 @@ export default class rd2EntryForm extends LightningElement {
                 type: ACTIONS.SET_CONTACT_DETAILS,
                 payload: { firstName, lastName, mailingCountry },
             });
-            this.handleElevateWidgetDisplay();
         } else if (error) {
             this.handleError(error);
         }
@@ -492,14 +436,10 @@ export default class rd2EntryForm extends LightningElement {
      * @param event Contains new payment method value
      */
     handlePaymentChange(event) {
-        //reset the widget and the form related to the payment method
         this.perform({
             type: ACTIONS.SET_PAYMENT_METHOD,
             payload: event.detail.value,
         });
-        this.hasUserDisabledElevateWidget = this.isCommitmentEdit;
-        this.isElevateEditWidgetEnabled = false;
-        this.evaluateElevateWidget();
     }
 
     handleStatusChange(event) {
@@ -507,7 +447,6 @@ export default class rd2EntryForm extends LightningElement {
             type: ACTIONS.SET_STATUS,
             payload: event.detail.value,
         });
-        this.evaluateElevateEditWidget();
     }
 
     handleStatusReasonChange(event) {
@@ -527,7 +466,6 @@ export default class rd2EntryForm extends LightningElement {
             type: ACTIONS.SET_RECURRING_TYPE,
             payload: event.detail,
         });
-        this.handleElevateWidgetDisplay();
     }
 
     handleRecurringPeriodChange(event) {
@@ -535,11 +473,9 @@ export default class rd2EntryForm extends LightningElement {
             type: ACTIONS.SET_RECURRING_PERIOD,
             payload: event.detail,
         });
-        this.handleElevateWidgetDisplay();
     }
 
     handleRecurringPeriodTypeChange(event) {
-        this.handleElevateWidgetDisplay();
         this.perform({
             type: ACTIONS.SET_PERIOD_TYPE,
             payload: event.detail,
@@ -583,16 +519,6 @@ export default class rd2EntryForm extends LightningElement {
             type: ACTIONS.SET_CURRENCY,
             payload: event.target.value,
         });
-        this.handleElevateWidgetDisplay();
-    }
-
-    /***
-     * @description Checks if the credit card widget should be displayed.
-     */
-    handleElevateWidgetDisplay() {
-        if (this.rd2State.isElevateCustomer) {
-            this.evaluateElevateWidget();
-        }
     }
 
     handleAmountChange(event) {
@@ -602,47 +528,12 @@ export default class rd2EntryForm extends LightningElement {
         });
     }
 
-    get isCommitmentEdit() {
-        return !!this.rd2State.commitmentId;
-    }
-
     get showChangeTypeField() {
         return !!this.rd2State.recordId && this.rd2State.isChangeLogEnabled;
     }
 
     get hasCustomFields() {
         return Object.keys(this.rd2State.customFieldSets).length > 0;
-    }
-
-    /***
-     * @description Checks if the Elevate Widget should be displayed on Edit
-     */
-    evaluateElevateEditWidget() {
-        if (this.rd2State.isElevateCustomer && this.rd2State.recordId) {
-            // Since the widget requires interaction to Edit, this should start as true
-            this.hasUserDisabledElevateWidget = true;
-
-            this.isElevateEditWidgetEnabled = this.rd2Service.isValidForElevate(this.rd2State);
-
-            this.isElevateWidgetEnabled = this.isElevateEditWidgetEnabled;
-        }
-    }
-
-    /***
-     * @description Checks if the Elevate widget should be displayed.
-     * The Elevate widget is applicable to new RDs only for now.
-     */
-    evaluateElevateWidget() {
-        const isStateValidForElevate = this.rd2Service.isValidForElevate(this.rd2State);
-        this.isElevateWidgetEnabled = this.isElevateEditWidgetEnabled || isStateValidForElevate;
-    }
-
-    /***
-     * @description Returns true if the Elevate widget is enabled and
-     * user did not click on the link to hide it
-     */
-    isElevateWidgetDisplayed() {
-        return this.isElevateWidgetEnabled === true && this.hasUserDisabledElevateWidget !== true;
     }
 
     /***
@@ -657,105 +548,11 @@ export default class rd2EntryForm extends LightningElement {
         this.isSaveButtonDisabled = true;
 
         if (this.isFormValid()) {
-            const allFields = this.getAllFields();
-            if (this.shouldSendToElevate(allFields)) {
-                this.processCommitmentSubmit(allFields);
-            } else {
-                this.processSubmit(allFields);
-            }
+            this.processSubmit();
         } else {
             this.isLoading = false;
             this.isSaveButtonDisabled = false;
         }
-    }
-
-    /***
-     * @description Overrides the standard submit when an
-     * Elevate recurring commitment record is to be created or updated.
-     */
-    async processCommitmentSubmit(allFields) {
-        try {
-            if (this.isElevateWidgetDisplayed()) {
-                this.loadingText =
-                    this.isExperienceSite && String.valueOf(this.rd2State.paymentMethod) === String.valueOf(this.ACH)
-                        ? ""
-                        : this.rd2Service.getPaymentProcessingMessage(this.rd2State.paymentMethod);
-                const elevateWidget = this.template.querySelector('[data-id="elevateWidget"]');
-                const paymentToken = await elevateWidget.returnToken().payload;
-                this.perform({
-                    type: ACTIONS.SET_PAYMENT_TOKEN,
-                    payload: paymentToken,
-                });
-            }
-        } catch (error) {
-            this.enableSaveButton();
-            this.isLoading = false;
-            return;
-        }
-
-        if (!this.isExperienceSite) {
-            this.loadingText = this.customLabels.savingCommitmentMessage;
-        }
-
-        try {
-            const rd = this.rd2Service
-                .constructRecurringDonation(this.recordId, this.rd2State.commitmentId)
-                .withInputFieldValues(allFields);
-
-            handleCommitment({
-                jsonRecord: rd.asJSON(),
-                paymentMethodToken: this.rd2State.paymentToken,
-            })
-                .then((jsonResponse) => {
-                    const response = isNull(jsonResponse) ? null : JSON.parse(jsonResponse);
-                    const isSuccess =
-                        isNull(response) ||
-                        response.statusCode === HTTP_CODES.Created ||
-                        response.statusCode === HTTP_CODES.OK;
-                    const responseBody = JSON.parse(response.body);
-
-                    if (isSuccess) {
-                        this.perform({
-                            type: ACTIONS.COMMITMENT_RESPONSE,
-                            payload: responseBody,
-                        });
-                        rd.withCommitmentResponseBody(responseBody);
-                        this.processSubmit(rd.record);
-                    } else {
-                        const message = this.rd2Service.getCommitmentError(response);
-                        this.handleSaveError(message);
-                    }
-                })
-                .catch((error) => {
-                    this.handleSaveError(error);
-                });
-        } catch (error) {
-            this.handleSaveError(error);
-        }
-    }
-
-    /***
-     * @description Determines if new or existing Recurring Donation update should send to Elevate
-     */
-    shouldSendToElevate() {
-        if (!this.rd2State.isElevateCustomer) {
-            return false;
-        }
-
-        return (
-            this.isElevateWidgetDisplayed() ||
-            (this.rd2Service.hasElevateFieldsChange(this.rd2State) &&
-                !isEmpty(this.getCommitmentId()) &&
-                !this.rd2Service.isOriginalStatusClosed(this.rd2State))
-        );
-    }
-
-    /***
-     * @description Returns commitment Id that can be retrieved from database, or
-     * set by the user in the custom fields section
-     */
-    getCommitmentId() {
-        return !isEmpty(this.rd2State.commitmentId) ? this.rd2State.commitmentId : null;
     }
 
     /***
@@ -801,15 +598,6 @@ export default class rd2EntryForm extends LightningElement {
     handleSaveError(error) {
         try {
             const constructedError = constructErrorMessage(error);
-            // Transform the error to a user-friendly error and log it when
-            // the RD insert failed but the Elevate commitment has been created
-            if (isNull(this.rd2State.recordId) && !isEmpty(this.getCommitmentId())) {
-                constructedError.detail = format(this.customLabels.commitmentFailedMessage, [
-                    this.getCommitmentId(),
-                    this.error.detail,
-                ]);
-                logError({ recordId: this.rd2State.recordId, errorMessage: this.error.detail }).catch(() => {});
-            }
             this.setError(constructedError);
         } catch (ex) {
             console.error("Unhandled save error", ex);
@@ -902,7 +690,6 @@ export default class rd2EntryForm extends LightningElement {
     resetAllValues() {
         this.isLoading = false;
         this.isSaveButtonDisabled = false;
-        this.isElevateWidgetEnabled = false;
         this.clearError();
 
         const inputFields = this.template.querySelectorAll("lightning-input-field");
@@ -925,15 +712,6 @@ export default class rd2EntryForm extends LightningElement {
         if (!isNull(this.customFieldsComponent)) {
             this.customFieldsComponent.resetValues();
         }
-    }
-
-    resetPaymentMethod() {
-        this.perform({
-            type: ACTIONS.SET_PAYMENT_METHOD,
-            payload: null,
-        });
-        const field = this.template.querySelector('lightning-input-field[data-id="paymentMethod"]');
-        field.reset();
     }
 
     get errorContainer() {
@@ -972,22 +750,10 @@ export default class rd2EntryForm extends LightningElement {
     }
 
     /**
-     * @description Returns the Credit Card Child Component instance
-     * @returns rd2ElevateCreditCardForm component dom
-     */
-    get creditCardComponent() {
-        return this.template.querySelector('[data-id="elevateWidget"]');
-    }
-
-    /**
      * @description Returns the save button element
      */
     get saveButton() {
         return this.template.querySelector("[data-id='submitButton']");
-    }
-
-    get originalPaymentMethod() {
-        return this.rd2State.initialViewState.paymentMethod;
     }
 
     get isEdit() {
@@ -1009,10 +775,6 @@ export default class rd2EntryForm extends LightningElement {
         };
 
         return { ...scheduleFields, ...donorFields, ...customFields, ...paymentMethod, ...this.returnValues() };
-    }
-
-    isPaymentMethodChanged() {
-        return this.rd2Service.isPaymentMethodChanged(this.rd2State);
     }
 
     /***

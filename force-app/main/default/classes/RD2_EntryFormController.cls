@@ -36,19 +36,6 @@
 */
 public with sharing class RD2_EntryFormController {
 
-    /**
-    * @description Handles commitment request creation, response parsing and RD Commitment Id update
-    */
-    private static RD2_CommitmentService commitmentService {
-        get {
-            if (commitmentService == null) {
-                commitmentService = new RD2_CommitmentService();
-            }
-            return commitmentService;
-        }
-        set;
-    }
-
     @TestVisible
     private static RD2_QueryService selector {
         get {
@@ -110,7 +97,6 @@ public with sharing class RD2_EntryFormController {
         view.InstallmentPeriodPermissions = getFieldPermissionsMap('npe03__Installment_Period__c');
         view.InstallmentFrequencyPermissions = getFieldPermissionsMap(String.valueOf(npe03__Recurring_Donation__c.InstallmentFrequency__c));
         view.customFieldSets = getCustomFieldSectionFields();
-        view.isElevateCustomer = RD2_ElevateIntegrationService.isIntegrationEnabled();
         view.isChangeLogEnabled = RD2_ChangeLogService.isChangeLogEnabled;
         view.periodToYearlyFrequencyMap = RD2_Constants.PERIOD_TO_YEARLY_FREQUENCY;
         view.closedStatusValues = new List<String>(RD2_StatusMapper.getInstance().getClosedStatusValues());
@@ -266,72 +252,6 @@ public with sharing class RD2_EntryFormController {
         } else {
             return new SaveResultView(sr);
         }
-    }
-
-    /***
-    * @description Constructs a Recurring Donation record based on the entry form fields, and
-    * submits the create or edit commitment request to the Elevate Payments API.
-    * @param jsonRecord Recurring Donation fields as entered by the user before the record is saved
-    * @param paymentMethodToken Payment Method Token
-    * @return String Commitment API response
-    */
-    @AuraEnabled
-    public static String handleCommitment(String jsonRecord, String paymentMethodToken) {
-        try {
-            npe03__Recurring_Donation__c rd = (npe03__Recurring_Donation__c) JSON.deserialize(
-                jsonRecord, npe03__Recurring_Donation__c.class
-            );
-
-            npe03__Recurring_Donation__c oldRd;
-            if (rd.Id != null) {
-                 oldRd = selector.getRecurringDonationForUI(rd.Id);
-            }
-
-            commitmentService.adjustAndValidateRD(rd, oldRd);
-            UTIL_Http.Response response = commitmentService.handleCommitment(rd, oldRd, paymentMethodToken);
-
-            return JSON.serialize(response);
-
-        } catch (Exception ex) {
-            UTIL_AuraEnabledCommon.throwAuraHandledException(ex.getMessage());
-        }
-
-        return null;
-    }
-
-    /***
-    * @description Constructs a Recurring Donation record based on the json record, and
-    * submits the update payment commitment request to the Elevate Payments API.
-    * @param jsonRecord Recurring Donation fields as entered by the user before the record is saved
-    * @param paymentMethodToken Payment Method Token
-    * @return String Commitment API response
-    */
-    @AuraEnabled
-    public static String handleUpdatePaymentCommitment(String jsonRecord, String paymentMethodToken) {
-        try {
-            npe03__Recurring_Donation__c rd =  (npe03__Recurring_Donation__c) JSON.deserialize(
-                jsonRecord, npe03__Recurring_Donation__c.class
-            );
-
-            UTIL_Http.Response response = commitmentService.handleCommitment(rd, null, paymentMethodToken);
-
-            return JSON.serialize(response);
-
-        } catch (Exception ex) {
-            UTIL_AuraEnabledCommon.throwAuraHandledException(ex.getMessage());
-        }
-
-        return null;
-    }
-
-    /***
-    * @description Logs an error when a Recurring Donation cannot be created/updated
-    * @param recordId A Recurring Donation, or a donor (Contact/Account) Id
-    * @param errorMessage An error message
-    */
-    @AuraEnabled
-    public static void logError(Id recordId, String errorMessage) {
-        commitmentService.logError(recordId, errorMessage);
     }
 
 

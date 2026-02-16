@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import { LightningElement, api } from "lwc";
+import { LightningElement, api, track } from "lwc";
 import { fireEvent } from "c/pubsubNoPageRef";
 import geLabelService from "c/geLabelService";
 

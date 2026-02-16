@@ -6,13 +6,9 @@ import * as utilTemplateBuilder from "c/utilTemplateBuilder";
 import retrieveDefaultSGERenderWrapper from "@salesforce/apex/GE_GiftEntryController.retrieveDefaultSGERenderWrapper";
 import getFormRenderWrapper from "@salesforce/apex/GE_GiftEntryController.getFormRenderWrapper";
 import getAllocationsSettings from "@salesforce/apex/GE_GiftEntryController.getAllocationsSettings";
-import checkForElevateCustomer from "@salesforce/apex/GE_GiftEntryController.isElevateCustomer";
-import upsertDataImport from "@salesforce/apex/GE_GiftEntryController.upsertDataImport";
-import sendPurchaseRequest from "@salesforce/apex/GE_GiftEntryController.sendPurchaseRequest";
 import addGiftTo from "@salesforce/apex/GE_GiftEntryController.addGiftTo";
 import getDataImportModel from "@salesforce/apex/BGE_DataImportBatchEntry_CTRL.getDataImportModel";
 import getGiftBatchView from "@salesforce/apex/GE_GiftEntryController.getGiftBatchView";
-import isElevateCustomer from "@salesforce/apex/GE_GiftEntryController.isElevateCustomer";
 import processGiftsFor from "@salesforce/apex/GE_GiftEntryController.processGiftsFor";
 import isGiftBatchAccessible from "@salesforce/apex/GE_GiftEntryController.isGiftBatchAccessible";
 import OPP_PAYMENT_OBJECT from "@salesforce/schema/npe01__OppPayment__c";
@@ -20,11 +16,9 @@ import { getRecord } from "lightning/uiRecordApi";
 import { getObjectInfo, getPicklistValues } from "lightning/uiObjectInfoApi";
 import { mockCheckInputValidity, mockCheckInputValidityImpl } from "lightning/input";
 import { mockCheckComboboxValidity } from "lightning/combobox";
-import { mockGetIframeReply } from "c/psElevateTokenHandler";
 
 const pubSub = require("c/pubsubNoPageRef");
 import gift from "c/geGift";
-import GeGatewaySettings from "c/geGatewaySettings";
 
 import DATA_IMPORT_BATCH_OBJECT from "@salesforce/schema/DataImportBatch__c";
 import OPPORTUNITY_OBJECT from "@salesforce/schema/Opportunity";
@@ -35,7 +29,6 @@ const PROCESSING_BATCH_MESSAGE = "c.geProcessingBatch";
 
 const mockWrapperWithNoNames = require("../../../../../../tests/__mocks__/apex/data/retrieveDefaultSGERenderWrapper.json");
 const allocationsSettingsNoDefaultGAU = require("../../../../../../tests/__mocks__/apex/data/allocationsSettingsNoDefaultGAU.json");
-const dataImportObjectInfo = require("../../../../../../tests/__mocks__/apex/data/dataImportObjectDescribeInfo.json");
 const dataImportBatchRecord = require("./data/getDataImportBatchRecord.json");
 const selectedContact = require("./data/getSelectedContact.json");
 const selectedAccount = require("./data/getSelectedAccount.json");
@@ -57,7 +50,6 @@ const setupForBatchMode = (giftBatchView) => {
     getAllocationsSettings.mockResolvedValue(allocationsSettingsNoDefaultGAU);
     getDataImportModel.mockResolvedValue('{"dummyKey":"dummyValue"}');
     getGiftBatchView.mockResolvedValue(giftBatchView);
-    isElevateCustomer.mockResolvedValue(true);
     isGiftBatchAccessible.mockResolvedValue(true);
 
     const formApp = createGeGiftEntryFormApp();
@@ -120,17 +112,6 @@ jest.mock(
     { virtual: true }
 );
 
-jest.mock(
-    "@salesforce/label/c.geErrorUncertainCardChargePart1",
-    () => {
-        return {
-            default:
-                "A system error occurred for the {0} donation by {1}. Your admin should review transactions in {2} and determine if the payment was processed.",
-        };
-    },
-    { virtual: true }
-);
-
 describe("c-ge-gift-entry-form-app", () => {
     afterEach(() => {
         clearDOM();
@@ -138,8 +119,17 @@ describe("c-ge-gift-entry-form-app", () => {
 
     describe("rendering behavior", () => {
         it("should render page blocker if the gift batch is inaccessible to the current user", async () => {
-            const formApp = setupForBatchMode({ gifts: [], totals: { TOTAL: 1, IMPORTED: 1 } });
+            retrieveDefaultSGERenderWrapper.mockResolvedValue(mockWrapperWithNoNames);
+            getFormRenderWrapper.mockResolvedValue(mockWrapperWithNoNames);
+            getAllocationsSettings.mockResolvedValue(allocationsSettingsNoDefaultGAU);
+            getDataImportModel.mockResolvedValue('{"dummyKey":"dummyValue"}');
+            getGiftBatchView.mockResolvedValue({ gifts: [], totals: { TOTAL: 1, IMPORTED: 1 } });
             isGiftBatchAccessible.mockResolvedValue(false);
+
+            const formApp = createGeGiftEntryFormApp();
+            formApp.sObjectName = DATA_IMPORT_BATCH_OBJECT.objectApiName;
+            formApp.recordId = "DUMMY_RECORD_ID";
+            document.body.appendChild(formApp);
 
             await flushPromises();
 
@@ -199,210 +189,9 @@ describe("c-ge-gift-entry-form-app", () => {
             const batchTable = shadowQuerySelector(formApp, "c-ge-batch-gift-entry-table");
             expect(batchTable).toBeNull();
         });
-
-        it("should render warning modal when batch has expired payment authorizations", async () => {
-            retrieveDefaultSGERenderWrapper.mockResolvedValue(mockWrapperWithNoNames);
-            getAllocationsSettings.mockResolvedValue(allocationsSettingsNoDefaultGAU);
-            getDataImportModel.mockResolvedValue('{"dummyKey":"dummyValue"}');
-            getGiftBatchView.mockResolvedValue({ gifts: [], totals: { TOTAL: 1, EXPIRED_PAYMENT: 1, FAILED: 1 } });
-            checkForElevateCustomer.mockResolvedValue(true);
-
-            const formApp = createGeGiftEntryFormApp();
-            formApp.sObjectName = DATA_IMPORT_BATCH_OBJECT.objectApiName;
-            formApp.recordId = "DUMMY_RECORD_ID";
-
-            document.body.appendChild(formApp);
-
-            const dispatchEventSpy = jest.spyOn(formApp, "dispatchEvent");
-            await flushPromises();
-
-            expect(dispatchEventSpy).toHaveBeenCalled();
-
-            const spiedEventComponentProperties = dispatchEventSpy.mock.calls[0][0].detail.componentProperties;
-            expect(spiedEventComponentProperties.variant).toEqual("warning");
-            expect(spiedEventComponentProperties.title).toEqual("c.gePaymentAuthExpiredHeader");
-            expect(spiedEventComponentProperties.message).toEqual("c.gePaymentAuthExpiredWarningText");
-            expect(spiedEventComponentProperties.buttons.length).toEqual(1);
-
-            const spiedEventModalProperties = dispatchEventSpy.mock.calls[0][0].detail.modalProperties;
-            expect(spiedEventModalProperties.componentName).toEqual("geModalPrompt");
-            expect(spiedEventModalProperties.showCloseButton).toEqual(true);
-        });
     });
 
     describe("event dispatch and handling behavior", () => {
-        it("should disable update button when widget is read-only with an editable recurring gift", async () => {
-            const formApp = setupForBatchMode({
-                gifts: [
-                    {
-                        fields: {
-                            Id: "DUMMY_RECORD_ID",
-                            Recurring_Donation_Elevate_Recurring_ID__c: "DUMMY_RECURRING_ID",
-                        },
-                    },
-                ],
-                totals: { TOTAL: 1 },
-            });
-            await flushPromises();
-
-            const batchTable = shadowQuerySelector(formApp, "c-ge-batch-gift-entry-table");
-            const loadDataEvent = new CustomEvent("loaddata", {
-                detail: {
-                    Id: "DUMMY_RECORD_ID",
-                },
-            });
-            batchTable.dispatchEvent(loadDataEvent);
-            await flushPromises();
-
-            const geFormRenderer = shadowQuerySelector(formApp, "c-ge-form-renderer");
-            const warningMessage = shadowQuerySelector(geFormRenderer, '[data-id="elevateTrnxWarning"]');
-            expect(warningMessage).toBeTruthy();
-
-            pubSub.fireEvent({}, "widgetStateChange", { state: "readOnly" });
-            await flushPromises();
-
-            const saveButton = shadowQuerySelector(geFormRenderer, '[data-id="bgeSaveButton"]');
-            expect(saveButton.disabled).toBe(true);
-        });
-
-        it("should disable update button when widget is read-only with an editable status for one-time gift", async () => {
-            const formApp = setupForBatchMode({
-                gifts: [{ fields: { Id: "DUMMY_RECORD_ID", Payment_Status__c: "AUTHORIZED" } }],
-                totals: { TOTAL: 1 },
-            });
-            await flushPromises();
-
-            const batchTable = shadowQuerySelector(formApp, "c-ge-batch-gift-entry-table");
-            const loadDataEvent = new CustomEvent("loaddata", {
-                detail: {
-                    Id: "DUMMY_RECORD_ID",
-                },
-            });
-            batchTable.dispatchEvent(loadDataEvent);
-            await flushPromises();
-
-            const geFormRenderer = shadowQuerySelector(formApp, "c-ge-form-renderer");
-            const warningMessage = shadowQuerySelector(geFormRenderer, '[data-id="elevateTrnxWarning"]');
-            expect(warningMessage).toBeTruthy();
-
-            pubSub.fireEvent({}, "widgetStateChange", { state: "readOnly" });
-            await flushPromises();
-
-            const saveButton = shadowQuerySelector(geFormRenderer, '[data-id="bgeSaveButton"]');
-            expect(saveButton.disabled).toBe(true);
-        });
-
-        it("should not display widget warning captured gift is loadeed", async () => {
-            const formApp = setupForBatchMode({
-                gifts: [{ fields: { Id: "DUMMY_RECORD_ID", Payment_Status__c: "CAPTURED" } }],
-                totals: { TOTAL: 1 },
-            });
-            await flushPromises();
-
-            const batchTable = shadowQuerySelector(formApp, "c-ge-batch-gift-entry-table");
-            const loadDataEvent = new CustomEvent("loaddata", {
-                detail: {
-                    Id: "DUMMY_RECORD_ID",
-                },
-            });
-            batchTable.dispatchEvent(loadDataEvent);
-            await flushPromises();
-
-            const geFormRenderer = shadowQuerySelector(formApp, "c-ge-form-renderer");
-            const warningMessage = shadowQuerySelectorAll(geFormRenderer, '[data-id="elevateTrnxWarning"]');
-            expect(warningMessage).toHaveLength(0);
-        });
-
-        it("should display widget warning when one-time gift read-only status is loadeed", async () => {
-            const formApp = setupForBatchMode({
-                gifts: [{ fields: { Id: "DUMMY_RECORD_ID", Payment_Status__c: "PENDING" } }],
-                totals: { TOTAL: 1 },
-            });
-            await flushPromises();
-
-            const batchTable = shadowQuerySelector(formApp, "c-ge-batch-gift-entry-table");
-            const loadDataEvent = new CustomEvent("loaddata", {
-                detail: {
-                    Id: "DUMMY_RECORD_ID",
-                },
-            });
-            batchTable.dispatchEvent(loadDataEvent);
-            await flushPromises();
-
-            const geFormRenderer = shadowQuerySelector(formApp, "c-ge-form-renderer");
-            const warningMessage = shadowQuerySelector(geFormRenderer, '[data-id="elevateTrnxWarning"]');
-            expect(warningMessage).toBeTruthy();
-        });
-        it("should display widget warning when one-time gift read-only status is loaded", async () => {
-            const formApp = setupForBatchMode({
-                gifts: [{ fields: { Id: "DUMMY_RECORD_ID", Payment_Status__c: "AUTHORIZED" } }],
-                totals: { TOTAL: 1 },
-            });
-            await flushPromises();
-
-            const batchTable = shadowQuerySelector(formApp, "c-ge-batch-gift-entry-table");
-            const loadDataEvent = new CustomEvent("loaddata", {
-                detail: {
-                    Id: "DUMMY_RECORD_ID",
-                },
-            });
-            batchTable.dispatchEvent(loadDataEvent);
-            await flushPromises();
-
-            const geFormRenderer = shadowQuerySelector(formApp, "c-ge-form-renderer");
-            const warningMessage = shadowQuerySelectorAll(geFormRenderer, '[data-id="elevateTrnxWarning"]');
-            expect(warningMessage).toHaveLength(1);
-        });
-
-        it("should display widget warning when recurring gift is loadeed", async () => {
-            const formApp = setupForBatchMode({
-                gifts: [
-                    {
-                        fields: {
-                            Id: "DUMMY_RECORD_ID",
-                            Recurring_Donation_Elevate_Recurring_ID__c: "TEST_RECURRING_ID",
-                        },
-                    },
-                ],
-                totals: { TOTAL: 1 },
-            });
-            await flushPromises();
-
-            const batchTable = shadowQuerySelector(formApp, "c-ge-batch-gift-entry-table");
-            const loadDataEvent = new CustomEvent("loaddata", {
-                detail: {
-                    Id: "DUMMY_RECORD_ID",
-                },
-            });
-            batchTable.dispatchEvent(loadDataEvent);
-            await flushPromises();
-
-            const geFormRenderer = shadowQuerySelector(formApp, "c-ge-form-renderer");
-            const warningMessage = shadowQuerySelectorAll(geFormRenderer, '[data-id="elevateTrnxWarning"]');
-            expect(warningMessage).toHaveLength(1);
-        });
-
-        it("should not display widget warning when imported gift is loaded", async () => {
-            const formApp = setupForBatchMode({
-                gifts: [{ fields: { Id: "DUMMY_RECORD_ID", Status__c: "Imported" } }],
-                totals: { TOTAL: 1 },
-            });
-            await flushPromises();
-
-            const batchTable = shadowQuerySelector(formApp, "c-ge-batch-gift-entry-table");
-            const loadDataEvent = new CustomEvent("loaddata", {
-                detail: {
-                    Id: "DUMMY_RECORD_ID",
-                },
-            });
-            batchTable.dispatchEvent(loadDataEvent);
-            await flushPromises();
-
-            const geFormRenderer = shadowQuerySelector(formApp, "c-ge-form-renderer");
-            const warningMessage = shadowQuerySelectorAll(geFormRenderer, '[data-id="elevateTrnxWarning"]');
-            expect(warningMessage).toHaveLength(0);
-        });
-
         it("should dispatch edit batch event", async () => {
             const formApp = setupForBatchMode({ gifts: [], totals: { TOTAL: 1 } });
 
@@ -769,7 +558,6 @@ describe("c-ge-gift-entry-form-app", () => {
             getAllocationsSettings.mockResolvedValue(allocationsSettingsNoDefaultGAU);
             getDataImportModel.mockResolvedValue('{"dummyKey":"dummyValue"}');
             getGiftBatchView.mockResolvedValue({ gifts: [], totals: { TOTAL: 1, EXPIRED_PAYMENT: 0, FAILED: 0 } });
-            checkForElevateCustomer.mockResolvedValue(true);
 
             const formApp = createGeGiftEntryFormApp();
             formApp.sObjectName = DATA_IMPORT_BATCH_OBJECT.objectApiName;
@@ -1015,95 +803,6 @@ describe("c-ge-gift-entry-form-app", () => {
             const pElement = pageLevelMessage.querySelector("ul li p");
             expect(pElement.textContent).toBe(
                 "When you select Account1 for Donor Type, you must enter information in Existing Donor Organization Account"
-            );
-        });
-    });
-
-    describe("payments in single mode", () => {
-        it("returns an error message when purchase call times out", async () => {
-            getAllocationsSettings.mockResolvedValue(allocationsSettingsNoDefaultGAU);
-            isElevateCustomer.mockResolvedValue(true);
-            retrieveDefaultSGERenderWrapper.mockResolvedValue(mockWrapperWithNoNames);
-            upsertDataImport.mockImplementation((dataImport) => {
-                return { Id: "fakeDataImportId", ...dataImport };
-            });
-            sendPurchaseRequest.mockResolvedValue(
-                JSON.stringify({
-                    status: "408",
-                    message: "Timed out",
-                })
-            );
-            mockCheckInputValidity.mockImplementation(mockCheckInputValidityImpl);
-            mockCheckComboboxValidity.mockImplementation(mockCheckInputValidityImpl);
-
-            const formApp = createGeGiftEntryFormApp();
-            document.body.appendChild(formApp);
-
-            mockGetIframeReply.mockImplementation((iframe, message, targetOrigin) => {
-                if (message.action === "createToken") {
-                    return { type: "post__npsp", token: "a_dummy_token" };
-                }
-            });
-            await flushPromises();
-
-            window.scrollTo = jest.fn();
-
-            getObjectInfo.emit(dataImportObjectInfo, (config) => {
-                return config.objectApiName?.objectApiName === "DataImport__c";
-            });
-
-            getObjectInfo.emit({ keyPrefix: "a01" }, (config) => {
-                return config.objectApiName?.objectApiName === OPP_PAYMENT_OBJECT.objectApiName;
-            });
-
-            getObjectInfo.emit({ keyPrefix: "006" }, (config) => {
-                return config.objectApiName?.objectApiName === OPPORTUNITY_OBJECT.objectApiName;
-            });
-
-            await flushPromises();
-
-            const geFormRenderer = shadowQuerySelector(formApp, "c-ge-form-renderer");
-            GeGatewaySettings.isValidElevatePaymentMethod = jest.fn(() => true);
-            geFormRenderer.GeGatewaySettings = GeGatewaySettings;
-
-            const [firstSection, secondSection, thirdSection, fourthSection] = shadowQuerySelectorAll(
-                geFormRenderer,
-                "c-ge-form-section"
-            );
-            const [donorType, accountLookup, contactLookup] = shadowQuerySelectorAll(firstSection, "c-ge-form-field");
-            const [donationDate, donationAmount, recordType, opportunityType, campaign, paymentMethod, checkNumber] =
-                shadowQuerySelectorAll(fourthSection, "c-ge-form-field");
-
-            runWithFakeTimer(() => {
-                changeFieldValue(donorType, "Contact1");
-                changeFieldValue(contactLookup, ["003_fake_contact_id"]);
-                changeFieldValue(paymentMethod, "Credit Card");
-                changeFieldValue(donationDate, "2021-06-15");
-                changeFieldValue(donationAmount, 123.45);
-            });
-
-            await flushPromises();
-
-            getRecord.emit(selectedContact, (config) => {
-                return config.recordId === "003_fake_contact_id";
-            });
-
-            await flushPromises();
-
-            const saveButton = shadowQuerySelector(
-                geFormRenderer,
-                'lightning-button[data-qa-locator="button c.commonSave"]'
-            );
-            saveButton.click();
-
-            await flushPromises();
-
-            const illustrationCmp = shadowQuerySelector(geFormRenderer, "c-util-illustration");
-
-            const errorText = illustrationCmp.querySelector("div p.critical-error-text");
-            expect(errorText).toBeTruthy();
-            expect(errorText.textContent).toBe(
-                "A system error occurred for the $123.45 donation by History Tester. Your admin should review transactions in c.commonPaymentServices and determine if the payment was processed."
             );
         });
     });

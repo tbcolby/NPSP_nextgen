@@ -107,8 +107,7 @@ private class DonationSelector_TEST {
                     'npe01__Payment_Amount__c, ' +
                     'npe01__Payment_Date__c, ' +
                     'npe01__Paid__c, ' +
-                    'npe01__Written_Off__c, ' +
-                    String.valueOf(npe01__OppPayment__c.Elevate_Payment_API_Status__c) + ' ' +
+                    'npe01__Written_Off__c ' +
                 'FROM npe01__OppPayment__r ' +
                 'WHERE npe01__Written_Off__c = false ' +
                 'AND npe01__Paid__c = false), ' +

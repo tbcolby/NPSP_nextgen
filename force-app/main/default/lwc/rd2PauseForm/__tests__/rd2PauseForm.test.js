@@ -2,7 +2,6 @@ import { createElement } from "lwc";
 import Rd2PauseForm from "c/rd2PauseForm";
 import { mockGetSelectedRows, getSelectedRowsImpl } from "lightning/datatable";
 import RD2_PausePermissionRequired from "@salesforce/label/c.RD2_PausePermissionRequired";
-import RD2_ElevateNotSupported from "@salesforce/label/c.RD2_ElevateNotSupported";
 
 const mockPauseData = require("./data/getPauseData.json");
 const mockGetInstallments = require("./data/getInstallments.json");

@@ -107,12 +107,6 @@ public with sharing class GiftBatchService {
         }
     }
 
-    public void giftsFailedCaptureFor(Id batchId, Map<String, String> failReasonByElevateBatchId) {
-        GiftBatch giftBatch = new GiftBatch(new GiftBatchId(batchId));
-        giftBatch.failGiftsWithReason(failReasonByElevateBatchId);
-        giftBatch.updateRecords();
-    }
-
     public void updateGiftBatchWith(GiftBatchId giftBatchId, AsyncApexJobId asyncApexJobId) {
         giftBatchServicePrivilegedHelper.updateGiftBatchWith(asyncApexJobId.value(), giftBatchId);
     }

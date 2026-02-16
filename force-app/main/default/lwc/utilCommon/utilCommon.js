@@ -564,8 +564,9 @@ const apiNameFor = (objectOrFieldReference) => {
         return objectOrFieldReference.fieldApiName;
     } else if (objectOrFieldReference.hasOwnProperty("objectApiName")) {
         return objectOrFieldReference.objectApiName;
+    } else {
+        return null;
     }
-    return null;
 };
 
 const isString = (val) => {

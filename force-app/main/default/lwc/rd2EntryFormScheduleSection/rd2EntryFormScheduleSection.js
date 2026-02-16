@@ -35,7 +35,6 @@ export default class rd2EntryFormScheduleSection extends LightningElement {
     cssLastDay;
     firstRendered = true;
     isMonthlyDonation = false;
-    @api isElevateDonation = false;
     @api isInitiallyMonthlyDonation = false;
 
     @track fields = {};
@@ -114,7 +113,7 @@ export default class rd2EntryFormScheduleSection extends LightningElement {
 
         if (this.isExperienceSite && this.firstRendered) {
             if (this.rd2State.dayOfMonth) {
-                this.isMonthlyDonation = !this.isElevateDonation ? true : false;
+                this.isMonthlyDonation = true;
             } else {
                 this.isMonthlyDonation = false;
                 let dd = String(new Date().getDate()).padStart(2, "0");
@@ -295,10 +294,7 @@ export default class rd2EntryFormScheduleSection extends LightningElement {
      */
     toggleLastDayFieldOnExperienceSite(event) {
         if (this.isExperienceSite) {
-            if (
-                (event.target.value === MONTHLY && this.isElevateDonation && this.isInitiallyMonthlyDonation) ||
-                !(event.target.value === MONTHLY)
-            ) {
+            if (!(event.target.value === MONTHLY)) {
                 this.isMonthlyDonation = false;
             } else {
                 this.isMonthlyDonation = true;
@@ -337,8 +333,9 @@ export default class rd2EntryFormScheduleSection extends LightningElement {
             return 6;
         } else if (this.rd2State.recurringPeriod === PERIOD.MONTHLY) {
             return 3;
+        } else {
+            return 4;
         }
-        return 4;
     }
 
     get _isAdvancedMode() {

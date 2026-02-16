@@ -104,22 +104,25 @@ export default class geTemplateBuilderFormField extends LightningElement {
     get cssClassCard() {
         if (this.field.elementType === WIDGET) {
             return "slds-card slds-card_extension slds-card_extension-widget slds-m-vertical_small";
+        } else {
+            return "slds-card slds-card_extension slds-m-vertical_small";
         }
-        return "slds-card slds-card_extension slds-m-vertical_small";
     }
 
     get cssClassActionsContainer() {
         if (this.field.elementType === WIDGET) {
             return "slds-size_1-of-12 vertical-align-center";
+        } else {
+            return "slds-size_1-of-12 slds-p-bottom_small";
         }
-        return "slds-size_1-of-12 slds-p-bottom_small";
     }
 
     get cssClassRenderedWidget() {
         if (this.isWidget) {
             return "slds-size_10-of-12 slds-p-right_small";
+        } else {
+            return "slds-size_5-of-12 slds-p-right_small";
         }
-        return "slds-size_5-of-12 slds-p-right_small";
     }
 
     get name() {
@@ -245,8 +248,9 @@ export default class geTemplateBuilderFormField extends LightningElement {
     get labelGeAssistiveRequiredCheckboxDescription() {
         if (this.isRequired) {
             return GeLabelService.format(this.CUSTOM_LABELS.geAssistiveDescriptionFieldRequired, [this.field.label]);
+        } else {
+            return GeLabelService.format(this.CUSTOM_LABELS.geAssistiveDescriptionFieldOptional, [this.field.label]);
         }
-        return GeLabelService.format(this.CUSTOM_LABELS.geAssistiveDescriptionFieldOptional, [this.field.label]);
     }
 
     /*******************************************************************************

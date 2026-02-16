@@ -45,14 +45,14 @@ export default class errRecordLog extends NavigationMixin(LightningElement) {
 
     isLoading = true;
     @track error = {};
-    hasAccess;
+    @track hasAccess;
 
     @track recordInfo = {};
     @track columns = [];
     @track data;
     hasData = true;
-    sortedBy;
-    sortDirection = DESC;
+    @track sortedBy;
+    @track sortDirection = DESC;
     fieldDatetime = {};
 
     /***
@@ -75,7 +75,7 @@ export default class errRecordLog extends NavigationMixin(LightningElement) {
 
                     if (this.hasData) {
                         this.data.forEach(function (log) {
-                            log[ERROR_LOG_URL_FIELD] = "/" + log.Id;
+                            log[ERROR_LOG_URL_FIELD] = "/" + log["Id"];
                         });
                     }
                 })

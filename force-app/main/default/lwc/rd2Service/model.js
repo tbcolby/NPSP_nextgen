@@ -25,8 +25,6 @@ import {
     SET_PLANNED_INSTALLMENTS,
     INITIAL_VIEW_LOAD,
     CUSTOM_FIELD_CHANGE,
-    SET_PAYMENT_TOKEN,
-    COMMITMENT_RESPONSE,
 } from "./actions";
 
 import {
@@ -81,18 +79,9 @@ const DEFAULT_INITIAL_STATE = {
     //Custom Fields
     customFieldSets: [],
 
-    //elevate iframe
-    paymentToken: null,
-    commitmentId: null,
-    achLastFour: null,
-    cardLastFour: null,
-    cardExpirationMonth: null,
-    cardExpirationYear: null,
-
     //Recurring Settings
     isAutoNamingEnabled: null,
     isMultiCurrencyEnabled: false,
-    isElevateCustomer: false,
     isChangeLogEnabled: null,
     periodToYearlyFrequencyMap: null,
     closedStatusValues: [],
@@ -152,46 +141,6 @@ const getChangeType = (state) => {
 
 const isAdvancedPeriod = (state) => {
     return state.recurringPeriod !== PERIOD.MONTHLY || state.recurringFrequency > 1;
-};
-
-const getCardFields = (cardData) => {
-    const { last4, expirationMonth, expirationYear } = cardData;
-    return {
-        cardLastFour: last4,
-        cardExpirationMonth: expirationMonth,
-        cardExpirationYear: expirationYear,
-        achLastFour: null,
-    };
-};
-
-const getAchFields = (achData) => {
-    const { last4 } = achData;
-    return {
-        cardLastFour: null,
-        cardExpirationMonth: null,
-        cardExpirationYear: null,
-        achLastFour: last4,
-    };
-};
-
-const handleCommitmentResponse = (state, payload) => {
-    const { cardData, achData } = payload;
-
-    if (cardData) {
-        const cardFields = getCardFields(cardData);
-        return {
-            ...state,
-            ...cardFields,
-            commitmentId: payload.id,
-        };
-    }
-
-    const achFields = getAchFields(achData);
-    return {
-        ...state,
-        ...achFields,
-        commitmentId: payload.id,
-    };
 };
 
 const handleRecordSaved = (state, payload) => {
@@ -299,13 +248,6 @@ const setPeriodType = (state, periodType) => {
     return {
         ...newState,
         changeType: getChangeType(newState),
-    };
-};
-
-const setPaymentToken = (state, paymentToken) => {
-    return {
-        ...state,
-        paymentToken,
     };
 };
 
@@ -437,8 +379,6 @@ export const nextState = (state = DEFAULT_INITIAL_STATE, action = {}) => {
     switch (action.type) {
         case CUSTOM_FIELD_CHANGE:
             return setCustomField(state, action.payload);
-        case COMMITMENT_RESPONSE:
-            return handleCommitmentResponse(state, action.payload);
         case RECORD_SAVED:
             return handleRecordSaved(state, action.payload);
         case RESET:
@@ -465,8 +405,6 @@ export const nextState = (state = DEFAULT_INITIAL_STATE, action = {}) => {
             return setDateEstablished(state, action.payload);
         case SET_ERROR:
             return setError(state, action.payload);
-        case SET_PAYMENT_TOKEN:
-            return setPaymentToken(state, action.payload);
         case SET_PLANNED_INSTALLMENTS:
             return setPlannedInstallments(state, action.payload);
         case SET_RECORD_NAME:

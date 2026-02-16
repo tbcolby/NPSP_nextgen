@@ -46,7 +46,7 @@ describe("c-ge-batch-gift-entry-header", () => {
 
             const buttons = batchHeader.shadowRoot.querySelectorAll("lightning-button");
             const processBatchButton = buttons[1];
-            expect(processBatchButton.label).toBe("c.bgeProcessBatchAndPayments");
+            expect(processBatchButton.label).toBe("c.bgeProcessBatch");
         });
 
         it("renders detail row", async () => {

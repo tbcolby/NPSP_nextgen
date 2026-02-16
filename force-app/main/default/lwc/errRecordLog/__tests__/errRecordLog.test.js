@@ -157,7 +157,7 @@ describe("c-err-record-log", () => {
                 expect(datatable.columns.length).toBe(numberOfColumns);
                 expect(datatable.columns[0].fieldName).toBe("logURL");
                 expect(datatable.columns[0].type).toBe("url");
-                expect(datatable.columns[0].label).toBe(mockGetObjectInfo.fields.Name.label);
+                expect(datatable.columns[0].label).toBe(mockGetObjectInfo.fields["Name"].label);
 
                 expect(datatable.data.length).toBe(numberOfRows);
                 expect(datatable.data[0].Name).not.toBeNull();
@@ -177,7 +177,7 @@ describe("c-err-record-log", () => {
                     datatable.dispatchEvent(
                         new CustomEvent("sort", {
                             detail: {
-                                fieldName: mockGetObjectInfo.fields.Datetime__c.apiName,
+                                fieldName: mockGetObjectInfo.fields["Datetime__c"].apiName,
                                 sortDirection: "asc",
                             },
                         })

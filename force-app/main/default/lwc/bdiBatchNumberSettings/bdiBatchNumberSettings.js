@@ -151,12 +151,12 @@ export default class bdiBatchNumberSettings extends LightningElement {
         const row = event.detail.row;
         switch (actionName) {
             case "activate":
-                activate({ autoNumberId: row.Id })
+                activate({ autoNumberId: row["Id"] })
                     .then(() => this.fetchAutoNumbers())
                     .catch((error) => (this.error = error));
                 break;
             case "deactivate":
-                deactivate({ autoNumberId: row.Id })
+                deactivate({ autoNumberId: row["Id"] })
                     .then(() => this.fetchAutoNumbers())
                     .catch((error) => (this.error = error));
                 break;

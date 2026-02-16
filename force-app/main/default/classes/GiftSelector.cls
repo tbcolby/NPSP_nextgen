@@ -106,17 +106,6 @@ public with sharing class GiftSelector {
         return Database.query(queryString);
     }
 
-    private List<String> elevateFields() {
-        List<String> elevateFieldApiNames = new List<String>{
-            String.valueOf(DataImport__c.Elevate_Payment_Status__c),
-            String.valueOf(DataImport__c.Payment_Declined_Reason__c),
-            String.valueOf(DataImport__c.Payment_Elevate_Batch_ID__c),
-            String.valueOf(DataImport__c.Payment_Elevate_ID__c)
-        };
-
-        return elevateFieldApiNames;
-    }
-
     private List<String> coreFields() {
         List<String> giftEntryFieldApiNames = new List<String> {
             String.valueOf(DataImport__c.Account1Imported__c),
@@ -131,8 +120,7 @@ public with sharing class GiftSelector {
             String.valueOf(DataImport__c.PaymentImportStatus__c),
             String.valueOf(DataImport__c.PaymentImported__c),
             String.valueOf(DataImport__c.Payment_Status__c),
-            String.valueOf(DataImport__c.Status__c),
-            String.valueOf(DataImport__c.Recurring_Donation_Elevate_Recurring_ID__c)
+            String.valueOf(DataImport__c.Status__c)
         };
 
         return giftEntryFieldApiNames;
@@ -163,10 +151,6 @@ public with sharing class GiftSelector {
         if (this.additionalGiftsFieldsToQuery != null) {
             queryFieldAsSet.addAll(this.additionalGiftsFieldsToQuery);
         }
-        if (GE_PaymentServices.getInstance().isElevateCustomer()) {
-            queryFieldAsSet.addAll(elevateFields());
-        }
-
         if (GE_SettingsService.getInstance().isRecurringGiftsEnabled()) {
             queryFieldAsSet.addAll(giftScheduleFields());
         }

@@ -19,7 +19,6 @@ import TIME_ZONE from "@salesforce/i18n/timeZone";
 import CURRENCY from "@salesforce/i18n/currency";
 
 import RECURRING_DONATION from "@salesforce/schema/npe03__Recurring_Donation__c";
-import FIELD_COMMITMENT_ID from "@salesforce/schema/npe03__Recurring_Donation__c.CommitmentId__c";
 import FIELD_PAYMENT_METHOD from "@salesforce/schema/npe03__Recurring_Donation__c.PaymentMethod__c";
 import FIELD_DAY_OF_MONTH from "@salesforce/schema/npe03__Recurring_Donation__c.Day_of_Month__c";
 import FIELD_INSTALLMENTS from "@salesforce/schema/npe03__Recurring_Donation__c.npe03__Installments__c";
@@ -50,17 +49,12 @@ export default class RecurringDonationTable extends LightningElement {
     openStopRecurringDonation = false;
     currentRecord;
     fixedInstallmentsLabel;
-    isElevateDonation = false;
     isInitiallyMonthlyDonation = false;
     paymentMethodLabel;
     dayOfMonthFieldLabel;
     defaultRecordTypeId;
 
-    @api
-    donationTypeFilter;
-
-    @api
-    allowACHPaymentMethod;
+    @api allowACHPaymentMethod;
 
     tdClasses = "hide-td";
     tdClassesNotHidden = "";
@@ -268,7 +262,6 @@ export default class RecurringDonationTable extends LightningElement {
             return row.recurringDonation.Id === e.target.getAttribute("data-recordid");
         });
 
-        this.isElevateDonation = this.currentRecord.recurringDonation[FIELD_COMMITMENT_ID.fieldApiName] ? true : false;
         this.isInitiallyMonthlyDonation = this.currentRecord.recurringDonation.npe03__Installment_Period__c === MONTHLY;
 
         switch (action) {
@@ -305,24 +298,18 @@ export default class RecurringDonationTable extends LightningElement {
     }
 
     getRecurringDonationFields() {
-        retrieveTableView({ elevateFilter: this.donationTypeFilter }).then((data) => {
+        retrieveTableView().then((data) => {
             if (data) {
                 this.data = data.map((el) => {
-                    let isElevate = el.recurringDonation[FIELD_COMMITMENT_ID.fieldApiName] ? true : false;
-                    let actions = this.actions
-                        .filter((elo) => (elo.name !== "updatePaymentMethod" && !isElevate) || isElevate)
-                        .map((action) => {
-                            return { ...action };
-                        });
+                    let actions = this.actions.map((action) => {
+                        return { ...action };
+                    });
                     let nexDonationFormatFirstElement = "";
                     let nexDonationFormatSecondElement = "";
 
                     actions.map((action) => {
                         action.disabled = false;
-                        if (
-                            el.status === CLOSED_STATUS ||
-                            (action.name !== "stopRecurringDonation" && this.currency !== "USD" && isElevate)
-                        ) {
+                        if (el.status === CLOSED_STATUS) {
                             action.disabled = true;
                         }
 

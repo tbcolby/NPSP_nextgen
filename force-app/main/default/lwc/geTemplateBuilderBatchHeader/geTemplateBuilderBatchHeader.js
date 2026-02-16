@@ -1,4 +1,4 @@
-import { LightningElement, api } from "lwc";
+import { LightningElement, track, api } from "lwc";
 import { dispatch, handleError, findMissingRequiredBatchFields } from "c/utilTemplateBuilder";
 import { findIndexByProperty, mutable, isEmpty } from "c/utilCommon";
 import GeLabelService from "c/geLabelService";
@@ -27,7 +27,7 @@ export default class geTemplateBuilderBatchHeader extends LightningElement {
     @api selectedBatchTableColumnOptions;
 
     isLoading = true;
-    hasErrors;
+    @track hasErrors;
 
     _isInitialized = false;
 

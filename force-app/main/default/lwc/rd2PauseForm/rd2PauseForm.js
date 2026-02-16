@@ -17,7 +17,6 @@ import firstDonationDateMessage from "@salesforce/label/c.RD2_PauseFirstDonation
 import saveSuccessMessage from "@salesforce/label/c.RD2_PauseSaveSuccessMessage";
 import deactivationSuccessMessage from "@salesforce/label/c.RD2_PauseDeactivationSuccessMessage";
 import rdClosedMessage from "@salesforce/label/c.RD2_PauseClosedRDErrorMessage";
-import elevateNotSupported from "@salesforce/label/c.RD2_ElevateNotSupported";
 import permissionRequired from "@salesforce/label/c.RD2_PausePermissionRequired";
 import insufficientPermissions from "@salesforce/label/c.commonInsufficientPermissions";
 
@@ -31,7 +30,6 @@ export default class Rd2PauseForm extends LightningElement {
         description,
         loadingMessage,
         cancelButton,
-        elevateNotSupported,
         saveButton,
         okButton,
         selectedRowsSummaryPlural,
@@ -53,7 +51,7 @@ export default class Rd2PauseForm extends LightningElement {
         isBlocked: false,
         blockedReason: "",
     };
-    isSaveDisplayed;
+    @track isSaveDisplayed;
     isSaveDisabled = false;
     pageHeader = "";
     @track pausedReason = {};

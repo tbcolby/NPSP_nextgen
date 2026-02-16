@@ -35,9 +35,6 @@
 */
 public inherited sharing class RD2_ERecurringDonationsSelector {
 
-    private final String ELEVATE_RD = 'Elevate Recurring Donations';
-    private final String NONELEVATE_RD = 'Non-Elevate Recurring Donations';
-
     @TestVisible
     private Id currentContactId {
         get {
@@ -53,7 +50,7 @@ public inherited sharing class RD2_ERecurringDonationsSelector {
      * @description Returns the Recurring Donation records related to the Experience Site user.
      * @return List<npe03__Recurring_Donation__c>
      */
-    public List<npe03__Recurring_Donation__c> getRecurringDonations(String elevateFilter) {
+    public List<npe03__Recurring_Donation__c> getRecurringDonations() {
 
         Id currentContactId = this.currentContactId;
         List<npe03__Recurring_Donation__c> recurringDonations = new List<npe03__Recurring_Donation__c>();
@@ -63,12 +60,7 @@ public inherited sharing class RD2_ERecurringDonationsSelector {
                                 + 'InstallmentFrequency__c, '
                                 + 'Day_of_Month__c, '
                                 + 'Status__c, '
-                                + 'CommitmentId__c, '
                                 + 'PaymentMethod__c, '
-                                + 'CardLast4__c, '
-                                + 'CardExpirationYear__c, '
-                                + 'CardExpirationMonth__c, '
-                                + 'ACH_Last_4__c, '
                                 + 'npe03__Last_Payment_Date__c, '
                                 + 'npe03__Installments__c, '
                                 + 'RecurringType__c, '
@@ -78,12 +70,6 @@ public inherited sharing class RD2_ERecurringDonationsSelector {
                                 + 'Lastmodifieddate '
                                 + 'FROM npe03__Recurring_Donation__c '
                                 + 'WHERE npe03__Contact__c = \'' + currentContactId + '\' ';
-
-            if(elevateFilter == ELEVATE_RD) {
-                queryString += 'AND CommitmentId__c != NULL ';
-            } else if (elevateFilter == NONELEVATE_RD) {
-                queryString += 'AND CommitmentId__c = NULL ';
-            }
 
             queryString += 'WITH SECURITY_ENFORCED ';
             queryString += 'ORDER BY npe03__Next_Payment_Date__c DESC NULLS LAST';

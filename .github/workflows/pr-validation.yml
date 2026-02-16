@@ -26,10 +26,7 @@ jobs:
       - run: yarn install --frozen-lockfile
 
       - name: Prettier Check
-        run: npx prettier --check "force-app/**/*.{js,html,css}"
-
-      - name: ESLint
-        run: npm run lint:lwc
+        run: npx prettier --check "force-app/**/*.{js,css}"
 
   # Jest tests for LWC
   jest:

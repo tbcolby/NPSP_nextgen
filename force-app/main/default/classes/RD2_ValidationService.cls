@@ -126,19 +126,6 @@ public with sharing class RD2_ValidationService {
         set;
     }
 
-    /***
-    * @descripton Elevate integration service
-    */
-    private RD2_ElevateIntegrationService elevateService {
-        get {
-            if (elevateService == null) {
-                elevateService = new RD2_ElevateIntegrationService();
-            }
-            return elevateService;
-        }
-        set;
-    }
-
     /**
      * @description Current date is the cut off date to determine all functionality related a Recurring Donation.
      * Moreover, it is used to calculate the RD end date and can be a past date, today or a future date when testing.
@@ -214,10 +201,8 @@ public with sharing class RD2_ValidationService {
         npe03__Recurring_Donation__c rd = recurringDonation.getSObject();
         validateAmount(rd, errorCollection);
         validateInstallmentPeriod(rd, errorCollection);
-        validateElevateInstallmentPeriod(recurringDonation, errorCollection);
         validateDayOfMonth(rd, errorCollection);
         validateFixedLength(recurringDonation, errorCollection);
-        validatePaymentMethod(recurringDonation, errorCollection);
     }
 
     /**
@@ -241,52 +226,13 @@ public with sharing class RD2_ValidationService {
     */
     public void validateOnChange(RD2_RecurringDonation recurringDonation, npe03__Recurring_Donation__c oldRd, ErrorRecord errorCollection) {
         npe03__Recurring_Donation__c rd = recurringDonation.getSObject();
-        if (elevateService.isElevateRecordReactivated(rd, oldRd)) {
-            errorCollection.addError(System.Label.RD2_ElevateRDClosedStatusCannotBeChanged);
-        }
-
-        if (!elevateService.hasUpdatePermissions(rd, oldRd)) {
-            errorCollection.addError(System.Label.RD2_ElevatePermissionRequired);
-        }
 
         validateCurrencyChange(rd, oldRd, errorCollection);
         validateRecurringDonationEndDate(recurringDonation, errorCollection);
 
-        validateElevateRDScheduleCannotBeInTheFuture(rd, oldRd, errorCollection);
-        validateElevateDayOfMonthChange(rd, oldRd, errorCollection);
-        validateElevateRDCampaignCannotUpdateToEmpty(rd, oldRd, errorCollection);
-        validateClosedElevateRecurringDonation(recurringDonation, oldRd, errorCollection);
-
         Boolean shouldValidateDonor = validateDonorChange(rd, oldRd, errorCollection);
         if (shouldValidateDonor) {
             validateDonor(rd, accountById.get(rd.npe03__Organization__c), errorCollection);
-        }
-    }
-
-    private void validateClosedElevateRecurringDonation(RD2_RecurringDonation recurringDonation, npe03__Recurring_Donation__c oldRd, ErrorRecord errorCollection) {
-        if (recurringDonation.isClosed()
-            && recurringDonation.isElevateRecord()
-            && isElevateFieldChanged(recurringDonation.getSObject(), oldRd)) {
-                errorCollection.addError(System.Label.RD2_ElevateRDCannotChangeElevateFields);
-        }
-    }
-
-    private Boolean isElevateFieldChanged(npe03__Recurring_Donation__c rd, npe03__Recurring_Donation__c oldRd) {
-        return rd.npe03__Contact__c != oldRd.npe03__Contact__c
-        || rd.npe03__Organization__c != oldRd.npe03__Organization__c
-        || rd.PaymentMethod__c != oldRd.PaymentMethod__c
-        || rd.npe03__Recurring_Donation_Campaign__c != oldRd.npe03__Recurring_Donation_Campaign__c
-        || rd.npe03__Amount__c != oldRd.npe03__Amount__c
-        || rd.InstallmentFrequency__c != oldRd.InstallmentFrequency__c
-        || rd.npe03__Installment_Period__c != oldRd.npe03__Installment_Period__c
-        || rd.StartDate__c != oldRd.StartDate__c
-        || rd.npe03__Date_Established__c != oldRd.npe03__Date_Established__c
-        || rd.Day_of_Month__c != oldRd.Day_of_Month__c;
-    }
-
-    private void validatePaymentMethod(RD2_RecurringDonation recurringDonation, ErrorRecord errorCollection) {
-        if (!recurringDonation.hasValidRecurringDonationPaymentMethod()) {
-            errorCollection.addError(System.Label.RD2_ElevatePaymentMethodChangeError);
         }
     }
 
@@ -313,18 +259,12 @@ public with sharing class RD2_ValidationService {
     }
 
     /**
-    * @description Validate Recurring Donation amount for Elevate and non-elevate Recurring Donation
+    * @description Validate Recurring Donation amount
     * @param rd The Recurring Donation to validate
     * @param errorCollection Error wrapper which contains all error related to the RD
     */
     private void validateAmount(npe03__Recurring_Donation__c rd, ErrorRecord errorCollection) {
-        if (RD2_ElevateIntegrationService.isIntegrationEnabled()
-            && String.isNotBlank(rd.CommitmentId__c)
-            && (rd.npe03__Amount__c == null || rd.npe03__Amount__c < 1)) {
-
-             errorCollection.addError(System.Label.RD2_ElevateRDAmountMustBeValid);
-
-        } else if (rd.npe03__Amount__c == null || rd.npe03__Amount__c == 0 || rd.npe03__Amount__c < 0) {
+        if (rd.npe03__Amount__c == null || rd.npe03__Amount__c == 0 || rd.npe03__Amount__c < 0) {
             errorCollection.addError(System.Label.RD2_AmountMustBeValid);
         }
     }
@@ -341,18 +281,6 @@ public with sharing class RD2_ValidationService {
                     System.Label.RD2_InstallmentPeriodMustBeValid,
                     new String[]{ rd.npe03__Installment_Period__c })
             );
-        }
-    }
-
-    private void validateElevateInstallmentPeriod(RD2_RecurringDonation recurringDonation, ErrorRecord errorCollection) {
-        if (RD2_ElevateIntegrationService.isIntegrationEnabled() && recurringDonation.isElevateRecord()) {
-            if (recurringDonation.isFirstAndFifteenthPeriod()) {
-                String errorMessage = String.format(
-                        System.Label.RD2_ElevateInstallmentPeriodMustBeValid,
-                        new String[]{ recurringDonation.getInstallmentPeriod() }
-                );
-                errorCollection.addError(errorMessage);
-            }
         }
     }
 
@@ -441,35 +369,6 @@ public with sharing class RD2_ValidationService {
     }
 
     /**
-    * @description Validate the Elevate RD Effective date cannot be in the future during update
-    * @param rd The Recurring Donation to validate
-    * @param oldRd The previous version of the Recurring Donation
-    * @param errorCollection Error wrapper which contains all error related to the RD
-    * @return void
-    */
-    private void validateElevateRDScheduleCannotBeInTheFuture(npe03__Recurring_Donation__c rd, npe03__Recurring_Donation__c oldRd, ErrorRecord errorCollection) {
-        if (isElevateRDChange(rd, oldRd)
-            && (rd.StartDate__c > currentDate)) {
-                errorCollection.addError(System.Label.RD2_ElevateRDEffectiveDateMustBeValid);
-        }
-    }
-
-    /**
-    * @description Validate the Elevate RD with Campaign cannot update to null
-    * @param rd The Recurring Donation to validate
-    * @param oldRd The previous version of the Recurring Donation
-    * @param errorCollection Error wrapper which contains all error related to the RD
-    * @return void
-    */
-    private void validateElevateRDCampaignCannotUpdateToEmpty(npe03__Recurring_Donation__c rd, npe03__Recurring_Donation__c oldRd, ErrorRecord errorCollection) {
-        if (isElevateRDChange(rd, oldRd)
-            && String.isNotBlank(oldRd.npe03__Recurring_Donation_Campaign__c)
-            && String.isBlank(rd.npe03__Recurring_Donation_Campaign__c)) {
-                errorCollection.addError(System.Label.RD2_ElevateRDCampaignCannotUpdateToNull);
-        }
-    }
-
-    /**
     * @description Validate the End Date on the Recurring Donation
     * @param recurringDonation The Recurring Donation to validate
     * @param errorCollection Error wrapper which contains all error related to the RD
@@ -479,13 +378,6 @@ public with sharing class RD2_ValidationService {
         npe03__Recurring_Donation__c rd = recurringDonation.getSObject();
         if (rd.EndDate__c == null) {
             return;
-        }
-
-        if (recurringDonation.isElevateRecord()
-            && recurringDonation.isClosed()
-            && rd.EndDate__c > currentDate
-        ) {
-            errorCollection.addError(System.Label.RD2_EndDateElevateCannotBeInFuture);
         }
 
         if (recurringDonation.isFixedLength()
@@ -521,18 +413,6 @@ public with sharing class RD2_ValidationService {
                     new String[]{recurringDonation.getSObject().Status__c})
             );
         }
-    }
-
-    /**
-    * @description Validates RD was already Elevate connected before this change
-    * @param rd The Recurring Donation to validate
-    * @param oldRd The previous version of the Recurring Donation
-    * @return Boolean
-    */
-    private Boolean isElevateRDChange(npe03__Recurring_Donation__c rd, npe03__Recurring_Donation__c oldRd) {
-        return RD2_ElevateIntegrationService.isIntegrationEnabled()
-            && String.isNotBlank(rd.CommitmentId__c)
-            && String.isNotBlank(oldRd.CommitmentId__c);
     }
 
     /***
@@ -608,21 +488,6 @@ public with sharing class RD2_ValidationService {
         }
     }
 
-    /***
-    * @description Validates Day of Month Change on Recurring Donation
-    * @param rd The Recurring Donation to validate
-    * @param oldRd The previous version of the Recurring Donation
-    * @return void
-    */
-    private void validateElevateDayOfMonthChange(npe03__Recurring_Donation__c rd, npe03__Recurring_Donation__c oldRd, ErrorRecord errorCollection) {
-        if (isElevateRDChange(rd, oldRd)
-            && rd.npe03__Installment_Period__c == RD_Constants.INSTALLMENT_PERIOD_MONTHLY
-            && rd.npe03__Installment_Period__c == oldRd.npe03__Installment_Period__c
-            && rd.Day_of_Month__c != oldRd.Day_of_Month__c) {
-                errorCollection.addError(System.Label.RD2_ElevateRDDayOfMonthCannotChange);
-        }
-    }
-
     /**
      * @description Validate the NumberOfPlannedInstallments field value for Fixed Length and
      * Open Recurring Donations
@@ -636,10 +501,6 @@ public with sharing class RD2_ValidationService {
             && numberOfPlannedInstallments > 1
         ) {
             errorCollection.addError(System.Label.RD2_NumberInstallmentsNotAllowedWhenOpen);
-        }
-
-        if (recurringDonation.isElevateRecord() && recurringDonation.isFixedLength()) {
-            errorCollection.addError(System.Label.RD2_ElevateRDCannotBeFixedLength);
         }
 
         if (!recurringDonation.isFixedLength()) {

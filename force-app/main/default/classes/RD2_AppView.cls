@@ -40,7 +40,6 @@ public class RD2_AppView {
     @AuraEnabled public Map<String, Boolean> InstallmentPeriodPermissions;
     @AuraEnabled public Map<String, Boolean> InstallmentFrequencyPermissions;
     @AuraEnabled public List<InputFieldView> customFieldSets;
-    @AuraEnabled public Boolean isElevateCustomer;
     @AuraEnabled public Boolean isChangeLogEnabled;
     @AuraEnabled public Map<String, Integer> periodToYearlyFrequencyMap;
     @AuraEnabled public List<String> closedStatusValues;

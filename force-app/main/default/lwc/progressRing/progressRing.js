@@ -1,4 +1,4 @@
-import { LightningElement, api } from "lwc";
+import { LightningElement, api, track } from "lwc";
 
 import textActive from "@salesforce/label/c.AssistiveTextActive";
 import textComplete from "@salesforce/label/c.AssistiveTextComplete";
@@ -9,8 +9,8 @@ export default class ProgressRing extends LightningElement {
     @api ringContent = "";
     @api ringSize;
 
-    ringClass;
-    arcValue;
+    @track ringClass;
+    @track arcValue;
     isContentVisible = false;
     isComplete = false;
     iconName = "";

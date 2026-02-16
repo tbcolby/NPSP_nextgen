@@ -86,10 +86,6 @@ export class RD2FormController {
         return this.element.shadowRoot.querySelector("c-rd2-entry-form-schedule-section");
     }
 
-    elevateWidget() {
-        return this.element.shadowRoot.querySelector("c-rd2-elevate-credit-card-form");
-    }
-
     amount() {
         const field = this.element.shadowRoot.querySelector('lightning-input-field[data-id="amountField"]');
         return new RD2FormField(field);
@@ -132,16 +128,6 @@ export class RD2FormController {
     recordName() {
         const field = this.element.shadowRoot.querySelector('lightning-input-field[data-id="recordName"]');
         return new RD2FormField(field);
-    }
-
-    last4() {
-        const widget = this.elevateWidget();
-        return widget.shadowRoot.querySelector('lightning-formatted-text[data-qa-locator="text Last Four Digits"]');
-    }
-
-    cardExpriation() {
-        const widget = this.elevateWidget();
-        return widget.shadowRoot.querySelector('lightning-formatted-text[data-qa-locator="text Expiration Date"]');
     }
 
     dayOfMonth() {
@@ -191,31 +177,8 @@ export class RD2FormController {
         return new RD2FormField(field);
     }
 
-    cardholderName() {
-        const field = this.elevateWidget().shadowRoot.querySelector('[data-id="cardholderName"]');
-        return new RD2FormField(field);
-    }
-
     saveButton() {
         return this.element.shadowRoot.querySelector('lightning-button[data-id="submitButton"]');
-    }
-
-    disableElevateButton() {
-        return this.elevateWidget().shadowRoot.querySelector(
-            'lightning-button[data-qa-locator="button Do Not Use Elevate"]'
-        );
-    }
-
-    updatePaymentButton() {
-        return this.elevateWidget().shadowRoot.querySelector(
-            'lightning-button[data-qa-locator="button Update Payment Information"]'
-        );
-    }
-
-    cancelUpdatePaymentButton() {
-        return this.elevateWidget().shadowRoot.querySelector(
-            'lightning-button[data-qa-locator="button Cancel Update Payment Information"]'
-        );
     }
 
     customFieldsSection() {

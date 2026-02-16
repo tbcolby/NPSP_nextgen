@@ -32,47 +32,6 @@
 private class GiftBatch_TEST {
 
     @isTest
-    static void shouldUpdateGiftRecordsFromAuthorizedToPaymentProcessingStatus() {
-        final Integer numberOfGifts = 10;
-        Gifts authorizedGifts = new Gifts(buildGifts(numberOfGifts, ElevateTransactionStatus.AUTHORIZED.name()));
-        GiftBatch giftBatch = new GiftBatch();
-        giftBatch.gifts = authorizedGifts;
-        ElevateBatchServiceMock elevateBatchServiceMock = new ElevateBatchServiceMock();
-
-        System.assert(authorizedGifts.giftsToUpdate.size() == 0);
-
-        giftBatch.elevateBatchService = stubFor(elevateBatchServiceMock);
-        giftBatch.giftBatchId = DUMMY_GIFT_BATCH_ID;
-        giftBatch.captureAuthorizedGifts();
-
-        System.assert(elevateBatchServiceMock.enqueuePaymentCaptureJobForCalled);
-        System.assert(authorizedGifts.giftsToUpdate.size() == numberOfGifts);
-        for (DataImport__c gift : authorizedGifts.giftsToUpdate.values()) {
-            System.assertEquals(ElevateTransactionStatus.PAYMENTPROCESSING.name(), gift.Payment_Status__c);
-        }
-    }
-
-    @isTest
-    static void shouldUpdateGiftRecordsWithFailReason() {
-        final Integer numberOfGifts = 5;
-        Gifts authorizedGifts = new Gifts(buildGifts(numberOfGifts, ElevateTransactionStatus.AUTHORIZED.name()));
-        GiftBatch giftBatch = new GiftBatch();
-        giftBatch.gifts = authorizedGifts;
-        ElevateBatchServiceMock elevateBatchServiceMock = new ElevateBatchServiceMock();
-
-        System.assert(authorizedGifts.giftsToUpdate.size() == 0);
-
-        giftBatch.elevateBatchService = stubFor(elevateBatchServiceMock);
-        giftBatch.failGiftsWithReason(buildFailReasonByElevateBatchId(numberOfGifts));
-
-        System.assert(authorizedGifts.giftsToUpdate.size() == numberOfGifts);
-        for (DataImport__c gift : authorizedGifts.giftsToUpdate.values()) {
-            System.assertEquals(ElevateTransactionStatus.RETRYABLEERROR.name(), gift.Payment_Status__c);
-            System.assertEquals('DUMMY FAIL REASON', gift.FailureInformation__c);
-        }
-    }
-
-    @isTest
     static void shouldReturnTotalCountOf10AndTotalAmountOf35050() {
         AggregateResultProxy mockTotalsResult = new AggregateResultProxy()
             .withAliasAndValue('recordCount', 10);
@@ -86,22 +45,6 @@ private class GiftBatch_TEST {
 
         System.assertEquals(10, giftBatch.totals().get('TOTAL'));
         System.assertEquals(350.50, giftBatch.totalDonations().amount());
-    }
-
-    @isTest
-    static void shouldReturnTrueWhenElevateWidgetOnTemplate() {
-        GiftBatch giftBatch = new GiftBatch();
-        giftBatch.giftTemplate = createDummyGiftTemplate(true);
-
-        System.assertEquals(true, giftBatch.hasElevateWidget());
-    }
-
-    @isTest
-    static void shouldReturnFalseWhenElevateWidgetNotOnTemplate() {
-        GiftBatch giftBatch = new GiftBatch();
-        giftBatch.giftTemplate = createDummyGiftTemplate(false);
-
-        System.assertEquals(false, giftBatch.hasElevateWidget());
     }
 
     @isTest
@@ -283,128 +226,6 @@ private class GiftBatch_TEST {
 
             return (AsyncApexJob) JSON.deserialize(jsonString, AsyncApexJob.class);
         }
-    }
-
-    private static GiftTemplate createDummyGiftTemplate(Boolean withElevateWidget) {
-        GE_Template.Element field =
-            new GE_Template.Element('field', 'True', null, 'CustomLabel', new List<String>{'Account_1_Name'});
-
-        GE_Template.Element[] elements = new GE_Template.Element[] { field };
-
-        if (withElevateWidget == true) {
-            GE_Template.Element widget =
-                new GE_Template.Element('widget', 'DisplayRule', 'geFormWidgetTokenizeCard', new List<String>{});
-            elements.add(widget);
-        }
-
-        GE_Template.Section section =
-            new GE_Template.Section('SectionLabel', 'Accordion', 'Expanded', 'True', elements);
-
-        GE_Template.Layout layout =
-            new GE_Template.Layout('DefaultMappingSet', new GE_Template.Section[]{section});
-
-        GE_Template.Template template =
-            new GE_Template.Template('Sample Template', 'This is the description.', '1.0', layout);
-
-        return new GiftTemplate(JSON.serialize(template));
-    }
-
-    private class ElevateBatchServiceMock implements StubProvider {
-        public Boolean enqueuePaymentCaptureJobForCalled = false;
-
-        public Object handleMethodCall(Object stubbedObject,
-            String stubbedMethodName,
-            Type returnType,
-            List<Type> listOfParamTypes,
-            List<String> listOfParamNames,
-            List<Object> listOfArgs) {
-
-            switch on (stubbedMethodName) {
-                when 'enqueuePaymentCaptureJobFor' {
-                    enqueuePaymentCaptureJobForCalled = true;
-                }
-            }
-
-            return null;
-        }
-    }
-
-    private static ElevateBatchService stubFor(ElevateBatchServiceMock elevateBatchServiceMock) {
-        return (ElevateBatchService) Test.createStub(ElevateBatchService.class, elevateBatchServiceMock);
-    }
-
-    public class PS_IntegrationServiceConfigMock implements StubProvider {
-        public Boolean isIntegrationEnabled = false;
-
-        public PS_IntegrationServiceConfigMock(Boolean isIntegrationEnabled) {
-            this.isIntegrationEnabled = isIntegrationEnabled;
-        }
-
-        public Object handleMethodCall(Object stubbedObject,
-            String stubbedMethodName,
-            Type returnType,
-            List<Type> listOfParamTypes,
-            List<String> listOfParamNames,
-            List<Object> listOfArgs) {
-
-            switch on (stubbedMethodName) {
-                when 'isIntegrationEnabled' {
-                    return isIntegrationEnabled;
-                }
-            }
-
-            return null;
-        }
-    }
-
-    private static PS_IntegrationServiceConfig stubFor(PS_IntegrationServiceConfigMock integrationServiceConfigMock) {
-        return (PS_IntegrationServiceConfig) Test.createStub(
-            PS_IntegrationServiceConfig.class,
-            integrationServiceConfigMock
-        );
-    }
-
-    public class GiftsMock implements StubProvider {
-        public Object handleMethodCall(Object stubbedObject,
-            String stubbedMethodName,
-            Type returnType,
-            List<Type> listOfParamTypes,
-            List<String> listOfParamNames,
-            List<Object> listOfArgs) {
-
-            return null;
-        }
-    }
-
-    private static Gifts stubFor(GiftsMock giftsMock) {
-        return (Gifts) Test.createStub(Gifts.class, giftsMock);
-    }
-
-    private static List<DataImport__c> buildGifts(Integer numberOfGifts, String paymentStatus) {
-        List<DataImport__c> dummyAuthorizedGifts = new List<DataImport__c>();
-        for (Integer i = 0; i < numberOfGifts; i++) {
-            DataImport__c dummyGift = new DataImport__c(
-                Id = UTIL_UnitTestData_TEST.mockId(DataImport__c.getSObjectType()),
-                Status__c = null,
-                NPSP_Data_Import_Batch__c = UTIL_UnitTestData_TEST.mockId(DataImportBatch__c.getSObjectType()),
-                Account1_Name__c = 'DUMMY ACCOUNT ' +  i,
-                Donation_Amount__c = 1,
-                Donation_Date__c = Date.today(),
-                Donation_Donor__c = 'Account1',
-                Payment_Status__c = paymentStatus,
-                Payment_Elevate_Batch_ID__c = 'DUMMY_ELEVATE_BATCH_ID_' + i
-            );
-            dummyAuthorizedGifts.add(dummyGift);
-        }
-        return dummyAuthorizedGifts;
-    }
-
-    private static Map<String, String> buildFailReasonByElevateBatchId(Integer numberOfGifts) {
-        Map<String, String> failReasonByElevateBatchId = new Map<String, String>();
-        for (Integer i = 0; i < numberOfGifts; i++) {
-            failReasonByElevateBatchId.put('DUMMY_ELEVATE_BATCH_ID_' + i, 'DUMMY FAIL REASON');
-        }
-        return failReasonByElevateBatchId;
     }
 
     private static final GiftBatchId DUMMY_GIFT_BATCH_ID =

@@ -2,23 +2,18 @@ import { LightningElement, api, track, wire } from "lwc";
 import { getObjectInfo } from "lightning/uiObjectInfoApi";
 import { NavigationMixin } from "lightning/navigation";
 import { registerListener, unregisterListener } from "c/pubsubNoPageRef";
-import { validateJSONString, getNamespace, showToast, format } from "c/utilCommon";
+import { validateJSONString, getNamespace, showToast } from "c/utilCommon";
 import { handleError } from "c/utilTemplateBuilder";
 import GeLabelService from "c/geLabelService";
 import geBatchGiftsExpectedTotalsMessage from "@salesforce/label/c.geBatchGiftsExpectedTotalsMessage";
 import geBatchGiftsExpectedCountOrTotalMessage from "@salesforce/label/c.geBatchGiftsExpectedCountOrTotalMessage";
 import processBatch from "@salesforce/apex/GE_GiftEntryController.processGiftsFor";
 import logError from "@salesforce/apex/GE_GiftEntryController.logError";
-import checkForElevateCustomer from "@salesforce/apex/GE_GiftEntryController.isElevateCustomer";
-
 import DATA_IMPORT_BATCH_OBJECT from "@salesforce/schema/DataImportBatch__c";
 import BATCH_TABLE_COLUMNS_FIELD from "@salesforce/schema/DataImportBatch__c.Batch_Table_Columns__c";
 import PAYMENT_OPPORTUNITY_ID from "@salesforce/schema/npe01__OppPayment__c.npe01__Opportunity__c";
 
 import bgeGridGiftDeleted from "@salesforce/label/c.bgeGridGiftDeleted";
-import commonPaymentServices from "@salesforce/label/c.commonPaymentServices";
-import gePaymentServicesUnavailableHeader from "@salesforce/label/c.gePaymentServicesUnavailableHeader";
-import gePaymentServicesUnavailableBody from "@salesforce/label/c.gePaymentServicesUnavailableBody";
 import rdFlsErrorDetail from "@salesforce/label/c.RD2_EntryFormMissingPermissions";
 import rdFlsErrorHeader from "@salesforce/label/c.geErrorFLSHeader";
 
@@ -28,7 +23,6 @@ const GIFT_ENTRY_TAB_NAME = "GE_Gift_Entry";
 
 import GiftBatch from "c/geGiftBatch";
 import Gift from "c/geGift";
-import ElevateBatch from "c/geElevateBatch";
 import { fireEvent } from "c/pubsubNoPageRef";
 
 export default class GeGiftEntryFormApp extends NavigationMixin(LightningElement) {
@@ -42,17 +36,13 @@ export default class GeGiftEntryFormApp extends NavigationMixin(LightningElement
     @api recordId;
     @api sObjectName;
 
-    isPermissionError;
-    loadingText = this.CUSTOM_LABELS.geTextSaving;
-
-    _hasDisplayedExpiredAuthorizationWarning = false;
-    _hasDisplayedElevateDisconnectedModal = false;
+    @track isPermissionError;
+    @track loadingText = this.CUSTOM_LABELS.geTextSaving;
 
     dataImportRecord = {};
     errorCallback;
     _isBatchProcessing = false;
     shouldLoadSpinner = false;
-    isElevateCustomer = false;
     openedGiftDonationId;
 
     namespace;
@@ -62,7 +52,6 @@ export default class GeGiftEntryFormApp extends NavigationMixin(LightningElement
     isFormSaveDisabled = false;
 
     giftBatch = new GiftBatch();
-    elevateBatch = new ElevateBatch();
     @track giftBatchState = {};
     gift = new Gift();
     @track giftInView = {};
@@ -96,8 +85,6 @@ export default class GeGiftEntryFormApp extends NavigationMixin(LightningElement
             if (this.isFormCollapsed) {
                 this.isFormCollapsed = false;
             }
-            fireEvent(this, "resetElevateWidget", {});
-
             this.isFormRendering = false;
         } catch (error) {
             handleError(error);
@@ -134,7 +121,6 @@ export default class GeGiftEntryFormApp extends NavigationMixin(LightningElement
     }
 
     async connectedCallback() {
-        this.isElevateCustomer = await checkForElevateCustomer();
         registerListener("geBatchGiftEntryTableChangeEvent", this.retrieveBatchTotals, this);
         registerListener("refreshbatchtable", this.refreshBatchTable, this);
         registerListener("softcreditwidgetchange", this.handleSoftCreditWidgetChange, this);
@@ -210,12 +196,6 @@ export default class GeGiftEntryFormApp extends NavigationMixin(LightningElement
     }
 
     async updateAppDisplay() {
-        if (this.shouldDisplayExpiredAuthorizationWarning()) {
-            this.displayExpiredAuthorizationWarningModalForPageLoad();
-        }
-        if (this.shouldDisplayElevateDeregistrationWarning()) {
-            this.displayElevateDeregistrationWarning();
-        }
         this._isBatchProcessing = this.giftBatchState.isProcessingGifts;
         this.shouldLoadSpinner = this._isBatchProcessing;
         this.isLoading = false;
@@ -229,32 +209,6 @@ export default class GeGiftEntryFormApp extends NavigationMixin(LightningElement
 
     processLogError(error, context) {
         logError({ error: error, context: context });
-    }
-
-    shouldDisplayElevateDeregistrationWarning() {
-        return (
-            !this.isElevateCustomer &&
-            !this._hasDisplayedElevateDisconnectedModal &&
-            this.giftBatchState.authorizedPaymentsCount > 0
-        );
-    }
-
-    displayElevateDeregistrationWarning() {
-        this.displayModalPrompt({
-            variant: "warning",
-            title: format(gePaymentServicesUnavailableHeader, [commonPaymentServices]),
-            message: format(gePaymentServicesUnavailableBody, [commonPaymentServices]),
-            buttons: [
-                {
-                    label: this.CUSTOM_LABELS.commonOkay,
-                    variant: "neutral",
-                    action: () => {
-                        this.dispatchEvent(new CustomEvent("closemodal"));
-                    },
-                },
-            ],
-        });
-        this._hasDisplayedElevateDisconnectedModal = true;
     }
 
     /*******************************************************************************
@@ -282,6 +236,7 @@ export default class GeGiftEntryFormApp extends NavigationMixin(LightningElement
                 const mostRecentGift = this.giftBatch.mostRecentGift();
                 if (mostRecentGift.failureInformation()) {
                     event.detail.error(mostRecentGift.failureInformation());
+                    return;
                 } else {
                     event.detail.success();
                     this.handleClearGiftInView();
@@ -317,14 +272,7 @@ export default class GeGiftEntryFormApp extends NavigationMixin(LightningElement
         } catch (error) {
             handleError(error);
         } finally {
-            if (this.shouldDisplayExpiredAuthorizationWarning()) {
-                this.displayExpiredAuthorizationWarningModalForProcessAndDryRun(async () => {
-                    this.giftBatchState = await this.giftBatch.dryRun();
-                    this.dispatchEvent(new CustomEvent("closemodal"));
-                });
-            } else {
-                this.giftBatchState = await this.giftBatch.dryRun();
-            }
+            this.giftBatchState = await this.giftBatch.dryRun();
         }
     }
 
@@ -385,14 +333,6 @@ export default class GeGiftEntryFormApp extends NavigationMixin(LightningElement
         return [];
     }
 
-    shouldDisplayExpiredAuthorizationWarning() {
-        return (
-            this.isElevateCustomer &&
-            this.giftBatchState.hasPaymentsWithExpiredAuthorizations &&
-            !this._hasDisplayedExpiredAuthorizationWarning
-        );
-    }
-
     async handleProcessBatch() {
         if (this.isProcessable()) {
             try {
@@ -410,20 +350,7 @@ export default class GeGiftEntryFormApp extends NavigationMixin(LightningElement
     }
 
     async startBatchProcessing() {
-        if (this.shouldDisplayExpiredAuthorizationWarning()) {
-            this.displayExpiredAuthorizationWarningModalForProcessAndDryRun(
-                this.processBatchAndCloseAuthorizationWarningModal()
-            );
-            return;
-        }
         await this.processBatch();
-    }
-
-    processBatchAndCloseAuthorizationWarningModal() {
-        return async () => {
-            await this.processBatch();
-            this.dispatchEvent(new CustomEvent("closemodal"));
-        };
     }
 
     handleBatchProcessingErrors() {
@@ -496,8 +423,6 @@ export default class GeGiftEntryFormApp extends NavigationMixin(LightningElement
     async refreshBatchTotals() {
         try {
             const wasProcessing = this._isBatchProcessing;
-
-            this._hasDisplayedExpiredAuthorizationWarning = false;
             this.giftBatchState = await this.giftBatch.refreshTotals();
 
             const finishedProcessingDuringThisRefresh = wasProcessing && !this.giftBatchState.isProcessingGifts;
@@ -539,9 +464,8 @@ export default class GeGiftEntryFormApp extends NavigationMixin(LightningElement
         try {
             this.isFormSaveDisabled = true;
             const gift = new Gift({ fields: event.detail });
-            const isRemovedFromElevate = await this.removeFromElevateBatch(gift);
 
-            await this.performDelete(gift.asDataImport(), isRemovedFromElevate);
+            this.giftBatchState = await this.giftBatch.remove(gift.asDataImport());
 
             if (this.giftInView?.fields.Id === gift?.id()) {
                 this.handleClearGiftInView();
@@ -552,61 +476,6 @@ export default class GeGiftEntryFormApp extends NavigationMixin(LightningElement
         } catch (error) {
             this.isFormSaveDisabled = false;
             handleError(error);
-        }
-    }
-
-    async removeFromElevateBatch(gift) {
-        let isRemovedFromElevate = false;
-        if (this.shouldRemoveFromElevateBatch(gift)) {
-            try {
-                await this.deleteFromElevateBatch(gift);
-                isRemovedFromElevate = true;
-            } catch (exception) {
-                let errorMsg = GeLabelService.format(this.CUSTOM_LABELS.geErrorElevateDelete, [
-                    this.CUSTOM_LABELS.commonPaymentServices,
-                ]);
-                throw new Error(errorMsg);
-            }
-        }
-
-        return isRemovedFromElevate;
-    }
-
-    async performDelete(giftAsDataImport, isRemovedFromElevate) {
-        try {
-            this.giftBatchState = await this.giftBatch.remove(giftAsDataImport);
-        } catch (exception) {
-            if (isRemovedFromElevate) {
-                this.logFailureAfterElevateDelete(exception, giftAsDataImport);
-                let errorMsg = GeLabelService.format(this.CUSTOM_LABELS.geErrorRecordFailAfterElevateDelete, [
-                    this.CUSTOM_LABELS.commonPaymentServices,
-                ]);
-                throw new Error(errorMsg);
-            }
-            throw exception;
-        }
-    }
-
-    logFailureAfterElevateDelete(exception, giftAsDataImport) {
-        this.processLogError(
-            exception.toString(),
-            GeLabelService.format(this.CUSTOM_LABELS.geElevateDeleteErrorLog, [
-                this.CUSTOM_LABELS.commonPaymentServices,
-                giftAsDataImport.Id,
-                this.batchId,
-            ])
-        );
-    }
-
-    shouldRemoveFromElevateBatch(gift) {
-        return gift && this.isElevateCustomer && gift.hasElevateRemovableStatus();
-    }
-
-    async deleteFromElevateBatch(gift) {
-        try {
-            return await this.elevateBatch.remove(gift);
-        } catch (exception) {
-            throw exception;
         }
     }
 
@@ -668,47 +537,6 @@ export default class GeGiftEntryFormApp extends NavigationMixin(LightningElement
             componentProperties,
         };
         this.dispatchEvent(new CustomEvent("togglemodal", { detail }));
-    }
-
-    displayExpiredAuthorizationWarningModalForPageLoad() {
-        this.displayModalPrompt({
-            variant: "warning",
-            title: this.CUSTOM_LABELS.gePaymentAuthExpiredHeader,
-            message: this.CUSTOM_LABELS.gePaymentAuthExpiredWarningText,
-            buttons: [
-                {
-                    label: this.CUSTOM_LABELS.commonOkay,
-                    variant: "neutral",
-                    action: () => {
-                        this.dispatchEvent(new CustomEvent("closemodal"));
-                    },
-                },
-            ],
-        });
-        this._hasDisplayedExpiredAuthorizationWarning = true;
-    }
-
-    displayExpiredAuthorizationWarningModalForProcessAndDryRun(actionOnProceed) {
-        this.displayModalPrompt({
-            variant: "warning",
-            title: this.CUSTOM_LABELS.gePaymentAuthExpiredHeader,
-            message: this.CUSTOM_LABELS.gePaymentAuthExpiredWarningText,
-            buttons: [
-                {
-                    label: this.CUSTOM_LABELS.geProcessAnyway,
-                    variant: "neutral",
-                    action: actionOnProceed,
-                },
-                {
-                    label: this.CUSTOM_LABELS.commonCancel,
-                    variant: "brand",
-                    action: () => {
-                        this.dispatchEvent(new CustomEvent("closemodal"));
-                    },
-                },
-            ],
-        });
-        this._hasDisplayedExpiredAuthorizationWarning = true;
     }
 
     buildModalConfigSelectColumns(available, selected) {

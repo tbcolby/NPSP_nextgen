@@ -9,7 +9,6 @@ import { SET_DONOR_TYPE } from "../../rd2Service/actions";
 
 const recurringDonationObjectInfo = require("../../../../../../tests/__mocks__/apex/data/recurringDonationObjectInfo.json");
 const initialViewResponse = require("../../../../../../tests/__mocks__/apex/data/getInitialView.json");
-const rd2WithCardCommitmentInitialView = require("../../rd2EntryForm/__tests__/data/rd2WithCardCommitmentInitialView.json");
 
 const mockHandleContactChange = jest.fn();
 const mockHandleAccountChange = jest.fn();
@@ -104,10 +103,11 @@ describe("existing recurring account donation", () => {
 
     beforeEach(async () => {
         const initialViewWithAccountDonor = {
-            ...rd2WithCardCommitmentInitialView,
+            ...initialViewResponse,
             record: {
-                ...rd2WithCardCommitmentInitialView.record,
+                ...initialViewResponse.record,
                 donorType: "Account",
+                accountId: "001fakeAccountId",
             },
         };
 

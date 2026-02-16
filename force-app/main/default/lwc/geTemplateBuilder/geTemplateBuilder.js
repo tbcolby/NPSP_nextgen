@@ -4,8 +4,6 @@ import storeFormTemplate from "@salesforce/apex/GE_GiftEntryController.storeForm
 import retrieveFormTemplateById from "@salesforce/apex/GE_GiftEntryController.retrieveFormTemplateById";
 import TemplateBuilderService from "c/geTemplateBuilderService";
 import GeLabelService from "c/geLabelService";
-import GeSettings from "c/geSettings";
-import GeGatewaySettings from "c/geGatewaySettings";
 import { getObjectInfo } from "lightning/uiObjectInfoApi";
 import {
     dispatch,
@@ -30,8 +28,6 @@ import {
     removeFromArray,
     isEmpty,
     isNotEmpty,
-    hasNestedProperty,
-    apiNameFor,
     format,
 } from "c/utilCommon";
 
@@ -52,8 +48,6 @@ import DONATION_DATE_FIELD from "@salesforce/schema/DataImport__c.Donation_Date_
 import DONATION_CAMPAIGN_SOURCE_FIELD from "@salesforce/schema/DataImport__c.DonationCampaignImported__c";
 import STATUS_FIELD from "@salesforce/schema/DataImport__c.Status__c";
 import FAILURE_INFORMATION_FIELD from "@salesforce/schema/DataImport__c.FailureInformation__c";
-import ELEVATE_PAYMENT_STATUS from "@salesforce/schema/DataImport__c.Elevate_Payment_Status__c";
-
 const DEFAULT_BATCH_TABLE_HEADERS_WITH_FIELD_MAPPINGS = [
     DONATION_AMOUNT_FIELD.fieldApiName,
     DONATION_DATE_FIELD.fieldApiName,
@@ -111,13 +105,12 @@ export default class geTemplateBuilder extends NavigationMixin(LightningElement)
     currentNamespace;
     @api isClone = false;
     isLoading = true;
-    activeTab = this.tabs.INFO.id;
+    @track activeTab = this.tabs.INFO.id;
     @track formTemplate = {
         name: null,
         description: null,
         batchHeaderFields: [],
         layout: null,
-        elevateSettings: null,
     };
     formLayout = {
         fieldMappingSetDevName: null,
@@ -126,7 +119,7 @@ export default class geTemplateBuilder extends NavigationMixin(LightningElement)
     };
     @track batchHeaderFields = [];
     @track formSections = [];
-    activeFormSectionId;
+    @track activeFormSectionId;
     @track diBatchInfo;
     @track batchFields;
     @track missingRequiredBatchFields;
@@ -146,9 +139,9 @@ export default class geTemplateBuilder extends NavigationMixin(LightningElement)
     ];
     @track selectedBatchTableColumnOptions = [...this.preselectedBatchTableColumnNames];
 
-    hasTemplateInfoTabError;
-    hasSelectFieldsTabError;
-    hasBatchSettingsTabError;
+    @track hasTemplateInfoTabError;
+    @track hasSelectFieldsTabError;
+    @track hasBatchSettingsTabError;
     previousSaveAttempted = false;
     @track sectionIdsByFieldMappingDeveloperNames = {};
 
@@ -332,10 +325,6 @@ export default class geTemplateBuilder extends NavigationMixin(LightningElement)
             this.catalogFieldsForTemplateEdit();
         }
 
-        if (GeSettings.isElevateCustomer()) {
-            GeGatewaySettings.setElevateSettings(this.formTemplate.elevateSettings, this.formTemplateRecordId);
-        }
-
         this.clearRecordIdOnClone(queryParameters);
     };
 
@@ -366,9 +355,6 @@ export default class geTemplateBuilder extends NavigationMixin(LightningElement)
     clearRecordIdOnClone(queryParameters) {
         if (queryParameters.c__clone || this.isClone) {
             this.formTemplateRecordId = null;
-            if (GeSettings.isElevateCustomer()) {
-                GeGatewaySettings.clearTemplateRecordId();
-            }
         }
     }
 
@@ -443,24 +429,6 @@ export default class geTemplateBuilder extends NavigationMixin(LightningElement)
                 },
             ];
         });
-
-        this.includePaymentStatusDisplayField();
-    }
-
-    includePaymentStatusDisplayField() {
-        const hasElevatePaymentStatusField = hasNestedProperty(
-            this._dataImportObject,
-            FIELDS,
-            apiNameFor(ELEVATE_PAYMENT_STATUS)
-        );
-
-        if (TemplateBuilderService.isElevateCustomer && hasElevatePaymentStatusField) {
-            const elevatePaymentStatusOption = {
-                label: this._dataImportObject.fields[apiNameFor(ELEVATE_PAYMENT_STATUS)]?.label,
-                value: this._dataImportObject.fields[apiNameFor(ELEVATE_PAYMENT_STATUS)]?.apiName,
-            };
-            this.availableBatchTableColumnOptions.push(elevatePaymentStatusOption);
-        }
     }
 
     /*******************************************************************************
@@ -1390,10 +1358,6 @@ export default class geTemplateBuilder extends NavigationMixin(LightningElement)
         } else {
             this.formTemplate.defaultBatchTableColumns = this.selectedBatchTableColumnOptions;
         }
-        if (GeSettings.isElevateCustomer()) {
-            this.formTemplate.elevateSettings = GeGatewaySettings.getElevateSettings();
-        }
-
         // TODO: Currently hardcoded as we're not providing a way to
         // create custom migrated field mapping sets yet.
         this.formTemplate.layout.fieldMappingSetDevName = DEFAULT_FIELD_MAPPING_SET;
@@ -1427,7 +1391,8 @@ export default class geTemplateBuilder extends NavigationMixin(LightningElement)
         // field's custom label is defaulted to just "Opportunity: Record Type"
         if (fieldMapping.Source_Field_API_Name == DONATION_RECORD_TYPE_NAME.fieldApiName) {
             return `${objectMapping.MasterLabel}: Record Type`;
+        } else {
+            return `${objectMapping.MasterLabel}: ${fieldMapping.Target_Field_Label}`;
         }
-        return `${objectMapping.MasterLabel}: ${fieldMapping.Target_Field_Label}`;
     }
 }
