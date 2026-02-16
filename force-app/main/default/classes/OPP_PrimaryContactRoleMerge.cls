@@ -67,7 +67,7 @@ public with sharing class OPP_PrimaryContactRoleMerge {
             }
         }
 
-        insert errors;
+        UTIL_DMLService.insertRecords(errors);
         duplicatePrimaryOCRs.processDML();
     }
 
@@ -166,8 +166,8 @@ public with sharing class OPP_PrimaryContactRoleMerge {
         * @return void.
         ********************************************************************************************************/
         public void processDML() {
-            delete ocrRecordsToDelete.values();
-            update ocrRecordsToUpdate.values();
+            Database.delete(ocrRecordsToDelete.values(), true);
+            UTIL_DMLService.updateRecords(ocrRecordsToUpdate.values());
         }
 
         /*******************************************************************************************************

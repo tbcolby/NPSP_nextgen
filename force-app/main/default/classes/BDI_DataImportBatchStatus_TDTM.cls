@@ -142,7 +142,7 @@ public inherited sharing class BDI_DataImportBatchStatus_TDTM extends TDTM_Runna
 
         }
 
-        update batches;
+        UTIL_DMLService.updateRecords(batches);
     }
 
     private List<DataImportBatch__c> getBatchesWithFailedRows(Set<Id> batchIds) {

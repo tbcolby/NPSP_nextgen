@@ -301,7 +301,7 @@ public without sharing class OPP_OpportunityContactRoles_TDTM extends TDTM_Runna
         }
 
         if (!listPrimaryOCRForInsert.isEmpty()) {
-            insert listPrimaryOCRForInsert;
+            UTIL_DMLService.insertRecords(listPrimaryOCRForInsert);
         }
 
         // Create Relationship Soft Credits accordingly
@@ -433,7 +433,7 @@ public without sharing class OPP_OpportunityContactRoles_TDTM extends TDTM_Runna
                 }
             }
 
-            update ocrsToUpdateImmediately;
+            UTIL_DMLService.updateRecords(ocrsToUpdateImmediately);
 
             syncHonoreeNotificationContacts(mapOppIdMapConIdOCR, primaryContactAccountChangeOpptys, transactionOCRs);
 
@@ -846,7 +846,7 @@ public without sharing class OPP_OpportunityContactRoles_TDTM extends TDTM_Runna
         }
 
         if (!ocrsToDelete.isEmpty()) {
-            delete ocrsToDelete;
+            Database.delete(ocrsToDelete, true);
         }
     }
 

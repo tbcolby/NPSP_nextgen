@@ -472,10 +472,10 @@ public with sharing class PMT_PaymentWizard_CTRL {
 	        }
 
 	        if (!paymentsToDelete.isEmpty()) {
-                delete paymentsToDelete;
+                Database.delete(paymentsToDelete, true);
             }
 
-            insert writeoffPayment;
+            UTIL_DMLService.insertRecord(writeoffPayment);
 
 	        redirect = true;
 
@@ -702,7 +702,7 @@ public with sharing class PMT_PaymentWizard_CTRL {
             }
 
             if (!paymentsToDelete.isEmpty()) {
-                delete paymentsToDelete;
+                Database.delete(paymentsToDelete, true);
             }
 
 	        // get the new payments into a list
@@ -712,7 +712,7 @@ public with sharing class PMT_PaymentWizard_CTRL {
             }
 
 	        // create the payment records
-	        insert pmts;
+	        UTIL_DMLService.insertRecords(pmts);
 
 	        redirect = true;
 

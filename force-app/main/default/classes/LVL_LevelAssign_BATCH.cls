@@ -170,9 +170,9 @@ public without sharing class LVL_LevelAssign_BATCH implements Database.Batchable
             new Map<String, String>{ 'Target Object' => sObjectName, 'SourceClass' => 'LVL_LevelAssign_BATCH' },
             recordsById.size());
 
-        update recordsById.values();
+        UTIL_DMLService.updateRecords(recordsById.values());
         if (!newEngagementPlans.isEmpty()) {
-            insert newEngagementPlans;
+            UTIL_DMLService.insertRecords(newEngagementPlans);
             SfdoInstrumentationService.getInstance().log(
                 SfdoInstrumentationEnum.Feature.EngagementPlans, 
                 SfdoInstrumentationEnum.Component.Batch, 
@@ -181,7 +181,7 @@ public without sharing class LVL_LevelAssign_BATCH implements Database.Batchable
                 newEngagementPlans.size());
         }
         if (!errorsCreatingEngagementPlans.isEmpty()) {
-            insert errorsCreatingEngagementPlans;
+            UTIL_DMLService.insertRecords(errorsCreatingEngagementPlans);
         }
     }
 

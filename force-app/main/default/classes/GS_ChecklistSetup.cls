@@ -109,7 +109,7 @@ public with sharing class GS_ChecklistSetup {
 
             checklistStatus.add(new GetStartedCompletionChecklistState__c(Item_Id__c = itemId,
                                                                      User__c = UserInfo.getUserId()));
-            insert checklistStatus;
+            UTIL_DMLService.insertRecords(checklistStatus);
         }
     }
 
