@@ -33,7 +33,7 @@
 * @date 2022
 * @description View class for errors encountered while saving a Recurring Donation
 */
-public class SaveErrorView {
+public inherited sharing class SaveErrorView {
     @AuraEnabled public String message;
     @AuraEnabled public List<String> fields;
 

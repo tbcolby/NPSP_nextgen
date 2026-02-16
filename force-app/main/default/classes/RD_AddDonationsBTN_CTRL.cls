@@ -77,8 +77,9 @@ public with sharing class RD_AddDonationsBTN_CTRL {
 
         Savepoint sp = Database.setSavepoint();
         try {
+            Id recordId = sc.getId();
             String soql = RD_RecurringDonations.strQueryRDNoWhere()
-                + ' WHERE Id = \'' + sc.getId() + '\'';
+                + ' WHERE Id = :recordId';
 
             npe03__Recurring_Donation__c rd = (npe03__Recurring_Donation__c) Database.query(soql);
 

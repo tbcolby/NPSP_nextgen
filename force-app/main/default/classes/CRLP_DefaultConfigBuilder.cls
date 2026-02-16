@@ -35,7 +35,7 @@
 * @description Static variables used to create the custom metadata type record for Customizable Rollups from
 * the legacy rollup settings in the NPSP Custom Settings objects.
 */
-public class CRLP_DefaultConfigBuilder {
+public inherited sharing class CRLP_DefaultConfigBuilder {
 
     /** @description Prefix all CMT DeveloperName values with this */
     public static final String RecordNamePrefix = 'NPSP_';

@@ -2,7 +2,7 @@
 
 This document tracks backwards-compatible modernization items across multiple release cycles. All items are designed to be incremental and safe for existing orgs.
 
-**Last Updated**: 2026-02-15
+**Last Updated**: 2026-02-16
 **Target Completion**: Q4 2027
 
 ---
@@ -13,7 +13,7 @@ This document tracks backwards-compatible modernization items across multiple re
 |----------|-------------|-----------|-------------|-----------|
 | Phase 0: Packaging & Setup | 4 | 4 | 0 | 0 |
 | Phase 1: Foundation | 8 | 6 | 0 | 2 |
-| Phase 2: Security | 12 | 0 | 0 | 12 |
+| Phase 2: Security | 12 | 1 | 2 | 9 |
 | Phase 3: Async Modernization | 15 | 0 | 0 | 15 |
 | Phase 4: Performance | 18 | 0 | 0 | 18 |
 | Phase 5: Code Quality | 14 | 0 | 0 | 14 |
@@ -22,7 +22,7 @@ This document tracks backwards-compatible modernization items across multiple re
 | Phase 8: Accessibility | 10 | 0 | 0 | 10 |
 | Phase 9: Integration | 8 | 0 | 0 | 8 |
 | Phase 10: Long-term | 20 | 0 | 0 | 20 |
-| **TOTAL** | **158** | **10** | **0** | **148** |
+| **TOTAL** | **158** | **11** | **2** | **145** |
 
 **Estimated Total Effort**: 800-1200 hours across 8 quarterly releases
 
@@ -208,42 +208,41 @@ Fixed 6 LWC test suites broken by Elevate removal. Fixed pre-existing rd2EntryFo
 ## Phase 2: Security Hardening (Release v1.0-v1.1)
 
 ### 2.1 Fix SOQL Injection Vulnerabilities (CRITICAL)
-**Status**: ⬜ Not Started
+**Status**: ✅ Complete
 **Effort**: 4-6 hours | **Risk**: Low (fixes security) | **Priority**: P0-Critical
+
+**Completed in Phase 2 PR**: Fixed 7 production files + 1 test file. Applied bind variables for ID/string concatenation and schema validation guards for dynamic object names in FROM clauses.
 
 | File | Line | Issue | Fix | Status |
 |------|------|-------|-----|--------|
-| ALLO_Multicurrency_TEST.cls | ~70 | String concat with oppId | Use bind variable | ⬜ |
-| HH_OppContactRoles_TDTM.cls | dynamic | String concat in WHERE | Use bind variable | ⬜ |
-| STG_PanelOppBatch_CTRL.cls | dynamic | Unparameterized object | Use Schema validation | ⬜ |
-| PSC_Opportunity_TDTM.cls | 87, 96 | Dynamic queries | Use bind variables | ⬜ |
+| RD2_ERecurringDonationsSelector.cls | 72 | Contact ID concat in WHERE | Bind variable `:currentContactId` | ✅ |
+| RD_AddDonationsBTN_CTRL.cls | 80-81 | StandardController ID concat | Extract to local, bind `:recordId` | ✅ |
+| BDE_BatchEntry_CTRL.cls | 96 | StandardController ID concat | Extract to local, bind `:batchId` | ✅ |
+| HH_OppContactRoles_TDTM.cls | 85-86 | Constant concat in WHERE | Extract to local, bind `:hhAccountType` | ✅ |
+| ALLO_Multicurrency_TDTM.cls | 154-159 | Object name in FROM | Schema validation guard | ✅ |
+| CRLP_RollupBatch_SVC.cls | 101-102 | Object name in FROM | Schema validation guard | ✅ |
+| STG_PanelOppBatch_CTRL.cls | 92-93 | Object name in FROM | Schema validation guard | ✅ |
+| ALLO_Multicurrency_TEST.cls | 185 | Test: oppId concat | Bind variable `:oppId` | ✅ |
+| PSC_Opportunity_TDTM.cls | 87, 96 | (False positive) | Already uses bind variables | ✅ N/A |
 
-**Pattern to apply**:
-```apex
-// UNSAFE
-String query = 'SELECT Id FROM Account WHERE Id = \'' + accountId + '\'';
-
-// SAFE
-String query = 'SELECT Id FROM Account WHERE Id = :accountId';
-```
+**Note**: ~30 test-only instances remain — deferred to test hygiene PR.
 
 ---
 
 ### 2.2 Add Explicit Sharing Declarations
-**Status**: ⬜ Not Started
+**Status**: 🔄 In Progress (46/~50 classes done)
 **Effort**: 10-15 hours | **Risk**: Low-Medium | **Priority**: P1
 
-**Current State**: 30+ public/global classes without explicit sharing
+**Completed in Phase 2 PR**: Added `inherited sharing` to 46 public/global classes that had no explicit sharing declaration. Covers global API classes, TDTM handlers, service/utility classes, and DTO/view classes.
 
-| Priority | Class | Current | Target | Status |
-|----------|-------|---------|--------|--------|
-| Critical | UTIL_Version_API.cls | implicit | inherited sharing | ⬜ |
-| Critical | ERR_Handler_API.cls | implicit | inherited sharing | ⬜ |
-| High | SaveResultView.cls | implicit | inherited sharing | ⬜ |
-| High | AggregateResultProxy.cls | implicit | inherited sharing | ⬜ |
-| High | CRLP_Rollup_TDTM.cls | implicit | inherited sharing | ⬜ |
-| High | RD_RecurringDonations.cls | implicit | inherited sharing | ⬜ |
-| Medium | 24+ other classes | implicit | inherited sharing | ⬜ |
+| Category | Classes | Status |
+|----------|---------|--------|
+| Global API classes | 6 (UTIL_Version_API, ERR_Handler_API, UTIL_CustomSettings_API, CAO_Constants_API, CONV_Account_Conversion_BATCH, STG_UninstallScript) | ✅ |
+| TDTM handlers | 13 (HH_OppContactRoles, CRLP_Rollup, AN_AutoNumber, ALLO_Multicurrency, REL_Relationships_Cm, RD2_RecurringDonations, ACCT_AccountMerge, PMT_Payment, CON_DoNotContact, REL_Relationships, CDL_CascadeDeleteLookups, BDI_DataImportBatchStatus, HH_HHObject) | ✅ |
+| Service/utility classes | 15 (RD_RecurringDonations, CRLP_RollupBatch_SVC, CRLP_Rollup_SVC, UTIL_Describe, UTIL_DMLService, UTIL_Namespace, UTIL_String, UTIL_CurrencyConversion, UTIL_Where, UTIL_OrderBy, UTIL_PageMessages_CTRL, CMT_FilterRuleEvaluation_SVC, CMT_FilterRuleUI_SVC, ContactMergeService, CRLP_DefaultConfigBuilder, CRLP_FiscalYears) | ✅ |
+| DTO/view classes | 8 (AggregateResultProxy, SaveResultView, SaveErrorView, ErrorRecord, CallableApiParameters, RD2_AppView, RD2_RecordView, RD_Constants) | ✅ |
+| Other | 4 (RLLP_OppPartialSoftCreditRollup, CRLP_Rollup, BDI_TargetFields, CRLP_ResetRollupFieldsQueueable, InputFieldView, PicklistOptionView) | ✅ |
+| Remaining (fflib vendor, test classes, already-declared) | ~remaining | ⏳ Deferred |
 
 ---
 
@@ -294,12 +293,12 @@ List<Account> accounts = (List<Account>) Security.stripInaccessible(
 ---
 
 ### 2.5 Remove Hardcoded Credentials/IDs
-**Status**: ⬜ Not Started
+**Status**: 🔄 In Progress (documentation added)
 **Effort**: 2-3 hours | **Risk**: Low | **Priority**: P2
 
 | File | Issue | Status |
 |------|-------|--------|
-| RP_Constants.cls | YouTube playlist ID (external, low risk) | ⬜ |
+| RP_Constants.cls | YouTube playlist ID & Heroku endpoints — documented as external dependencies, not credentials. Added comments noting community forks may need to reconfigure via Custom Metadata. | ✅ Documented |
 | Audit all test classes | Hardcoded test IDs | ⬜ |
 
 ---
@@ -926,6 +925,7 @@ Each release should include:
 | 2026-02-03 | 158 | 0 | 158 | - |
 | 2026-02-14 | 158 | 5 | 153 | Phase 0 (4 items) + Phase 1 item 1.1 (API upgrade) |
 | 2026-02-15 | 158 | 10 | 148 | Phase 1 items 1.2-1.8 (+5 completed) |
+| 2026-02-16 | 158 | 11 | 145 | Phase 2: SOQL injection (2.1 complete), sharing (2.2 partial), hardcoded IDs (2.5 partial) |
 
 ### Sprint Velocity History
 
@@ -933,7 +933,8 @@ Each release should include:
 |--------|---------|-----------|-------|
 | Phase 0 | 4 | 5 | 4 Phase 0 items + 1 Phase 1 item (API upgrade bundled) |
 | Phase 1 | 7 | 5 | 1 deferred (TODO/FIXME → Phase 5), 1 was N/A (fflib = no app usage) |
+| Phase 2a | 3 | 1 | 2.1 complete, 2.2 + 2.5 in progress (46 sharing + 8 SOQL injection + 1 doc) |
 
 ---
 
-*Document maintained by NPSP_nextgen community. Last updated: 2026-02-15*
+*Document maintained by NPSP_nextgen community. Last updated: 2026-02-16*

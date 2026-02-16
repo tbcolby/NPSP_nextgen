@@ -69,7 +69,7 @@ public inherited sharing class RD2_ERecurringDonationsSelector {
                                 + 'npe03__Total_Paid_Installments__c, '
                                 + 'Lastmodifieddate '
                                 + 'FROM npe03__Recurring_Donation__c '
-                                + 'WHERE npe03__Contact__c = \'' + currentContactId + '\' ';
+                                + 'WHERE npe03__Contact__c = :currentContactId ';
 
             queryString += 'WITH SECURITY_ENFORCED ';
             queryString += 'ORDER BY npe03__Next_Payment_Date__c DESC NULLS LAST';

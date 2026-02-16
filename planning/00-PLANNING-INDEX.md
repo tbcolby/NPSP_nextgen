@@ -22,8 +22,9 @@ This directory contains CTA-level architectural planning documents for the NPSP_
 | Phase | PR | Status | Key Changes |
 |-------|-----|--------|-------------|
 | Phase 0 | [PR #1](https://github.com/tbcolby/NPSP_nextgen/pull/1) (merged) | **Complete** | Namespace npsp→npsp2, API 53→63, Elevate removal, CCI 4.6.0, CI fixes |
-| Phase 1 | [PR #2](https://github.com/tbcolby/NPSP_nextgen/pull/2) | **Complete** | testMethod→@IsTest (648), @track cleanup (90), deps update, ESLint fixes |
-| Phase 2+ | — | Not started | Security, Async, Performance, Code Quality, UI, Config, A11y, Integration |
+| Phase 1 | [PR #2](https://github.com/tbcolby/NPSP_nextgen/pull/2) (merged) | **Complete** | testMethod→@IsTest (648), @track cleanup (90), deps update, ESLint fixes |
+| Phase 2a | PR #3 | **In Progress** | SOQL injection fixes (8 files), sharing declarations (46 classes), hardcoded ID docs |
+| Phase 2b+ | — | Not started | DML error handling, CRUD/FLS, remaining security items |
 
 ## Salesforce Well-Architected Framework Alignment
 
@@ -218,4 +219,4 @@ These are living documents. To propose changes:
 
 ---
 
-*Last Updated: 2026-02-15*
+*Last Updated: 2026-02-16*

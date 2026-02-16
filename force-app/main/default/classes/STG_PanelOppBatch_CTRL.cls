@@ -90,6 +90,9 @@ public with sharing class STG_PanelOppBatch_CTRL extends STG_Panel {
                 // Determine if the SkewMode job is needed based on a simple count of the number of records
                 // that meet the skew mode criteria.
                 String objName = CRLP_Rollup_SVC.getSummaryObjectType(jobType).getDescribe().getName();
+                if (UTIL_Describe.getSObjectType(objName) == null) {
+                    continue;
+                }
                 String query = 'SELECT Count() FROM ' + objName;
 
                 String skewFilter = CRLP_RollupBatch_SVC.getSkewWhereClause(jobType, CRLP_RollupProcessingOptions.BatchJobMode.SkewMode);
