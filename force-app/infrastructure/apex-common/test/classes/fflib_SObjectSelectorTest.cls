@@ -28,14 +28,14 @@
 private with sharing class fflib_SObjectSelectorTest 
 {
 	
-	static testMethod void testGetSObjectName()
+	@IsTest static void testGetSObjectName()
 	{
 		Testfflib_SObjectSelector selector = new Testfflib_SObjectSelector();
 		system.assertEquals(null, selector.getSObjectFieldSetList());
 		system.assertEquals('Account',selector.getSObjectName());
 	}
 	
-	static testMethod void testSelectSObjectsById()
+	@IsTest static void testSelectSObjectsById()
 	{
 		// Inserting in reverse order so that we can test the order by of select 
 		List<Account> accountList = new List<Account> {
@@ -60,7 +60,7 @@ private with sharing class fflib_SObjectSelectorTest
 		system.assertEquals(76543.21,result[1].AnnualRevenue);
 	}
 
-	static testMethod void testQueryLocatorById()
+	@IsTest static void testQueryLocatorById()
 	{
 		// Inserting in reverse order so that we can test the order by of select 
 		List<Account> accountList = new List<Account> {
@@ -90,7 +90,7 @@ private with sharing class fflib_SObjectSelectorTest
 		System.assertEquals(false, iteratorResult.hasNext());
 	}
 	
-	static testMethod void testAssertIsAccessible()
+	@IsTest static void testAssertIsAccessible()
 	{
 		List<Account> accountList = new List<Account> {
 			new Account(Name='TestAccount2',AccountNumber='A2',AnnualRevenue=12345.67),
@@ -119,7 +119,7 @@ private with sharing class fflib_SObjectSelectorTest
 		}
 	}
 
-	static testMethod void testCRUDOff()
+	@IsTest static void testCRUDOff()
 	{
 		List<Account> accountList = new List<Account> {
 			new Account(Name='TestAccount2',AccountNumber='A2',AnnualRevenue=12345.67),
@@ -147,7 +147,7 @@ private with sharing class fflib_SObjectSelectorTest
 		}
 	}
 	
-	static testMethod void testSOQL()
+	@IsTest static void testSOQL()
 	{
 		Testfflib_SObjectSelector selector = new Testfflib_SObjectSelector();
 		String soql = selector.newQueryFactory().toSOQL();
@@ -159,7 +159,7 @@ private with sharing class fflib_SObjectSelectorTest
 		assertFieldListString(fieldListString, null);
 	}
 	
-	static testMethod void testDefaultConfig()
+	@IsTest static void testDefaultConfig()
 	{
 		Testfflib_SObjectSelector selector = new Testfflib_SObjectSelector();
 		System.assertEquals(false, selector.isEnforcingFLS());

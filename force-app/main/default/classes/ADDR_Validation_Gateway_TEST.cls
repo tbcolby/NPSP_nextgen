@@ -55,7 +55,7 @@ public with sharing class ADDR_Validation_Gateway_TEST {
 
     }
 
-    public static testMethod void testOneAddress() {
+    @IsTest public static void testOneAddress() {
     	ADDR_SmartyStreets_Gateway gateway = createDefaultSettings();
 
         Test.startTest();
@@ -68,7 +68,7 @@ public with sharing class ADDR_Validation_Gateway_TEST {
         UTIL_Debug.debug(logginglevel.warn, sr.getFullAddress());
     }
 
-    public static testMethod void testMultiAddress() {
+    @IsTest public static void testMultiAddress() {
     	ADDR_SmartyStreets_Gateway gateway = createDefaultSettings();
 
         Test.startTest();
@@ -81,7 +81,7 @@ public with sharing class ADDR_Validation_Gateway_TEST {
         system.assertEquals('1 Infinite Loop', srs[1].delivery_line_1);
     }
 
-    public static testMethod void testZip() {
+    @IsTest public static void testZip() {
     	ADDR_SmartyStreets_Gateway gateway = createDefaultSettings();
 
         Test.startTest();
@@ -94,7 +94,7 @@ public with sharing class ADDR_Validation_Gateway_TEST {
         system.assertEquals(47.957763, sz.zipcodes[0].latitude);
     }
 
-    public static testMethod void testBadInput() {
+    @IsTest public static void testBadInput() {
         ADDR_SmartyStreets_Gateway gateway = createDefaultSettings();
 
         Test.startTest();
@@ -109,7 +109,7 @@ public with sharing class ADDR_Validation_Gateway_TEST {
         system.assertEquals(null, sr);
     }
 
-    public static testMethod void testBadAuth() {
+    @IsTest public static void testBadAuth() {
     	ADDR_SmartyStreets_Gateway gateway = createDefaultSettings();
 
         Test.startTest();
@@ -124,7 +124,7 @@ public with sharing class ADDR_Validation_Gateway_TEST {
         system.assertEquals(null, sr);
     }
 
-    public static testMethod void testNoSubscription() {
+    @IsTest public static void testNoSubscription() {
         ADDR_SmartyStreets_Gateway gateway = createDefaultSettings();
 
         Test.startTest();
@@ -139,7 +139,7 @@ public with sharing class ADDR_Validation_Gateway_TEST {
         system.assertEquals(null, sr);
     }
 
-    public static testMethod void testServerError() {
+    @IsTest public static void testServerError() {
         ADDR_SmartyStreets_Gateway gateway = createDefaultSettings();
 
         Test.startTest();

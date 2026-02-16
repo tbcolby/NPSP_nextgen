@@ -445,7 +445,7 @@ public with sharing class PSC_ManageSoftCredits_TEST {
     verify:
         The transaction is completely rolled back and there is no partial commit
     **********************************************************************************************************/
-    private static testMethod void testSaveRollsBackAllDmlsOnError() {
+    @IsTest private static void testSaveRollsBackAllDmlsOnError() {
         initTestDataWithPscs();
         Test.setCurrentPage(Page.PSC_ManageSoftCredits);
         PSC_ManageSoftCredits_CTRL ctrl = new PSC_ManageSoftCredits_CTRL(new ApexPages.StandardController(opp));
@@ -501,7 +501,7 @@ public with sharing class PSC_ManageSoftCredits_TEST {
     verify:
         Records are saved as expected
     **********************************************************************************************************/
-    private static testMethod void testResaveSucceedsWhenErrorIsFixed() {
+    @IsTest private static void testResaveSucceedsWhenErrorIsFixed() {
         initTestDataWithPscs();
         Test.setCurrentPage(Page.PSC_ManageSoftCredits);
         PSC_ManageSoftCredits_CTRL ctrl = new PSC_ManageSoftCredits_CTRL(new ApexPages.StandardController(opp));

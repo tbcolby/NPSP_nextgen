@@ -51,7 +51,7 @@ const CHECKBOX = "checkbox";
 export default class GeFormField extends LightningElement {
     @track _formState;
     @track objectDescribeInfo;
-    @track _disabled = false;
+    _disabled = false;
     @track targetFieldDescribeInfo;
     @api targetFieldName;
     _recordTypeId;
@@ -370,9 +370,8 @@ export default class GeFormField extends LightningElement {
         const rowIndex = this.getAttribute("data-qa-row");
         if (rowIndex) {
             return `${this.fieldLabel} ${rowIndex}`;
-        } else {
-            return this.fieldLabel;
         }
+        return this.fieldLabel;
     }
 
     get qaLocatorInputPrefix() {

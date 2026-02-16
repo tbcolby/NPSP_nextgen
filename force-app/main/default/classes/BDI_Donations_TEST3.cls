@@ -44,7 +44,7 @@ public with sharing class BDI_Donations_TEST3 {
     * verify: 
     *    correct donations matched
     **********************************************************************************************************/            
-    static testMethod void donationMatchRules1() {
+    @IsTest static void donationMatchRules1() {
         //skip the test if Advancement is installed
         if (ADV_PackageInfo_SVC.useAdv()) return;
 
@@ -67,7 +67,7 @@ public with sharing class BDI_Donations_TEST3 {
     * verify:
     *    correct donations matched
     **********************************************************************************************************/
-    static testMethod void donationMatchRules1b() {
+    @IsTest static void donationMatchRules1b() {
         //skip the test if Advancement is installed
         if (ADV_PackageInfo_SVC.useAdv()) return;
 
@@ -90,7 +90,7 @@ public with sharing class BDI_Donations_TEST3 {
     * verify:
     *    error, due to multiple matches
     **********************************************************************************************************/
-    static testMethod void donationMatchRules1c() {
+    @IsTest static void donationMatchRules1c() {
         //skip the test if Advancement is installed
         if (ADV_PackageInfo_SVC.useAdv()) return;
 
@@ -113,7 +113,7 @@ public with sharing class BDI_Donations_TEST3 {
     * verify:
     *    correct donations matched
     **********************************************************************************************************/
-    static testMethod void donationMatchRules1d() {
+    @IsTest static void donationMatchRules1d() {
         //skip the test if Advancement is installed
         if (ADV_PackageInfo_SVC.useAdv()) return;
 
@@ -135,7 +135,7 @@ public with sharing class BDI_Donations_TEST3 {
     * verify: 
     *    correct donations matched
     **********************************************************************************************************/            
-    static testMethod void donationMatchRules2() {
+    @IsTest static void donationMatchRules2() {
         //skip the test if Advancement is installed
         if (ADV_PackageInfo_SVC.useAdv()) return;
 
@@ -157,7 +157,7 @@ public with sharing class BDI_Donations_TEST3 {
     * verify: 
     *    correct donations matched
     **********************************************************************************************************/            
-    static testMethod void donationMatchRules3() {
+    @IsTest static void donationMatchRules3() {
         
         string strRTName = UTIL_RecordTypes.getRecordTypeNameForMembershipTests(Opportunity.sObjectType);
 
@@ -186,7 +186,7 @@ public with sharing class BDI_Donations_TEST3 {
     *    no donations matched
     *    ambiguous match error logged
     **********************************************************************************************************/            
-    static testMethod void donationMatchRules4() {
+    @IsTest static void donationMatchRules4() {
         //skip the test if Advancement is installed
         if (ADV_PackageInfo_SVC.useAdv()) return;
 
@@ -209,7 +209,7 @@ public with sharing class BDI_Donations_TEST3 {
     *    no donations matched
     *    new donation created
     **********************************************************************************************************/            
-    static testMethod void donationMatchRules4b() {
+    @IsTest static void donationMatchRules4b() {
         //skip the test if Advancement is installed
         if (ADV_PackageInfo_SVC.useAdv()) return;
 
@@ -231,7 +231,7 @@ public with sharing class BDI_Donations_TEST3 {
     * verify: 
     *    best donation matched
     **********************************************************************************************************/            
-    static testMethod void donationMatchRules5() {
+    @IsTest static void donationMatchRules5() {
         //skip the test if Advancement is installed
         if (ADV_PackageInfo_SVC.useAdv()) return;
 
@@ -254,7 +254,7 @@ public with sharing class BDI_Donations_TEST3 {
     *    no donation matched
     *    new donation created
     **********************************************************************************************************/            
-    static testMethod void donationMatchRules5b() {
+    @IsTest static void donationMatchRules5b() {
         //skip the test if Advancement is installed
         if (ADV_PackageInfo_SVC.useAdv()) return;
 
@@ -276,7 +276,7 @@ public with sharing class BDI_Donations_TEST3 {
     * verify: 
     *    new donation created (even though matches existing Opp)
     **********************************************************************************************************/            
-    static testMethod void donationMatchRules6() {
+    @IsTest static void donationMatchRules6() {
         //skip the test if Advancement is installed
         if (ADV_PackageInfo_SVC.useAdv()) return;
 
@@ -299,7 +299,7 @@ public with sharing class BDI_Donations_TEST3 {
     *    no donation created
     *    error reported on bdi
     **********************************************************************************************************/            
-    static testMethod void donationMatchRules7() {
+    @IsTest static void donationMatchRules7() {
         //skip the test if Advancement is installed
         if (ADV_PackageInfo_SVC.useAdv()) return;
 
@@ -321,7 +321,7 @@ public with sharing class BDI_Donations_TEST3 {
     * verify: 
     *    new donation created
     **********************************************************************************************************/            
-    static testMethod void donationMatchRules7b() {
+    @IsTest static void donationMatchRules7b() {
         //skip the test if Advancement is installed
         if (ADV_PackageInfo_SVC.useAdv()) return;
 
@@ -344,7 +344,7 @@ public with sharing class BDI_Donations_TEST3 {
     *    no new donation created
     *    error reported on bdi
     **********************************************************************************************************/            
-    static testMethod void donationMatchRules8() {
+    @IsTest static void donationMatchRules8() {
         //skip the test if Advancement is installed
         if (ADV_PackageInfo_SVC.useAdv()) return;
 
@@ -367,7 +367,7 @@ public with sharing class BDI_Donations_TEST3 {
     *    no new donation created
     *    error reported on bdi
     **********************************************************************************************************/            
-    static testMethod void donationMatchRules9() {
+    @IsTest static void donationMatchRules9() {
         //skip the test if Advancement is installed
         if (ADV_PackageInfo_SVC.useAdv()) return;
 
@@ -390,7 +390,7 @@ public with sharing class BDI_Donations_TEST3 {
     *    no new donation created
     *    record matched
     **********************************************************************************************************/            
-    static testMethod void donationMatchRules9b() {
+    @IsTest static void donationMatchRules9b() {
         //skip the test if Advancement is installed
         if (ADV_PackageInfo_SVC.useAdv()) return;
 
@@ -413,7 +413,7 @@ public with sharing class BDI_Donations_TEST3 {
     *    no new donation created
     *    best opp matched
     **********************************************************************************************************/            
-    static testMethod void donationMatchRules10() {
+    @IsTest static void donationMatchRules10() {
         //skip the test if Advancement is installed
         if (ADV_PackageInfo_SVC.useAdv()) return;
 
@@ -436,7 +436,7 @@ public with sharing class BDI_Donations_TEST3 {
     *    no new donation created
     *    error reported on bdi
     **********************************************************************************************************/            
-    static testMethod void donationMatchRules10b() {
+    @IsTest static void donationMatchRules10b() {
         //skip the test if Advancement is installed
         if (ADV_PackageInfo_SVC.useAdv()) return;
 
@@ -459,7 +459,7 @@ public with sharing class BDI_Donations_TEST3 {
     *    no new donation created
     *    existing opp matched
     **********************************************************************************************************/            
-    static testMethod void donationMatchRules11() {
+    @IsTest static void donationMatchRules11() {
         //skip the test if Advancement is installed
         if (ADV_PackageInfo_SVC.useAdv()) return;
 
@@ -482,7 +482,7 @@ public with sharing class BDI_Donations_TEST3 {
     *    no new donation created
     *    existing opp matched
     **********************************************************************************************************/            
-    static testMethod void donationMatchRules11b() {
+    @IsTest static void donationMatchRules11b() {
         //skip the test if Advancement is installed
         if (ADV_PackageInfo_SVC.useAdv()) return;
 
@@ -504,7 +504,7 @@ public with sharing class BDI_Donations_TEST3 {
     *    no new donation created
     *    existing opp matched
     **********************************************************************************************************/            
-    static testMethod void donationMatchRules12() {
+    @IsTest static void donationMatchRules12() {
         //skip the test if Advancement is installed
         if (ADV_PackageInfo_SVC.useAdv()) return;
 
@@ -527,7 +527,7 @@ public with sharing class BDI_Donations_TEST3 {
     *    no new donation created
     *    existing opp matched
     **********************************************************************************************************/            
-    static testMethod void donationMatchRules13() {
+    @IsTest static void donationMatchRules13() {
         //skip the test if Advancement is installed
         if (ADV_PackageInfo_SVC.useAdv()) return;
 
@@ -550,7 +550,7 @@ public with sharing class BDI_Donations_TEST3 {
     *    no new donation created
     *    existing opp matched
     **********************************************************************************************************/            
-    static testMethod void donationMatchRules14() {
+    @IsTest static void donationMatchRules14() {
         //skip the test if Advancement is installed
         if (ADV_PackageInfo_SVC.useAdv()) return;
 
@@ -576,7 +576,7 @@ public with sharing class BDI_Donations_TEST3 {
     *    no new donation created
     *    no opp matched
     **********************************************************************************************************/            
-    static testMethod void donationMatchRules14b() {
+    @IsTest static void donationMatchRules14b() {
         //skip the test if Advancement is installed
         if (ADV_PackageInfo_SVC.useAdv()) return;
 
@@ -605,7 +605,7 @@ public with sharing class BDI_Donations_TEST3 {
     *    payment matched
     *    opp remaining balance updated
     **********************************************************************************************************/            
-    static testMethod void donationMatchRules14c() {
+    @IsTest static void donationMatchRules14c() {
         //skip the test if Advancement is installed
         if (ADV_PackageInfo_SVC.useAdv()) return;
 
@@ -644,7 +644,7 @@ public with sharing class BDI_Donations_TEST3 {
     *    no new donation created
     *    error reported on bdi
     **********************************************************************************************************/            
-    static testMethod void donationMatchRules15() {
+    @IsTest static void donationMatchRules15() {
         //skip the test if Advancement is installed
         if (ADV_PackageInfo_SVC.useAdv()) return;
 
@@ -669,7 +669,7 @@ public with sharing class BDI_Donations_TEST3 {
     *    no new donation created
     *    error reported on bdi
     **********************************************************************************************************/            
-    static testMethod void donationMatchRules16() {
+    @IsTest static void donationMatchRules16() {
         //skip the test if Advancement is installed
         if (ADV_PackageInfo_SVC.useAdv()) return;
 
@@ -696,7 +696,7 @@ public with sharing class BDI_Donations_TEST3 {
     *    no new donation created
     *    error reported on bdi
     **********************************************************************************************************/
-    static testMethod void donationMatchRules17() {
+    @IsTest static void donationMatchRules17() {
         //skip the test if Advancement is installed
         if (ADV_PackageInfo_SVC.useAdv()) return;
 
@@ -727,7 +727,7 @@ public with sharing class BDI_Donations_TEST3 {
     *    payment matched
     *    opp remaining balance updated
     **********************************************************************************************************/
-    static testMethod void donationMatchRules18a() {
+    @IsTest static void donationMatchRules18a() {
         //skip the test if Advancement is installed
         if (ADV_PackageInfo_SVC.useAdv()) return;
 
@@ -768,7 +768,7 @@ public with sharing class BDI_Donations_TEST3 {
     *    payment matched
     *    opp remaining balance updated
     **********************************************************************************************************/
-    static testMethod void donationMatchRules18b() {
+    @IsTest static void donationMatchRules18b() {
         //skip the test if Advancement is installed
         if (ADV_PackageInfo_SVC.useAdv()) return;
 
@@ -810,7 +810,7 @@ public with sharing class BDI_Donations_TEST3 {
     *    payment matched
     *    opp remaining balance updated
     **********************************************************************************************************/
-    static testMethod void donationMatchRules18c() {
+    @IsTest static void donationMatchRules18c() {
         //skip the test if Advancement is installed
         if (ADV_PackageInfo_SVC.useAdv()) return;
 
@@ -849,7 +849,7 @@ public with sharing class BDI_Donations_TEST3 {
     * verify:
     *    error, due to detection of multiple payments
     **********************************************************************************************************/
-    static testMethod void donationMatchRules18d() {
+    @IsTest static void donationMatchRules18d() {
         //skip the test if Advancement is installed
         if (ADV_PackageInfo_SVC.useAdv()) return;
 
@@ -874,7 +874,7 @@ public with sharing class BDI_Donations_TEST3 {
     *    existing opp matched, and closed
     *    payment matched and marked paid and updated to match opp
     **********************************************************************************************************/
-    static testMethod void donationMatchRules19() {
+    @IsTest static void donationMatchRules19() {
         //skip the test if Advancement is installed
         if (ADV_PackageInfo_SVC.useAdv()) return;
 

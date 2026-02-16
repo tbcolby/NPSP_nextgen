@@ -77,7 +77,7 @@ private with sharing class ALLO_Allocations_TEST {
     * Decreasing the amount so that the total allocation amount is greater than the opportunity amount, an
     * error is thrown and the opportunity update is blocked.
     ********************************************************************************************************/
-    static testMethod void oppAmountChange() {
+    @IsTest static void oppAmountChange() {
         setupSettings(null);
 
         Account acc = new Account(Name='foo');
@@ -283,7 +283,7 @@ private with sharing class ALLO_Allocations_TEST {
     * Decreasing the amount so that the total allocation amount is greater than the payment amount, an
     * error is thrown and the payment update is blocked.
     ********************************************************************************************************/
-    static testMethod void pmtAmountChange() {
+    @IsTest static void pmtAmountChange() {
         General_Accounting_Unit__c defaultGau = new General_Accounting_Unit__c(Name='default GAU');
         insert defaultGau;
 
@@ -351,7 +351,7 @@ private with sharing class ALLO_Allocations_TEST {
     * when there are multiple allocations to the same GAU on the payment level, it will be consolidated on the
     * Opportunity level (Only going from payment to opportunity, not Recurring donation/campaign to opportunity)
     ********************************************************************************************************/
-    static testMethod void duplicateGAUWithPayments() {
+    @IsTest static void duplicateGAUWithPayments() {
         General_Accounting_Unit__c defaultGau = new General_Accounting_Unit__c(Name='default GAU');
         insert defaultGau;
 
@@ -438,7 +438,7 @@ private with sharing class ALLO_Allocations_TEST {
     * A mixture of positive and negative payments should be successfully inserted
     * This test was created to ensure we are not breaking Accounting Subledger functionality
     ********************************************************************************************************/
-    static testMethod void pmtsWithPositiveAndNegativeAmounts() {
+    @IsTest static void pmtsWithPositiveAndNegativeAmounts() {
         Date todaysDate = System.today();
         Date tomorrowsDate = System.today().addDays(1);
         Date todayPlusOneMonthsDate = System.today().addMonths(1);
@@ -538,7 +538,7 @@ private with sharing class ALLO_Allocations_TEST {
     * Decreasing the amount so that the total allocation amount (absolute value) is greater than the payment
     * amount, an error is thrown and the payment update is blocked.
     ********************************************************************************************************/
-    static testMethod void pmtsWithNegativeAmount() {
+    @IsTest static void pmtsWithNegativeAmount() {
         General_Accounting_Unit__c defaultGau = new General_Accounting_Unit__c(Name='default GAU');
         insert defaultGau;
 
@@ -607,7 +607,7 @@ private with sharing class ALLO_Allocations_TEST {
     * Creating a new allocation for that opportunity decreases the default fund allocation.
     * Creating an allocation for the total amount deletes the default allocation.
     ********************************************************************************************************/
-    static testMethod void defaultAllocations() {
+    @IsTest static void defaultAllocations() {
         General_Accounting_Unit__c defaultGau = new General_Accounting_Unit__c(Name='General');
         insert defaultGau;
 
@@ -648,7 +648,7 @@ private with sharing class ALLO_Allocations_TEST {
     * Opportunity created where campaign allocations exceed opp amount: exception thrown, only default
     * allocation created
     ********************************************************************************************************/
-    static testMethod void campaignAllocations() {
+    @IsTest static void campaignAllocations() {
         General_Accounting_Unit__c defaultgau = new General_Accounting_Unit__c(Name='General');
         insert defaultgau;
 
@@ -703,7 +703,7 @@ private with sharing class ALLO_Allocations_TEST {
         (the Campaign Allocation Amount must be <= Opportunity Amount)
         - The Amount reminder is covered by the NPSP Default Allocation.
     **********************************************************************************************************/
-    private static testMethod void testOppAllocationGauMatchesCampaignGau() {
+    @IsTest private static void testOppAllocationGauMatchesCampaignGau() {
         General_Accounting_Unit__c defaultGau = new General_Accounting_Unit__c(Name = 'Default');
         General_Accounting_Unit__c campaignGau = new General_Accounting_Unit__c(Name = 'Campaign');
         insert new General_Accounting_Unit__c[] {
@@ -763,7 +763,7 @@ private with sharing class ALLO_Allocations_TEST {
     * Remove allocation that exceed's opportunity amount: all RD allocations are created.
     * Delete a recurring donation allocation: corresponding opportunity allocation is also deleted.
     ********************************************************************************************************/
-    static testMethod void recurringDonationsValidation() {
+    @IsTest static void recurringDonationsValidation() {
         General_Accounting_Unit__c defaultgau = new General_Accounting_Unit__c(Name='General');
         insert defaultgau;
 
@@ -853,7 +853,7 @@ private with sharing class ALLO_Allocations_TEST {
     * Set Payment to Written Off.  modify recurring donation allocations: Opportunity's allocations are
     * updated, but Written Off Payment's Allocations are left unchanged/
     ********************************************************************************************************/
-    static testMethod void recurringDonationsPaymentAllocationValidation() {
+    @IsTest static void recurringDonationsPaymentAllocationValidation() {
         General_Accounting_Unit__c defaultgau = new General_Accounting_Unit__c(Name='General');
         insert defaultgau;
 
@@ -960,7 +960,7 @@ private with sharing class ALLO_Allocations_TEST {
     * Updates all opportunity amounts to be equal to the campaign allocation amount, verifies that default
     * allocations were deleted when no longer needed.
     ********************************************************************************************************/
-    static testMethod void bulkOppInsert() {
+    @IsTest static void bulkOppInsert() {
         General_Accounting_Unit__c defaultgau = new General_Accounting_Unit__c(Name='General');
         insert defaultgau;
 
@@ -1004,7 +1004,7 @@ private with sharing class ALLO_Allocations_TEST {
     * @description Inserts opportunities which excluded types and record types. Verifies no default
     * allocations are created.
     ********************************************************************************************************/
-    static testMethod void testExcludedOpps() {
+    @IsTest static void testExcludedOpps() {
         General_Accounting_Unit__c defaultgau = new General_Accounting_Unit__c(Name='General');
         insert defaultgau;
 
@@ -1034,7 +1034,7 @@ private with sharing class ALLO_Allocations_TEST {
     * Updates the amount, verifies default allocation was created. Nulls out the amount, verifies the
     * default allocation was deleted.
     ********************************************************************************************************/
-    static testMethod void testOppNullAmount() {
+    @IsTest static void testOppNullAmount() {
         General_Accounting_Unit__c defaultgau = new General_Accounting_Unit__c(Name='General');
         insert defaultgau;
 
@@ -1069,7 +1069,7 @@ private with sharing class ALLO_Allocations_TEST {
     * thrown. Deactivates the opportunity allocation's GAU, updates the opportunity amount, verifies the
     * allocation to the inactive GAU isn't modified.
     ********************************************************************************************************/
-    static testMethod void testInactiveGAU() {
+    @IsTest static void testInactiveGAU() {
         setupSettings(null);
 
         Account acc = new Account(Name='foo');
@@ -1125,7 +1125,7 @@ private with sharing class ALLO_Allocations_TEST {
     * allocations and one with an allocation. Runs batch class. Verifies two default allocations are created;
     * one for the total amount, and one for the unallocated remainder.
     ********************************************************************************************************/
-    static testMethod void testMakeDefaultAllocations() {
+    @IsTest static void testMakeDefaultAllocations() {
         General_Accounting_Unit__c defaultGau = new General_Accounting_Unit__c(Name='General');
         insert defaultGau;
 

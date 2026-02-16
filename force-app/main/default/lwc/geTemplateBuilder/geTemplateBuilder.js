@@ -104,7 +104,7 @@ export default class geTemplateBuilder extends NavigationMixin(LightningElement)
     existingFormTemplateName;
     currentNamespace;
     @api isClone = false;
-    @track isLoading = true;
+    isLoading = true;
     @track activeTab = this.tabs.INFO.id;
     @track formTemplate = {
         name: null,
@@ -142,7 +142,7 @@ export default class geTemplateBuilder extends NavigationMixin(LightningElement)
     @track hasTemplateInfoTabError;
     @track hasSelectFieldsTabError;
     @track hasBatchSettingsTabError;
-    @track previousSaveAttempted = false;
+    previousSaveAttempted = false;
     @track sectionIdsByFieldMappingDeveloperNames = {};
 
     @wire(getObjectInfo, { objectApiName: DATA_IMPORT_BATCH_OBJECT })

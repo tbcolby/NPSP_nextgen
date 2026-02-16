@@ -59,8 +59,8 @@ export default class utilInput extends LightningElement {
     @api picklistOptionsOverride;
     @api disabled;
 
-    @track isRichTextValid = true;
-    @track defaultRecordTypeId;
+    isRichTextValid = true;
+    defaultRecordTypeId;
     @track fieldDescribe;
     @track _picklistValues;
 

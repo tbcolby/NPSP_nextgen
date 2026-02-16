@@ -39,7 +39,7 @@ public class RD_BulkTests_TEST {
     /*******************************************************************************************************
     * @description Tests inserting multiple non open-ended Recurring Donations at once.
     */
-    static testMethod void bulkInsertOpportunities()
+    @IsTest static void bulkInsertOpportunities()
     {
         Integer contactCount = 20;
         Integer recurringDonationCount = 20;

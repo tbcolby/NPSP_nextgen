@@ -69,7 +69,7 @@ public with sharing class OPP_SendAcknowledgmentBTN_TEST {
     /*********************************************************************************************************
     @description verify the page will rollback the opportunity changes when an exception occurs     
     **********************************************************************************************************/ 
-    private static testMethod void testSendAcknowledgmentRollsBackAllDmlsOnError() { 
+    @IsTest private static void testSendAcknowledgmentRollsBackAllDmlsOnError() { 
         Test.setCurrentPage(Page.OPP_SendAcknowledgmentBTN);
 
         List<Opportunity> opps = setUpOpportunities(2);

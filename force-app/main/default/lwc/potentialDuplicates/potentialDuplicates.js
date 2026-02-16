@@ -14,8 +14,8 @@ export default class PotentialDuplicates extends NavigationMixin(LightningElemen
     @api displayCard;
     @api displayToast;
 
-    @track isEnabled = true;
-    @track duplicateCount;
+    isEnabled = true;
+    duplicateCount;
     @track error;
     lblTitle = lblPotentialDuplicatesFoundNone;
     lblViewDuplicatesLink = lblViewDuplicates;

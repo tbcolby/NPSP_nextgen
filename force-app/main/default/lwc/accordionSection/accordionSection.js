@@ -1,4 +1,4 @@
-import { LightningElement, api, track } from "lwc";
+import { LightningElement, api } from "lwc";
 import { isNull } from "c/util";
 
 import toggleInstructionsWhenOpen from "@salesforce/label/c.accordionSection_ToggleInstructionsWhenOpen";
@@ -9,7 +9,7 @@ export default class AccordionSection extends LightningElement {
     @api title;
     @api shadeOnOpen;
 
-    @track isOpen = false;
+    isOpen = false;
 
     connectedCallback() {
         if (this.shadeOnOpen !== undefined) {

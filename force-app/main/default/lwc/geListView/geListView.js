@@ -60,7 +60,7 @@ export default class geListView extends LightningElement {
 
     @track objectInfo;
     @track selectedColumnHeaders;
-    @track isLoading = true;
+    isLoading = true;
     @track options = [];
     @track records = [];
     @track columns = [];

@@ -51,7 +51,7 @@ private class STG_PanelHouseholds_TEST {
     verify:
         The method returns panel Id.  
     **********************************************************************************************************/   
-    private static testMethod void testPanelHasPanelId() {
+    @IsTest private static void testPanelHasPanelId() {
         STG_PanelHouseholds_CTRL panel = new STG_PanelHouseholds_CTRL();
         System.assertEquals('idPanelHH', panel.idPanel());
     }
@@ -62,7 +62,7 @@ private class STG_PanelHouseholds_TEST {
     verify:
         The settings field is saved as user specified it  
     **********************************************************************************************************/   
-    private static testMethod void testSaveSettingsSavesAutomaticHHNaming() {
+    @IsTest private static void testSaveSettingsSavesAutomaticHHNaming() {
         STG_Panel.stgService.stgHH.npo02__Advanced_Household_Naming__c = false; 
 
         STG_PanelHouseholds_CTRL panel = new STG_PanelHouseholds_CTRL();
@@ -79,7 +79,7 @@ private class STG_PanelHouseholds_TEST {
         The method returns false.    
         The page contains an error message.    
     **********************************************************************************************************/ 
-    private static testMethod void testPanelPageHasErrorWhenAccountModelIsNotAsExpected() {
+    @IsTest private static void testPanelPageHasErrorWhenAccountModelIsNotAsExpected() {
         UTIL_UnitTestData_TEST.setupHHNamingSettings();
 
         STG_Panel.stgService.stgHH.npo02__Household_Rules__c = HH_Households.ALL_PROCESSOR;
@@ -101,7 +101,7 @@ private class STG_PanelHouseholds_TEST {
         isValidSettings() returns false when any Household Naming Settings field is invalid.
         isValidSettings() returns true when all Household Naming Settings fields are valid.
     **********************************************************************************************************/ 
-    private static testMethod void testPanelValidatesHHNamingSettingsWhetherAutomaticHHNamingIsOn() {
+    @IsTest private static void testPanelValidatesHHNamingSettingsWhetherAutomaticHHNamingIsOn() {
         STG_PanelHouseholds_CTRL panel = new STG_PanelHouseholds_CTRL();        
 
         for (Boolean isAutomaticHouseholdNaming : new Boolean[] { true, false }) {
@@ -132,7 +132,7 @@ private class STG_PanelHouseholds_TEST {
         The method returns false.    
         The page contains error messages for all invalid fields.    
     **********************************************************************************************************/ 
-    private static testMethod void testPanelPageHasErrorWhenHHNamingSettingsFieldIsInvalid() {
+    @IsTest private static void testPanelPageHasErrorWhenHHNamingSettingsFieldIsInvalid() {
         Household_Naming_Settings__c settings = UTIL_UnitTestData_TEST.setupHHNamingSettings();
         settings.Household_Name_Format__c = '{!{!FirstName}} {!LastName}} Household';//invalid format
         settings.Formal_Greeting_Format__c = '{!Salutation}}}} {!LastName}';//invalid format
@@ -159,7 +159,7 @@ private class STG_PanelHouseholds_TEST {
     verify:
         The method returns false if a Household Naming Settings field is invalid 
     **********************************************************************************************************/ 
-    private static testMethod void testPanelValidatesUserChangesOfHHNamingSettings() {        
+    @IsTest private static void testPanelValidatesUserChangesOfHHNamingSettings() {        
         UTIL_UnitTestData_TEST.setupHHNamingSettings();
         
         Test.setCurrentPage(Page.STG_PanelHouseholds);
@@ -181,7 +181,7 @@ private class STG_PanelHouseholds_TEST {
     verify:
         The method throws an exception
     **********************************************************************************************************/ 
-    private static testMethod void testExampleNameThrowsExceptionWhenHHNameFormatFieldIsInvalid() {        
+    @IsTest private static void testExampleNameThrowsExceptionWhenHHNameFormatFieldIsInvalid() {        
         UTIL_UnitTestData_TEST.setupInvalidHHNamingSettings();
 
         try {
@@ -199,7 +199,7 @@ private class STG_PanelHouseholds_TEST {
     verify:
         The method returns a Household Name example 
     **********************************************************************************************************/ 
-    private static testMethod void testExampleNameIsExpectedWhenHHNameFormatFieldIsValid() {        
+    @IsTest private static void testExampleNameIsExpectedWhenHHNameFormatFieldIsValid() {        
         UTIL_UnitTestData_TEST.setupHHNamingSettings();
 
         String exampleName = STG_PanelHouseholds_CTRL.strNameSpecExample(STG_Panel.stgService.stgHN, HH_NAME_FORMAT_FIELD, 2);
@@ -213,7 +213,7 @@ private class STG_PanelHouseholds_TEST {
     verify:
         The method returns an error message
     **********************************************************************************************************/ 
-    private static testMethod void testExampleNameIsAnErrorWhenImplementingClassIsInvalid() {        
+    @IsTest private static void testExampleNameIsAnErrorWhenImplementingClassIsInvalid() {        
         Household_Naming_Settings__c settings = UTIL_UnitTestData_TEST.setupHHNamingSettings();
         settings.Implementing_Class__c = 'foo';
 

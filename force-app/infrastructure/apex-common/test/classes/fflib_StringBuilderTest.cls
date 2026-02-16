@@ -27,7 +27,7 @@
 @IsTest
 private with sharing class fflib_StringBuilderTest 
 {	
-	static testMethod void testfflib_StringBuilder1()
+	@IsTest static void testfflib_StringBuilder1()
 	{
 		fflib_StringBuilder sb = new fflib_StringBuilder();
 		sb.add('this is a string');
@@ -35,7 +35,7 @@ private with sharing class fflib_StringBuilderTest
 		system.assertEquals(sb.getStringValue(),'this is a string, which is made up from\r a number of smaller strings. 5 in this case!');	
 	}
 
-	static testMethod void testfflib_StringBuilder2()
+	@IsTest static void testfflib_StringBuilder2()
 	{
 		fflib_StringBuilder sb = new fflib_StringBuilder(new List<String>{'apples',' and ','pears',': stairs. '});
 		sb.add('this is a string');
@@ -43,7 +43,7 @@ private with sharing class fflib_StringBuilderTest
 		system.assertEquals(sb.getStringValue(),'apples and pears: stairs. this is a string, which is made up from\r a number of smaller strings. 5 in this case!');	
 	}
 
-	static testMethod void testCommaDelimitedBuilder1()
+	@IsTest static void testCommaDelimitedBuilder1()
 	{
 		fflib_StringBuilder.CommaDelimitedListBuilder sb = new fflib_StringBuilder.CommaDelimitedListBuilder();
 		sb.add('a');
@@ -51,7 +51,7 @@ private with sharing class fflib_StringBuilderTest
 		system.assertEquals(sb.getStringValue(),'a,b,c,d');	
 	}
 
-	static testMethod void testCommaDelimitedBuilder2()
+	@IsTest static void testCommaDelimitedBuilder2()
 	{
 		fflib_StringBuilder.CommaDelimitedListBuilder sb = new fflib_StringBuilder.CommaDelimitedListBuilder(new List<String>{'x','y'});
 		sb.add('a');
@@ -59,7 +59,7 @@ private with sharing class fflib_StringBuilderTest
 		system.assertEquals(sb.getStringValue(),'x,y,a,b,c,d');	
 	}
 	
-	static testMethod void testCommanDelimitedBuilderWithItemPrefix()
+	@IsTest static void testCommanDelimitedBuilderWithItemPrefix()
 	{
 		fflib_StringBuilder.CommaDelimitedListBuilder sb = new fflib_StringBuilder.CommaDelimitedListBuilder(new List<String>{'x','y'});
 		sb.add('a');
@@ -67,7 +67,7 @@ private with sharing class fflib_StringBuilderTest
 		system.assertEquals(sb.getStringValue('$'),'$x,$y,$a,$b,$c,$d');	
 	}
 	
-	static testMethod void testCommanDelimitedBuilderWithAlternativeDelimiter()
+	@IsTest static void testCommanDelimitedBuilderWithAlternativeDelimiter()
 	{
 		fflib_StringBuilder.CommaDelimitedListBuilder sb = new fflib_StringBuilder.CommaDelimitedListBuilder(new List<String>{'x','y'});
 		sb.setDelimiter(';');
@@ -76,7 +76,7 @@ private with sharing class fflib_StringBuilderTest
 		system.assertEquals(sb.getStringValue(),'x;y;a;b;c;d');	
 	}
 	
-	static testMethod void testCommanDelimitedBuilderWithAlternativeDelimiterAndPrefix()
+	@IsTest static void testCommanDelimitedBuilderWithAlternativeDelimiterAndPrefix()
 	{
 		fflib_StringBuilder.CommaDelimitedListBuilder sb = new fflib_StringBuilder.CommaDelimitedListBuilder(new List<String>{'x','y'});
 		sb.setItemPrefix('#');
@@ -86,7 +86,7 @@ private with sharing class fflib_StringBuilderTest
 		system.assertEquals(sb.getStringValue(),'#x:#y:#a:#b:#c:#d');
 	}
 
-	static testMethod void testFieldListBuilder()
+	@IsTest static void testFieldListBuilder()
 	{
 		List<Schema.SObjectField> fields = new List<Schema.SObjectField> { Account.Name, Account.Id, Account.AccountNumber, Account.AccountNumber, Account.AnnualRevenue };
 		fflib_StringBuilder.FieldListBuilder sb = new fflib_StringBuilder.FieldListBuilder(fields);
@@ -99,7 +99,7 @@ private with sharing class fflib_StringBuilderTest
 		system.assert(fieldSet.contains('AnnualRevenue'));
 	}
 
-	static testMethod void testMultiCurrencyFieldListBuilder()
+	@IsTest static void testMultiCurrencyFieldListBuilder()
 	{
 		List<Schema.SObjectField> fields = new List<Schema.SObjectField> { Account.Name, Account.Id, Account.AccountNumber, Account.AnnualRevenue };
 		fflib_StringBuilder.MultiCurrencyFieldListBuilder sb = new fflib_StringBuilder.MultiCurrencyFieldListBuilder(fields);

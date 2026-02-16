@@ -44,7 +44,7 @@ private with sharing class BDI_DataImportCTRL_TEST {
     * verify:
     *    all code tested in controller
     **********************************************************************************************************/
-    static testMethod void TestBDIVisualforcePage() {
+    @IsTest static void TestBDIVisualforcePage() {
 
         createTestData();
 
@@ -104,7 +104,7 @@ private with sharing class BDI_DataImportCTRL_TEST {
     * verify:
     *    all code tested in controller
     **********************************************************************************************************/
-    static testMethod void testBDIDryRun() {
+    @IsTest static void testBDIDryRun() {
 
         createTestData();
 
@@ -163,7 +163,7 @@ private with sharing class BDI_DataImportCTRL_TEST {
     /*********************************************************************************************************
     * @description Tests that controller will properly run dry run for only the selected DI records
     */
-    static testMethod void testSelectedDIDryRun() {
+    @IsTest static void testSelectedDIDryRun() {
 
         // Set the contact matching rule so that matching during dry run should happen
         Data_Import_Settings__c dis = UTIL_CustomSettingsFacade.getDataImportSettings();
@@ -336,7 +336,7 @@ private with sharing class BDI_DataImportCTRL_TEST {
     * verify:
     *    all code tested in controller
     **********************************************************************************************************/
-    static testMethod void TestBDIVisualforcePageValidation() {
+    @IsTest static void TestBDIVisualforcePageValidation() {
 
         list<DataImport__c> listDI = new list<DataImport__c>();
         listDI.add(BDI_DataImport_TEST.newDI('c1', 'C1', 'c2', 'C2'));
@@ -372,7 +372,7 @@ private with sharing class BDI_DataImportCTRL_TEST {
     *    test controller handles the batchId parameter (which is what the Start Import button on Batches
     *    will use.
     */
-    static testMethod void testBatchStartImportButton() {
+    @IsTest static void testBatchStartImportButton() {
 
         DataImportBatch__c diBatch = BDI_BatchOverride_TEST.newDIBatch();
         insert diBatch;
@@ -392,7 +392,7 @@ private with sharing class BDI_DataImportCTRL_TEST {
     /*********************************************************************************************************
     * @description Tests that controller will properly load and process selected DI records.
     */    
-    static testMethod void testSelectedDIButton() {
+    @IsTest static void testSelectedDIButton() {
 
         // This DI will the be passed into the controller and processed
         DataImport__c testDataImportA = new DataImport__c(
@@ -550,7 +550,7 @@ private with sharing class BDI_DataImportCTRL_TEST {
     * verify:
     *    The UserCanEditSettings flag is correct.
     **********************************************************************************************************/
-    static testMethod void testUserCanEditSettings() {
+    @IsTest static void testUserCanEditSettings() {
 
         DataImportBatch__c diBatch = BDI_BatchOverride_TEST.newDIBatch();
         diBatch.GiftBatch__c = false;
@@ -580,7 +580,7 @@ private with sharing class BDI_DataImportCTRL_TEST {
     * verify:
     *    The UserCanEditSettings flag is correct.
     **********************************************************************************************************/
-    static testMethod void testUserCannotEditSettings() {
+    @IsTest static void testUserCannotEditSettings() {
 
         DataImportBatch__c diBatch = BDI_BatchOverride_TEST.newDIBatch();
         diBatch.GiftBatch__c = true;

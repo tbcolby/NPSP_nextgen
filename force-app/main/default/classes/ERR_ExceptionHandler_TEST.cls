@@ -41,7 +41,7 @@ private with sharing class ERR_ExceptionHandler_TEST {
     * exception handler method to beautify the error message, and verifies the results. Applies the method 
     * again, verifies the results are unchanged.
     */
-	static testMethod void testHandleException() {
+	@IsTest static void testHandleException() {
 		Exception ex;
 		try {
 			insert new Opportunity();
@@ -67,7 +67,7 @@ private with sharing class ERR_ExceptionHandler_TEST {
     * @description Catches an invalid ID error, which we don't handle. Verifies it's not a handled exception,
     * and that applying the beautify method does nothing.
     */
-	static testMethod void testUnhandledExceptionIsUnmodified() {
+	@IsTest static void testUnhandledExceptionIsUnmodified() {
 		Exception ex;
 		try {
 			Id foo = 'foo';

@@ -43,11 +43,15 @@ service_patterns:
     usage: Sibling component communication
 
 state_management:
-  - @track: Reactive properties for complex objects
+  - @track: ONLY for objects/arrays needing deep reactivity (not primitives)
   - @api: Public properties and methods
   - @wire: Apex method integration
   - Service singletons: Shared state across components
   - Pub-sub: Cross-component communication
+  note: >
+    Phase 1 removed ~90 unnecessary @track decorators from primitives.
+    110 remaining @track instances are all on objects/arrays (legitimate).
+    Do NOT add @track to boolean, string, or number properties.
 
 file_structure:
   component/
@@ -63,15 +67,14 @@ file_structure:
 ```yaml
 complex_components:
   - name: geFormRenderer
-    lines: 3079
+    lines: ~2800
     purpose: Core form rendering engine
     helpers:
       - geFormElementHelper.js
-      - elevateTokenizeableGift.js
     features:
       - Dynamic field validation
-      - Elevate payment processing
       - Soft credit handling
+    note: Elevate payment processing was removed in Phase 0
 
   - name: geTemplateBuilder
     lines: 1430
@@ -82,11 +85,11 @@ complex_components:
       - Modal interactions
 
   - name: rd2EntryForm
-    lines: 1093
+    lines: ~1000
     purpose: Recurring Donations entry form
     features:
       - Schedule configuration
-      - Payment method management
+      - Payment method management (Elevate removed; generic interface TBD)
 ```
 
 ### Aura Migration Targets

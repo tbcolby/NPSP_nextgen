@@ -133,7 +133,7 @@ private class CMT_FilterRuleEvaluation_TEST {
     /**
      * @description test the evaluation method to process a given SObject against a FilterGroup
      */
-    static testMethod void test_evaluateFilterRules() {
+    @IsTest static void test_evaluateFilterRules() {
         mockFilterCMTValues();
 
         Contact con = UTIL_UnitTestData_TEST.getContact();

@@ -374,7 +374,7 @@ public with sharing class CON_ChangeAccount_TEST {
     *   the Contact's Address Override lookup is updated
     *   the Contact's mailing address matches the override
     */
-    static testMethod void testAddressOverride() {
+    @IsTest static void testAddressOverride() {
         //skip the test if Advancement is installed
         if(ADV_PackageInfo_SVC.useAdv()) return;
 

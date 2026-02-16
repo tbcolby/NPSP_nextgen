@@ -50,17 +50,17 @@ export default class geBatchWizard extends NavigationMixin(LightningElement) {
     @api recordId;
     @api dedicatedListenerEventName;
 
-    @track step = 0;
+    step = 0;
     @track templates;
     @track selectedBatchHeaderFields = [];
     @track formSections = [];
     @track selectedTemplateId;
-    @track isLoading = true;
+    isLoading = true;
     @track donationMatchingBehaviors;
-    @track hasInvalidBatchFields = false;
+    hasInvalidBatchFields = false;
     @track missingBatchHeaderFieldLabels = [];
     @track missingRequiredFieldsMessage;
-    @track allowFirstInstallment = false;
+    allowFirstInstallment = false;
 
     dataImportBatchFieldInfos;
     dataImportBatchInfo;

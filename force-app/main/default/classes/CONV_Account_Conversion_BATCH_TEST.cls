@@ -207,7 +207,7 @@ public with sharing class CONV_Account_Conversion_BATCH_TEST {
     /*******************************************************************************************************
     * @description Tests the conversion process for Contacts with a single address
     */
-    public testMethod static void testSingleContactAddress(){
+    @IsTest public static void testSingleContactAddress(){
         //skip the test if Advancement is installed
         if(ADV_PackageInfo_SVC.useAdv()) {
             return;
@@ -277,7 +277,7 @@ public with sharing class CONV_Account_Conversion_BATCH_TEST {
     /*******************************************************************************************************
     * @description Tests the conversion process for Contacts with two addresses
     */
-    public testMethod static void test2ContactAddresses(){
+    @IsTest public static void test2ContactAddresses(){
         //skip the test if Advancement is installed
         if(ADV_PackageInfo_SVC.useAdv()) return;
 
@@ -353,7 +353,7 @@ public with sharing class CONV_Account_Conversion_BATCH_TEST {
     /*******************************************************************************************************
     * @description Tests the conversion process for Contacts with two addresses, but address verification disabled
     */
-    public testMethod static void testContactDisableAddresses(){
+    @IsTest public static void testContactDisableAddresses(){
         //skip the test if Advancement is installed
         if(ADV_PackageInfo_SVC.useAdv()) return;
 
@@ -431,7 +431,7 @@ public with sharing class CONV_Account_Conversion_BATCH_TEST {
     /*******************************************************************************************************
     * @description Tests the conversion process when setting primary affiliation
     */
-    public testMethod static void testSettingPrimaryAffiliation(){
+    @IsTest public static void testSettingPrimaryAffiliation(){
         //skip the test if Advancement is installed - Bucket Account not supported in ADV
         if(ADV_PackageInfo_SVC.useAdv()) return;
 

@@ -42,6 +42,7 @@ This document describes the automated intake system for NPSP_nextgen that routes
 | DevOps/CI-CD | `domain:devops` | devops_agent |
 | Documentation | `domain:docs` | documentation_agent |
 | Testing | `domain:testing` | testing_agent |
+| Modernization / Tech Debt | `domain:modernization` | modernization_agent |
 
 ### Component Type → Agent Labels
 
@@ -52,6 +53,7 @@ This document describes the automated intake system for NPSP_nextgen that routes
 | Aura Component | `agent:lwc` |
 | Visualforce Page | `agent:apex` |
 | Trigger/Automation | `agent:apex`, `agent:testing` |
+| Modernization / Tech Debt | `agent:modernization` |
 
 ### Priority Labels
 
@@ -127,6 +129,15 @@ When an agent is assigned, it adds a comment explaining:
 > - Vulnerability assessment
 > - Compliance check
 
+**Modernization Agent:**
+> 🔄 **Modernization Agent** has been assigned to review this issue.
+>
+> This issue will be analyzed for:
+> - Alignment with modernization roadmap
+> - Phase placement and prioritization
+> - Cross-cutting impact assessment
+> - Burndown tracking updates
+
 ## Integration with Supervisor Agent
 
 The Supervisor Agent monitors all incoming issues and can:
@@ -151,6 +162,7 @@ The Supervisor Agent monitors all incoming issues and can:
 - `domain:devops` - DevOps
 - `domain:docs` - Documentation
 - `domain:testing` - Testing
+- `domain:modernization` - Modernization / Tech Debt
 
 ### Agent Labels
 - `agent:apex` - Apex Agent
@@ -159,6 +171,7 @@ The Supervisor Agent monitors all incoming issues and can:
 - `agent:security` - Security Agent
 - `agent:devops` - DevOps Agent
 - `agent:documentation` - Documentation Agent
+- `agent:modernization` - Modernization Agent
 
 ### Status Labels
 - `triage` - Needs initial review

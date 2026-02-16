@@ -46,7 +46,7 @@ private with sharing class PMT_PaymentCreator_TEST {
         written off payments are left alone
         unpaid (and not written off) are deleted
     **********************************************************************************************************/            
-    static testMethod void CloseLostOppWithMixOfPayments() {
+    @IsTest static void CloseLostOppWithMixOfPayments() {
         npe01__Contacts_And_Orgs_Settings__c PaymentsSettingsForTests = UTIL_CustomSettingsFacade.getContactsSettingsForTests(
             new npe01__Contacts_And_Orgs_Settings__c (npe01__Payments_Enabled__c= true));
         
@@ -129,7 +129,7 @@ private with sharing class PMT_PaymentCreator_TEST {
     verify:
         payment is written off, no infinite recursion takes place
     **********************************************************************************************************/            
-    static testMethod void nullAmount() {
+    @IsTest static void nullAmount() {
         npe01__Contacts_And_Orgs_Settings__c PaymentsSettingsForTests = UTIL_CustomSettingsFacade.getContactsSettingsForTests(
             new npe01__Contacts_And_Orgs_Settings__c (npe01__Payments_Enabled__c= true));
         
@@ -171,7 +171,7 @@ private with sharing class PMT_PaymentCreator_TEST {
         A list of paid payments should be created. 
         The Payment Date on the Payments records is equal to their related Opportunity Closed Date.
     **********************************************************************************************************/            
-    static testMethod void testClosedWonOpportunity_UpdateAmountFromNullToValue() {
+    @IsTest static void testClosedWonOpportunity_UpdateAmountFromNullToValue() {
         Integer testOpportunitiesCount = 200;
 
         List<Opportunity> testOpportunities = new List<Opportunity>();
@@ -213,7 +213,7 @@ private with sharing class PMT_PaymentCreator_TEST {
         A list of paid payments should be created. 
         The Payment Date on the Payments records is equal to their related Opportunity Closed Date.
     **********************************************************************************************************/            
-    static testMethod void testClosedWonOpportunity_UpdateAmountFromZeroToValue() {
+    @IsTest static void testClosedWonOpportunity_UpdateAmountFromZeroToValue() {
         Integer testOpportunitiesCount = 200;
 
         List<Opportunity> testOpportunities = new List<Opportunity>();
@@ -255,7 +255,7 @@ private with sharing class PMT_PaymentCreator_TEST {
         A list of unpaid payments should be created. 
         The Scheduled Date on the Payments records is equal to their related Opportunity Closed Date.
     **********************************************************************************************************/
-    static testMethod void testOpenOpportunity_UpdateAmountFromNullToValue() {
+    @IsTest static void testOpenOpportunity_UpdateAmountFromNullToValue() {
         Integer testOpportunitiesCount = 200;
 
         List<Opportunity> testOpportunities = new List<Opportunity>();
@@ -297,7 +297,7 @@ private with sharing class PMT_PaymentCreator_TEST {
         A list of unpaid payments should be created. 
         The Scheduled Date on the Payments records is equal to their related Opportunity Closed Date.
     **********************************************************************************************************/
-    static testMethod void testOpenOpportunity_UpdateAmountFromZeroToValue() {
+    @IsTest static void testOpenOpportunity_UpdateAmountFromZeroToValue() {
         Integer testOpportunitiesCount = 200;
 
         List<Opportunity> testOpportunities = new List<Opportunity>();
@@ -338,7 +338,7 @@ private with sharing class PMT_PaymentCreator_TEST {
     verify:
         No payment should be created because the Opportunities are Closed Lost.
     **********************************************************************************************************/
-    static testMethod void testClosedLostOpportunity_UpdateAmountFromNullToValue() {
+    @IsTest static void testClosedLostOpportunity_UpdateAmountFromNullToValue() {
         List<Opportunity> testOpportunities = new List<Opportunity>();
         for (Integer i = 0; i < 200; i++) {
             testOpportunities.add(new Opportunity(
@@ -369,7 +369,7 @@ private with sharing class PMT_PaymentCreator_TEST {
     verify:
         No payment should be created because the Opportunities are Closed Lost.
     **********************************************************************************************************/
-    static testMethod void testClosedLostOpportunity_UpdateAmountFromZeroToValue() {
+    @IsTest static void testClosedLostOpportunity_UpdateAmountFromZeroToValue() {
         List<Opportunity> testOpportunities = new List<Opportunity>();
         for (Integer i = 0; i < 200; i++) {
             testOpportunities.add(new Opportunity(
@@ -439,7 +439,7 @@ private with sharing class PMT_PaymentCreator_TEST {
     verify:
         no payment created
     **********************************************************************************************************/            
-    static testMethod void createOppWithTypeNotExcluded() {
+    @IsTest static void createOppWithTypeNotExcluded() {
         npe01__Contacts_And_Orgs_Settings__c PaymentsSettingsForTests = UTIL_CustomSettingsFacade.getContactsSettingsForTests(
             new npe01__Contacts_And_Orgs_Settings__c (npe01__Payments_Enabled__c= true, Opp_Types_Excluded_for_Payments__c='NO-PAYMENT'));
         
@@ -472,7 +472,7 @@ private with sharing class PMT_PaymentCreator_TEST {
     verify:
         no payment created
     **********************************************************************************************************/            
-    static testMethod void createOppWithTypeExcluded() {
+    @IsTest static void createOppWithTypeExcluded() {
         npe01__Contacts_And_Orgs_Settings__c PaymentsSettingsForTests = UTIL_CustomSettingsFacade.getContactsSettingsForTests(
             new npe01__Contacts_And_Orgs_Settings__c (npe01__Payments_Enabled__c= true, Opp_Types_Excluded_for_Payments__c='NO-PAYMENT'));
         
@@ -505,7 +505,7 @@ private with sharing class PMT_PaymentCreator_TEST {
     verify:
         no payment created
     **********************************************************************************************************/            
-    static testMethod void createOppWithRecordTypeExcluded() {
+    @IsTest static void createOppWithRecordTypeExcluded() {
         // see if this org has any record types we can use!
         Id rtIdGift = UTIL_RecordTypes.getRecordTypeIdForGiftsTests(Opportunity.sObjectType);
 
@@ -545,7 +545,7 @@ private with sharing class PMT_PaymentCreator_TEST {
             system.assertEquals(1, opmtAll.size());
     }
     
-    private static testMethod void testOpportunityWillAutoClosefterAllPaymentsReceived() {
+    @IsTest private static void testOpportunityWillAutoClosefterAllPaymentsReceived() {
         String closedWonStage = UTIL_UnitTestData_TEST.getClosedWonStage();
         String openStage = UTIL_UnitTestData_TEST.getOpenStage();
 
@@ -582,7 +582,7 @@ private with sharing class PMT_PaymentCreator_TEST {
         System.assertEquals(closedWonStage, oh.opp.StageName);
     }
 
-    private static testMethod void testOpportunityWillAutoCloseIfAmountUpdatedToMatchPayments() {
+    @IsTest private static void testOpportunityWillAutoCloseIfAmountUpdatedToMatchPayments() {
         String closedWonStage = UTIL_UnitTestData_TEST.getClosedWonStage();
         String openStage = UTIL_UnitTestData_TEST.getOpenStage();
 
@@ -630,7 +630,7 @@ private with sharing class PMT_PaymentCreator_TEST {
         System.assertEquals(closedWonStage, oh.opp.StageName);
     }
 
-    private static testMethod void testOpportunityWillNotAutoCloseIfNotAllPaymentsReceived() {
+    @IsTest private static void testOpportunityWillNotAutoCloseIfNotAllPaymentsReceived() {
         String closedWonStage = UTIL_UnitTestData_TEST.getClosedWonStage();
         String openStage = UTIL_UnitTestData_TEST.getOpenStage();
 
@@ -678,7 +678,7 @@ private with sharing class PMT_PaymentCreator_TEST {
         System.assertEquals(openStage, oh.opp.StageName);
     }
 
-    private static testMethod void testOpportunityWillNotAutoCloseIfNoStageNameSet() {
+    @IsTest private static void testOpportunityWillNotAutoCloseIfNoStageNameSet() {
         String openStage = UTIL_UnitTestData_TEST.getOpenStage();
 
         if (String.isEmpty(openStage)) {
@@ -714,7 +714,7 @@ private with sharing class PMT_PaymentCreator_TEST {
         System.assertEquals(openStage, oh.opp.StageName);
     }
 
-    private static testMethod void testOpportunityWillNotAutoCloseIfAlreadyClosed() {
+    @IsTest private static void testOpportunityWillNotAutoCloseIfAlreadyClosed() {
         String closedWonStage = UTIL_UnitTestData_TEST.getClosedWonStage();
         String openStage = UTIL_UnitTestData_TEST.getOpenStage();
         String closedLostStage = UTIL_UnitTestData_TEST.getClosedLostStage();
@@ -764,7 +764,7 @@ private with sharing class PMT_PaymentCreator_TEST {
         System.assertEquals(closedLostStage, oh.opp.StageName);
     }
 
-    private static testMethod void testOpportunityWillNotAutoCloseIfAllPaymentsWrittenOff() {
+    @IsTest private static void testOpportunityWillNotAutoCloseIfAllPaymentsWrittenOff() {
         String closedWonStage = UTIL_UnitTestData_TEST.getClosedWonStage();
         String openStage = UTIL_UnitTestData_TEST.getOpenStage();
 
@@ -802,7 +802,7 @@ private with sharing class PMT_PaymentCreator_TEST {
         System.assertEquals(openStage, oh.opp.StageName);
     }
 
-    private static testMethod void testOpportunityWillNotAutoCloseClosesIfAmountSetToZero() {
+    @IsTest private static void testOpportunityWillNotAutoCloseClosesIfAmountSetToZero() {
         String closedWonStage = UTIL_UnitTestData_TEST.getClosedWonStage();
         String openStage = UTIL_UnitTestData_TEST.getOpenStage();
 
@@ -899,7 +899,7 @@ private with sharing class PMT_PaymentCreator_TEST {
         Excluded opps don't get payments.
         Included opps payments are created correctly.
     **********************************************************************************************************/            
-    static testMethod void testBatchPaymentCreation() {
+    @IsTest static void testBatchPaymentCreation() {
         npe01__Contacts_And_Orgs_Settings__c consSettings = new npe01__Contacts_And_Orgs_Settings__c (
             npe01__Payments_Enabled__c= true, 
             Opp_Types_Excluded_for_Payments__c='NO-PAYMENT'

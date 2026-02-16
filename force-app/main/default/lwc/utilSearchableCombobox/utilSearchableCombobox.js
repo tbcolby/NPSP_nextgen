@@ -17,9 +17,9 @@ export default class utilSearchableCombobox extends LightningElement {
     @api dropdownAlignment = "left";
 
     @track isSearchOpen;
-    @track searchKey = "";
+    searchKey = "";
     @track searchResults;
-    @track areSearchResultsVisible = false;
+    areSearchResultsVisible = false;
 
     get customSearchResultBoxClasses() {
         if (this.dropdownAlignment === "bottom-left") {

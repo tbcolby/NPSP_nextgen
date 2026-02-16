@@ -18,12 +18,12 @@ export default class geHome extends NavigationMixin(LightningElement) {
     // Expose custom labels to template
     CUSTOM_LABELS = GeLabelService.CUSTOM_LABELS;
 
-    @track view = GIFT_ENTRY;
+    view = GIFT_ENTRY;
     @track formTemplateId;
     @track cloneFormTemplate;
-    @track isLoading = true;
-    @track isAppAccessible = true;
-    @track isListViewAccessible = true;
+    isLoading = true;
+    isAppAccessible = true;
+    isListViewAccessible = true;
     _listViewPermissionErrorHeader;
     _listViewPermissionErrorBody;
 

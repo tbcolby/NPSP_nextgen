@@ -71,7 +71,7 @@ private class CRLP_ConfigBuilder_TEST {
         CRLP_Rollup_SEL.cachedRollups = (List<Rollup__mdt>) JSON.deserialize(rollupsJSON, List<Rollup__mdt>.class);
     }
 
-    static testMethod void test_CMTdeployment() {
+    @IsTest static void test_CMTdeployment() {
         mockRollupCMTValues();
 
         Filter_Group__mdt fg = CMT_FilterRule_SEL.cachedFilterGroups[0];

@@ -15,22 +15,27 @@ This document outlines the strategy for modernizing NPSP_nextgen's user interfac
 ```
 ┌─────────────────────────────────────────────────────────────────┐
 │                    UI TECHNOLOGY INVENTORY                       │
+│              (Updated 2026-02-15 after Phase 0+1)               │
 ├─────────────────────────────────────────────────────────────────┤
 │                                                                  │
-│  Lightning Web Components  ████████████████████  125 components │
+│  Lightning Web Components  ████████████████████  ~115 components│
 │  Aura Components           ███████░░░░░░░░░░░░░  35 components  │
 │  Visualforce Pages         ████████████████░░░░  79 pages       │
 │                                                                  │
-│  Total UI Components: 239                                        │
+│  Total UI Components: ~229                                       │
 │                                                                  │
 │  ┌───────────────────────────────────────────────────────────┐  │
 │  │              MODERNIZATION READINESS                       │  │
 │  │                                                            │  │
-│  │  LWC:  ████████████████████  Modern (52%)                 │  │
+│  │  LWC:  ████████████████████  Modern (50%)                 │  │
 │  │  Aura: ███████░░░░░░░░░░░░░  Migration Target (15%)       │  │
-│  │  VF:   ████████████████░░░░  Long-term Target (33%)       │  │
+│  │  VF:   ████████████████░░░░  Long-term Target (35%)       │  │
 │  │                                                            │  │
 │  └───────────────────────────────────────────────────────────┘  │
+│                                                                  │
+│  Phase 0: Removed ~10 Elevate-specific LWC components            │
+│  Phase 1: Cleaned ~90 unnecessary @track decorators              │
+│           Re-formatted all LWC JS with Prettier 2.8.7            │
 │                                                                  │
 └─────────────────────────────────────────────────────────────────┘
 ```
@@ -309,7 +314,7 @@ These require careful analysis and may warrant redesign rather than direct migra
 | GE_GiftEntry | Very High | Core gift entry - needs careful planning |
 | HH_AddressMgr | High | Google Maps integration |
 | HH_Canvas | High | D3.js visualization |
-| RD2_EntryForm | High | Elevate integration |
+| RD2_EntryForm | High | Payment integration (Elevate removed in Phase 0) |
 | BGE_* components | High | Batch gift entry workflow |
 
 **Recommendation**: Create new LWC implementations alongside Aura, allowing gradual migration rather than big-bang replacement.
@@ -493,6 +498,6 @@ export default class NpspComponentName extends LightningElement {
 
 ---
 
-*Document Version: 1.0*
-*Last Updated: 2026-02-03*
+*Document Version: 1.1*
+*Last Updated: 2026-02-15*
 *Author: NPSP_nextgen Architecture Team*

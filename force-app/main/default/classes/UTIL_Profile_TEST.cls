@@ -40,7 +40,7 @@ private class UTIL_Profile_TEST {
     @description Test multiple calls of the method getInstance() to make sure the UTIL_Profile instance is constructed only once.
     verify: The query should run only once.
     ***************************************************************************************************************************/   
-    private static testMethod void testGetInstanceQueriesOnceOnMultipleCalls() {
+    @IsTest private static void testGetInstanceQueriesOnceOnMultipleCalls() {
         System.assertEquals(0, Limits.getQueries(), 'The query count should be 0');
 
         UTIL_Profile profileUtil = UTIL_Profile.getInstance();
@@ -59,7 +59,7 @@ private class UTIL_Profile_TEST {
     @description Test the getProfileIds() with valid Profile name.
     verify: getProfileIds() returns all Profile Ids for the specified Profile Name
     ***************************************************************************************************************************/   
-    private static testMethod void testGetProfileIdsWithValidProfileName() {
+    @IsTest private static void testGetProfileIdsWithValidProfileName() {
         Map<String, List<Profile>> orgProfilesByName = getProfilesByName();
 
         Test.startTest();
@@ -86,7 +86,7 @@ private class UTIL_Profile_TEST {
     @description Test the getProfileIds() with invalid Profile name.
     verify: getProfileIds() returns empty List
     ***************************************************************************************************************************/   
-    private static testMethod void testGetProfileIdsWithInvalidProfileName() {
+    @IsTest private static void testGetProfileIdsWithInvalidProfileName() {
         Test.startTest();
         UTIL_Profile profileUtil = UTIL_Profile.getInstance();
         Test.stopTest();

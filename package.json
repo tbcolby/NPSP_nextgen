@@ -1,20 +1,20 @@
 {
   "devDependencies": {
-    "@lwc/eslint-plugin-lwc": "^1.1.1",
+    "@lwc/eslint-plugin-lwc": "^1.8.2",
     "@sa11y/jest": "^3.1.0",
-    "@salesforce/eslint-config-lwc": "^3.2.1",
+    "@salesforce/eslint-config-lwc": "^3.7.1",
     "@salesforce/eslint-plugin-lightning": "^1.0.0",
     "@salesforce/sfdx-lwc-jest": "^1.4.0",
-    "eslint": "^8.7.0",
-    "eslint-plugin-import": "^2.25.4",
-    "eslint-plugin-jest": "^26.0.0",
-    "jest": "^27.4.3",
-    "prettier": "2.5.1"
+    "eslint": "^8.57.1",
+    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-jest": "^26.9.0",
+    "jest": "^27.5.1",
+    "prettier": "2.8.7"
   },
   "resolutions": {
-    "js-yaml": "^3.13.1",
-    "node-notifier": "^8.0.1",
-    "axios": "^0.21.1"
+    "js-yaml": "^3.14.1",
+    "node-notifier": "^8.0.2",
+    "axios": "^0.28.0"
   },
   "scripts": {
     "test:unit": "lwc-jest --skipApiVersionCheck",

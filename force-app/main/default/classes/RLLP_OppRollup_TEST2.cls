@@ -43,13 +43,13 @@ public with sharing class RLLP_OppRollup_TEST2 {
     /*********************************************************************************************************
     * @description Runs testOpportunityUtilityErrorHandling test method for the One to One account processor.
     */
-    static testMethod void testOpportunityUtilityErrorHandlingOne2One() {
+    @IsTest static void testOpportunityUtilityErrorHandlingOne2One() {
     	testOpportunityUtilityErrorHandling(CAO_Constants.ONE_TO_ONE_PROCESSOR);
     }
     /*********************************************************************************************************
     * @description Runs testOpportunityUtilityErrorHandling test method for the household account processor.
     */
-    static testMethod void testOpportunityUtilityErrorHandlingHHAccount() {
+    @IsTest static void testOpportunityUtilityErrorHandlingHHAccount() {
     	testOpportunityUtilityErrorHandling(CAO_Constants.HH_ACCOUNT_PROCESSOR);
     }
     /*********************************************************************************************************
@@ -117,13 +117,13 @@ public with sharing class RLLP_OppRollup_TEST2 {
     /*********************************************************************************************************
     * @description Runs testGivingRollupTooManyOpps test method for the One to One account processor.
     */
-    static testMethod void testGivingRollupTooManyOppsOne2One(){
+    @IsTest static void testGivingRollupTooManyOppsOne2One(){
         testGivingRollupTooManyOpps(CAO_Constants.ONE_TO_ONE_PROCESSOR);
     }
     /*********************************************************************************************************
     * @description Runs testGivingRollupTooManyOpps test method for the household account processor.
     */
-    static testMethod void testGivingRollupTooManyOppsHHAccount(){
+    @IsTest static void testGivingRollupTooManyOppsHHAccount(){
         testGivingRollupTooManyOpps(CAO_Constants.HH_ACCOUNT_PROCESSOR);
     }
     /*********************************************************************************************************
@@ -183,13 +183,13 @@ public with sharing class RLLP_OppRollup_TEST2 {
     /*********************************************************************************************************
     * @description Runs testHouseholdStats test method for the One to One account processor.
     */
-    static testMethod void testHouseholdStatsOne2One(){
+    @IsTest static void testHouseholdStatsOne2One(){
         testHouseholdStats(CAO_Constants.ONE_TO_ONE_PROCESSOR);
     }
     /*********************************************************************************************************
     * @description Runs testHouseholdStats test method for the household account processor.
     */
-    static testMethod void testHouseholdStatsHHAccount(){
+    @IsTest static void testHouseholdStatsHHAccount(){
         testHouseholdStats(CAO_Constants.HH_ACCOUNT_PROCESSOR);
     }
     /*********************************************************************************************************
@@ -284,13 +284,13 @@ public with sharing class RLLP_OppRollup_TEST2 {
     /*********************************************************************************************************
     * @description Runs testUserDefinedRollup test method for the One to One account processor.
     */
-    static testMethod void testUserDefinedRollupOne2One(){
+    @IsTest static void testUserDefinedRollupOne2One(){
         testUserDefinedRollup(CAO_Constants.ONE_TO_ONE_PROCESSOR);
     }
     /*********************************************************************************************************
     * @description Runs testUserDefinedRollup test method for the household account processor.
     */
-    static testMethod void testUserDefinedRollupHHAccount(){
+    @IsTest static void testUserDefinedRollupHHAccount(){
         testUserDefinedRollup(CAO_Constants.HH_ACCOUNT_PROCESSOR);
     }
     /*********************************************************************************************************
@@ -386,13 +386,13 @@ public with sharing class RLLP_OppRollup_TEST2 {
     /*********************************************************************************************************
     * @description Runs testMultiCurrencyMethods test method for the One to One account processor.
     */
-    static testMethod void testMultiCurrencyMethodsOne2One(){
+    @IsTest static void testMultiCurrencyMethodsOne2One(){
         testMultiCurrencyMethods(CAO_Constants.ONE_TO_ONE_PROCESSOR);
     }
     /*********************************************************************************************************
     * @description Runs testMultiCurrencyMethods test method for the household account processor.
     */
-    static testMethod void testMultiCurrencyMethodsHHAccount(){
+    @IsTest static void testMultiCurrencyMethodsHHAccount(){
         testMultiCurrencyMethods(CAO_Constants.HH_ACCOUNT_PROCESSOR);
     }
     /*********************************************************************************************************
@@ -466,13 +466,13 @@ public with sharing class RLLP_OppRollup_TEST2 {
     /*********************************************************************************************************
     * @description Runs testRollupAlls test method for the One to One account processor.
     */
-    static testMethod void testRollupAllsOne2One(){
+    @IsTest static void testRollupAllsOne2One(){
         testRollupAlls(CAO_Constants.ONE_TO_ONE_PROCESSOR);
     }
     /*********************************************************************************************************
     * @description Runs testRollupAlls test method for the household account processor.
     */
-    static testMethod void testRollupAllsHHAccount(){
+    @IsTest static void testRollupAllsHHAccount(){
         testRollupAlls(CAO_Constants.HH_ACCOUNT_PROCESSOR);
     }
     /*********************************************************************************************************
@@ -501,13 +501,13 @@ public with sharing class RLLP_OppRollup_TEST2 {
     /*********************************************************************************************************
     * @description Runs testFiscalYearandCustomNDay test method for the One to One account processor.
     */
-    static testMethod void testFiscalYearandCustomNDayOne2One(){
+    @IsTest static void testFiscalYearandCustomNDayOne2One(){
         testFiscalYearandCustomNDay(CAO_Constants.ONE_TO_ONE_PROCESSOR);
     }
     /*********************************************************************************************************
     * @description Runs testFiscalYearandCustomNDay test method for the household account processor.
     */
-    static testMethod void testFiscalYearandCustomNDayHHAccount(){
+    @IsTest static void testFiscalYearandCustomNDayHHAccount(){
         testFiscalYearandCustomNDay(CAO_Constants.HH_ACCOUNT_PROCESSOR);
     }
     /*********************************************************************************************************
@@ -572,13 +572,13 @@ public with sharing class RLLP_OppRollup_TEST2 {
     /*********************************************************************************************************
     * @description Runs testSoftCredits test method for the One to One account processor.
     */
-    static testMethod void testSoftCreditsOne2One(){
+    @IsTest static void testSoftCreditsOne2One(){
         testSoftCredits(CAO_Constants.ONE_TO_ONE_PROCESSOR);
     }
     /*********************************************************************************************************
     * @description Runs testSoftCredits test method for the household account processor.
     */
-    static testMethod void testSoftCreditsHHAccount(){
+    @IsTest static void testSoftCreditsHHAccount(){
         testSoftCredits(CAO_Constants.HH_ACCOUNT_PROCESSOR);
     }
     /*********************************************************************************************************
@@ -665,13 +665,13 @@ public with sharing class RLLP_OppRollup_TEST2 {
     /*********************************************************************************************************
     * @description Runs testOrgSoftCredits test method for the One to One account processor.
     */
-    static testMethod void testOrgSoftCreditsOne2One(){
+    @IsTest static void testOrgSoftCreditsOne2One(){
         testOrgSoftCredits(CAO_Constants.ONE_TO_ONE_PROCESSOR);
     }
     /*********************************************************************************************************
     * @description Runs testOrgSoftCredits test method for the household account processor.
     */
-    static testMethod void testOrgSoftCreditsHHAccount(){
+    @IsTest static void testOrgSoftCreditsHHAccount(){
         testOrgSoftCredits(CAO_Constants.HH_ACCOUNT_PROCESSOR);
     }
     /*********************************************************************************************************
@@ -752,13 +752,13 @@ public with sharing class RLLP_OppRollup_TEST2 {
     /*********************************************************************************************************
     * @description Runs testFutureMethods test method for the One to One account processor.
     */
-    static testMethod void testFutureMethodsOne2One(){
+    @IsTest static void testFutureMethodsOne2One(){
         testFutureMethods(CAO_Constants.ONE_TO_ONE_PROCESSOR);
     }
     /*********************************************************************************************************
     * @description Runs testFutureMethods test method for the household account processor.
     */
-    static testMethod void testFutureMethodsHHAccount(){
+    @IsTest static void testFutureMethodsHHAccount(){
         testFutureMethods(CAO_Constants.HH_ACCOUNT_PROCESSOR);
     }
     /*********************************************************************************************************
@@ -816,7 +816,7 @@ public with sharing class RLLP_OppRollup_TEST2 {
     /*********************************************************************************************************
     * @description Verifies the RLLP_OppRollup_UTIL getCurrentFY() is not null
     */
-    static testMethod void testFYUtility(){
+    @IsTest static void testFYUtility(){
         integer fy = RLLP_OppRollup_UTIL.getCurrentFY();
         system.assert(fy != null);
     }
@@ -824,7 +824,7 @@ public with sharing class RLLP_OppRollup_TEST2 {
     * @description For a given date, test to see if fiscal year is correctly calculated based on all
     * combinations of org fiscal year settings
     */
-    static testMethod void testGetFiscalYearForDate() {
+    @IsTest static void testGetFiscalYearForDate() {
         Date targetDate = Date.newInstance(2014, 10, 1);
 
         // Target date is in fiscal year Jan 2014 through Dec 2014, year comes from start
@@ -902,14 +902,14 @@ public with sharing class RLLP_OppRollup_TEST2 {
     /*********************************************************************************************************
     * @description Runs testUDRChangeBehavior test method for the One to One account processor.
     */
-    static testMethod void testUDRChangeBehaviorOne2One(){
+    @IsTest static void testUDRChangeBehaviorOne2One(){
         testUDRChangeBehavior(CAO_Constants.ONE_TO_ONE_PROCESSOR);
     }
     /*********************************************************************************************************
     * @description Creates User Defined Rollups, a Contact and an Opportunity, then updates the Opportunity
     * Total Quantity and verifies rollup fields from opportunity trigger for the contacts reflects the update.
     */
-    static testMethod void testUDRChangeBehaviorHHAccount(){
+    @IsTest static void testUDRChangeBehaviorHHAccount(){
         testUDRChangeBehavior(CAO_Constants.HH_ACCOUNT_PROCESSOR);
     }
     /*********************************************************************************************************

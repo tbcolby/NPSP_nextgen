@@ -82,7 +82,7 @@ public class ALLO_Multicurrency_TEST {
     * converts the allocation amount to the opportunity's currency. Verifies user is prevented from manually
     * modifying an allocation's currency.
     */
-    static testMethod void alloMultiCurrency() {
+    @IsTest static void alloMultiCurrency() {
         //only run test in multicurrency orgs
         if (!userInfo.isMultiCurrencyOrganization())
             return;
@@ -144,7 +144,7 @@ public class ALLO_Multicurrency_TEST {
     * @description This multicurrency test only runs on multicurrency organizations, and does nothing
     * otherwise. Verifies new allocations match currency code of Opportunities.
     */
-    static testMethod void validateMulticurrencyAllocsMatchOppCurrency() {
+    @IsTest static void validateMulticurrencyAllocsMatchOppCurrency() {
         //only run test in multicurrency orgs
         if (!UserInfo.isMultiCurrencyOrganization()) {
             return;
@@ -192,7 +192,7 @@ public class ALLO_Multicurrency_TEST {
     * @description This multicurrency test only runs on multicurrency organizations, and does nothing 
     * otherwise. Verifies that rollups correctly convert amounts of different currencies.
     */
-    static testMethod void rollupMultiCurrency() {
+    @IsTest static void rollupMultiCurrency() {
         //only run test in multicurrency orgs
         if (!userInfo.isMultiCurrencyOrganization())
             return;
@@ -255,7 +255,7 @@ public class ALLO_Multicurrency_TEST {
     * @description This multicurrency test only runs on multicurrency organizations, and does nothing 
     * otherwise. Verifies that Make Default Allocations respects multicurrency configuration.
     */
-    static testMethod void testMakeDefaultAllocations() {
+    @IsTest static void testMakeDefaultAllocations() {
         //only run test in multicurrency orgs
         if (!userInfo.isMultiCurrencyOrganization())
             return;

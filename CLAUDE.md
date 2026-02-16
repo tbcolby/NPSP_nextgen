@@ -4,16 +4,21 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-NPSP_nextgen is a community-driven fork of Salesforce's Nonprofit Success Pack (NPSP), enhanced with LLM-assisted development. It's an unmanaged Salesforce package (namespace: `npsp`, API version 53.0) containing ~1,689 Apex classes and ~125 Lightning Web Components.
+NPSP_nextgen is a community-driven fork of Salesforce's Nonprofit Success Pack (NPSP), enhanced with LLM-assisted development. It's a 2GP unlocked Salesforce package (namespace: `npsp2`, API version 63.0) containing ~1,570 Apex classes and ~115 Lightning Web Components.
 
 **Critical**: This is independent from Salesforce/Salesforce.org. Always test in a sandbox before production deployment.
+
+### Modernization Status
+- **Phase 0** (complete): Namespace npsp→npsp2, API 53→63, Elevate removal, CCI 4.6.0
+- **Phase 1** (complete): testMethod→@IsTest (648), @track cleanup (~90), deps update, ESLint fixes
+- See `planning/` for full roadmap and `documentation/MODERNIZATION_BURNDOWN.md` for tracking
 
 ## Build & Development Commands
 
 ### Environment Setup
 ```bash
 yarn install                              # Install JS dependencies
-pip install cumulusci                     # Install CumulusCI (>= 3.74.0)
+pip install cumulusci                     # Install CumulusCI (>= 4.6.0)
 cci org scratch dev my_org                # Create scratch org
 cci flow run dev_org --org my_org         # Deploy and configure dev org
 ```
@@ -48,8 +53,8 @@ npm run lint:lwc                          # ESLint for LWC
 ```
 force-app/
 ├── main/default/
-│   ├── classes/          # 1,689 Apex classes
-│   ├── lwc/              # 125+ LWC components
+│   ├── classes/          # ~1,570 Apex classes
+│   ├── lwc/              # ~115 LWC components
 │   ├── aura/             # Legacy Aura components
 │   ├── triggers/         # Triggers (delegated to TDTM)
 │   └── customMetadata/   # Configuration metadata
@@ -102,16 +107,18 @@ force-app/
 - Avoid `@track` for primitive values
 
 ### Testing
+- Use `@IsTest` annotation (not deprecated `testMethod` keyword)
 - Use `@TestSetup` for shared test data
 - Include assertion messages: `System.assertEquals(expected, actual, 'Description')`
 - Test bulk scenarios (200+ records) for trigger handlers
+- LWC tests: 52 Jest suites, 422 tests (all passing)
 
 ## Agent System
 
 This project has LLM agent infrastructure in `.claude/`:
 - `.claude/agents/ARCHITECTURE.md` - Multi-agent system design
 - `.claude/INTAKE_SYSTEM.md` - Automated issue triage
-- `.claude/agents/domains/` - Specialized agent guidance for Apex, LWC, testing, security, DevOps
+- `.claude/agents/domains/` - Specialized agent guidance for Apex, LWC, testing, security, DevOps, documentation, modernization
 
 ## Dependencies
 

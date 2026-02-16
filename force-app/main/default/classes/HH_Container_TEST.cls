@@ -68,7 +68,7 @@ private class HH_Container_TEST {
     /*********************************************************************************************************
     * @description Tests getHH() and getContacts()
     */
-    public static testMethod void testGetHHGetContacts() {
+    @IsTest public static void testGetHHGetContacts() {
 
         initTestData();
 
@@ -104,7 +104,7 @@ private class HH_Container_TEST {
     verify:
         Contacts are retrieved successfully
     **********************************************************************************************************/
-    static testMethod void testContactsAreReturnedWhenHHNamingSettingsIsInvalidAndAutomaticHHNamingIsOff() {
+    @IsTest static void testContactsAreReturnedWhenHHNamingSettingsIsInvalidAndAutomaticHHNamingIsOff() {
         UTIL_UnitTestData_TEST.turnOffAutomaticHHNaming();
         UTIL_UnitTestData_TEST.setupInvalidHHNamingSettings();
 
@@ -129,7 +129,7 @@ private class HH_Container_TEST {
     verify:
         The SOQL is correct
     **********************************************************************************************************/
-    static testMethod void testContactSoqlIsCorrect() {
+    @IsTest static void testContactSoqlIsCorrect() {
         UTIL_UnitTestData_TEST.turnOnAutomaticHHNaming();
         UTIL_UnitTestData_TEST.setupHHNamingSettings(
             '{!{!FIRSTname} {!LASTname}} Household',
@@ -178,7 +178,7 @@ private class HH_Container_TEST {
             - The MiddleName field (if the org has MiddleName enabled)
             - Contact fields specified in Household Naming configuration
     **********************************************************************************************************/
-    static testMethod void testGetContactFieldsReturnsExpectedFieldNames() {
+    @IsTest static void testGetContactFieldsReturnsExpectedFieldNames() {
         UTIL_UnitTestData_TEST.setupHHNamingSettings();
 
         Set<String> fieldNames = HH_Container_LCTRL.getContactFields();
@@ -218,7 +218,7 @@ private class HH_Container_TEST {
     /*********************************************************************************************************
     * @description Tests getAddresses()
     */
-    public static testMethod void testGetAddresses() {
+    @IsTest public static void testGetAddresses() {
         //skip the test if Advancement is installed
         if(ADV_PackageInfo_SVC.useAdv()) return;
 
@@ -238,14 +238,14 @@ private class HH_Container_TEST {
     /*********************************************************************************************************
     * @description Tests packageLabels()
     */
-    public static testMethod void testPackageLabels() {
+    @IsTest public static void testPackageLabels() {
         HH_Container_LCTRL.packageLabels();
     }
 
     /*********************************************************************************************************
     * @description Tests upsertContacts()
     */
-    public static testMethod void testUpsertContacts() {
+    @IsTest public static void testUpsertContacts() {
         initTestData();
 
         conA.FirstName = 'upserted';
@@ -272,7 +272,7 @@ private class HH_Container_TEST {
     verify:
         The transaction is completely rolled back and there is no partial commit
     **********************************************************************************************************/
-    private static testMethod void testUpsertContactsRollsBackAllDmlsOnError() {
+    @IsTest private static void testUpsertContactsRollsBackAllDmlsOnError() {
         initTestData();
 
         String existingConAFirstName = conA.FirstName;
@@ -318,7 +318,7 @@ private class HH_Container_TEST {
     /*********************************************************************************************************
     * @description Tests updateHousehold()
     */
-    public static testMethod void testUpdateHousehold() {
+    @IsTest public static void testUpdateHousehold() {
         initTestData();
 
         Test.startTest();
@@ -339,7 +339,7 @@ private class HH_Container_TEST {
     /*********************************************************************************************************
     * @description Tests mergeHouseholds()
     */
-    public static testMethod void testMergeHouseholds() {
+    @IsTest public static void testMergeHouseholds() {
         initTestData();
         Account hhA2 = new Account(Name = 'test_hh2', npe01__SYSTEM_AccountType__c = CAO_Constants.HH_ACCOUNT_TYPE);
         Account hhA3 = new Account(Name = 'test_hh3', npe01__SYSTEM_AccountType__c = CAO_Constants.HH_ACCOUNT_TYPE);
@@ -363,7 +363,7 @@ private class HH_Container_TEST {
         Only one default Address exists for the Household.
         Other Households are merged with the Household.
     **********************************************************************************************************/
-    private static testMethod void saveShouldResultInOneDefaultAddressWhenContactsAreAddedToTheHousehold() {
+    @IsTest private static void saveShouldResultInOneDefaultAddressWhenContactsAreAddedToTheHousehold() {
         Integer accountSize = 3;
         Account[] accounts = buildAccounts(accountSize);
         insert accounts;
@@ -447,7 +447,7 @@ private class HH_Container_TEST {
         A new Household and an Address are created for the Removed Contact.
         No Household is merged.
     **********************************************************************************************************/
-    private static testMethod void saveShouldAddRemovedContactToNewHousehold() {
+    @IsTest private static void saveShouldAddRemovedContactToNewHousehold() {
         //skip the test if Advancement is installed
         if(ADV_PackageInfo_SVC.useAdv()) return;
 
@@ -530,7 +530,7 @@ private class HH_Container_TEST {
     verify:
         Name and Formal/Informal Greetings are not modified on the Household
     **********************************************************************************************************/
-    static testMethod void testHHNameAndGreetingsAreNotModifiedWhenAutomaticHHNamingIsOff() {
+    @IsTest static void testHHNameAndGreetingsAreNotModifiedWhenAutomaticHHNamingIsOff() {
         UTIL_UnitTestData_TEST.turnOffAutomaticHHNaming();
         UTIL_UnitTestData_TEST.setupInvalidHHNamingSettings();
 
@@ -554,7 +554,7 @@ private class HH_Container_TEST {
     verify:
         Name and Formal/Informal Greetings are set on the Household
     **********************************************************************************************************/
-    static testMethod void testHHNameAndGreetingsAreModifiedWhenAutomaticHHNamingIsOn() {
+    @IsTest static void testHHNameAndGreetingsAreModifiedWhenAutomaticHHNamingIsOn() {
         UTIL_UnitTestData_TEST.turnOnAutomaticHHNaming();
         initTestData();
 
@@ -572,7 +572,7 @@ private class HH_Container_TEST {
     /*********************************************************************************************************
     * @description Tests addContactAddresses()
     */
-    public static testMethod void testAddContactAddresses() {
+    @IsTest public static void testAddContactAddresses() {
 
         //skip the test if Advancement is installed
         if(ADV_PackageInfo_SVC.useAdv()) return;
@@ -602,7 +602,7 @@ private class HH_Container_TEST {
     /*********************************************************************************************************
     * @description Tests getSalutations()
     */
-    public static testMethod void testGetSalutations() {
+    @IsTest public static void testGetSalutations() {
         list<HH_Container_LCTRL.SelectOption> listSO = HH_Container_LCTRL.getSalutations();
         system.assert(listSO.size() > 0);
     }
@@ -610,7 +610,7 @@ private class HH_Container_TEST {
     /*********************************************************************************************************
     * @description Tests HH_AutoCompleteDataProvider_LCTRL
     */
-    public static testMethod void testAutoCompleteDataProvider() {
+    @IsTest public static void testAutoCompleteDataProvider() {
 
         initTestData();
 
@@ -632,7 +632,7 @@ private class HH_Container_TEST {
     /*********************************************************************************************************
     * @description Test if the queryValue is valid for the SOSL
     */
-    public static testMethod void testAutoCompleteIsValidSearchQuery() {
+    @IsTest public static void testAutoCompleteIsValidSearchQuery() {
         System.assertEquals(false, HH_AutoCompleteDataProvider_LCTRL.isValidSearchQuery(null), 'Search is invalid for null query');
         System.assertEquals(false, HH_AutoCompleteDataProvider_LCTRL.isValidSearchQuery(''), 'Search is invalid for empty query');
         System.assertEquals(false, HH_AutoCompleteDataProvider_LCTRL.isValidSearchQuery('c'), 'Search is invalid for one character query');
@@ -646,7 +646,7 @@ private class HH_Container_TEST {
     * @description Verifies auto complete does not return records when Contact.Name is encrypted and
     * the search query is not at least two characters long
     */
-    public static testMethod void testAutoCompleteReturnsEmptyListForEncryptedContactNameAndInvalidSearchQuery() {
+    @IsTest public static void testAutoCompleteReturnsEmptyListForEncryptedContactNameAndInvalidSearchQuery() {
         initTestData();
         UTIL_UnitTestData_TEST.setFixedSearchResults(new List<Contact>{ conA, conO });
 
@@ -660,7 +660,7 @@ private class HH_Container_TEST {
     * @description Verifies auto complete returns records when Contact.Name is encrypted and
     * the search query is valid
     */
-    public static testMethod void testAutoCompleteReturnsRecordsForEncryptedContactNameAndValidSearchQuery() {
+    @IsTest public static void testAutoCompleteReturnsRecordsForEncryptedContactNameAndValidSearchQuery() {
         initTestData();
         UTIL_UnitTestData_TEST.setFixedSearchResults(new List<Contact>{ conA, conO });
 
@@ -673,7 +673,7 @@ private class HH_Container_TEST {
     /*********************************************************************************************************
     * @description Verifies required methods can be run as a User without Undeliverable Address permissions
     */
-    public static testMethod void testPageLoadsWithoutUndeliverableAddressPermissions() {
+    @IsTest public static void testPageLoadsWithoutUndeliverableAddressPermissions() {
         User adminUser = UTIL_UnitTestData_TEST.createUserWithoutInsert(UTIL_Profile.SYSTEM_ADMINISTRATOR);
         Id adminProfileId = [SELECT Id FROM Profile WHERE Name = :UTIL_Profile.SYSTEM_ADMINISTRATOR LIMIT 1].Id;
         
@@ -722,7 +722,7 @@ private class HH_Container_TEST {
     /*********************************************************************************************************
     * @description Verifies Undeliverable status syncs correctly as a User without Undeliverable Address permissions
     */
-    public static testMethod void testSyncWithoutUndeliverableAddressPermissions() {
+    @IsTest public static void testSyncWithoutUndeliverableAddressPermissions() {
         User adminUser = UTIL_UnitTestData_TEST.createUserWithoutInsert(UTIL_Profile.SYSTEM_ADMINISTRATOR);
         Id adminProfileId = [SELECT Id FROM Profile WHERE Name = :UTIL_Profile.SYSTEM_ADMINISTRATOR LIMIT 1].Id;
         

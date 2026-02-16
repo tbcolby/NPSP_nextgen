@@ -98,11 +98,11 @@ export default class bdiObjectMappingModal extends LightningElement {
     @api diObjectMappingSetDevName;
     @api namespaceWrapper;
 
-    @track isLoading;
-    @track inSave = false;
+    isLoading;
+    inSave = false;
     @track row;
 
-    @track modalTitle;
+    modalTitle;
 
     @track diImportRecordFieldOptions;
     @track diImportRecordStatusFieldOptions;

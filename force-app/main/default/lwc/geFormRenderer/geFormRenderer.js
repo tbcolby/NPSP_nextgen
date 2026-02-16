@@ -123,16 +123,16 @@ export default class GeFormRenderer extends LightningElement {
     @api saveDisabled = false;
     @api isMakeRecurringButtonDisabled = false;
 
-    @track isPermissionError = false;
+    isPermissionError = false;
     @track permissionErrorTitle;
     @track permissionErrorMessage;
     @track formTemplate;
     @track fieldMappings;
-    @track ready = false;
-    @track name = "";
-    @track description = "";
-    @track mappingSet = "";
-    @track version = "";
+    ready = false;
+    name = "";
+    description = "";
+    mappingSet = "";
+    version = "";
     @api hasPaymentWidget = false;
     _openedGiftId;
     @track _batch = {};
@@ -147,7 +147,7 @@ export default class GeFormRenderer extends LightningElement {
     @track widgetConfig = {
         hasPaymentMethodFieldInForm: undefined,
     };
-    @track isAccessible = true;
+    isAccessible = true;
 
     _isFormCollapsed = false;
     _shouldInformParent = true;

@@ -34,7 +34,7 @@ export default class rd2EntryFormScheduleSection extends LightningElement {
     cssHideOnlyAmountFrequencyModal;
     cssLastDay;
     firstRendered = true;
-    @track isMonthlyDonation = false;
+    isMonthlyDonation = false;
     @api isInitiallyMonthlyDonation = false;
 
     @track fields = {};

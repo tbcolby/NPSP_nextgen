@@ -11,10 +11,10 @@ export default class ProgressRing extends LightningElement {
 
     @track ringClass;
     @track arcValue;
-    @track isContentVisible = false;
-    @track isComplete = false;
-    @track iconName = "";
-    @track assistiveText = "";
+    isContentVisible = false;
+    isComplete = false;
+    iconName = "";
+    assistiveText = "";
 
     @api
     get valueNow() {

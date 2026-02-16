@@ -36,7 +36,7 @@
 @isTest(IsParallel=True)
 private class UTIL_JobProgress_CTRL_TEST {
 
-    static testMethod void jobProgressController(){
+    @IsTest static void jobProgressController(){
 
         //queue up a batch job to render against
         //borrow method from existing account conversion util
@@ -66,7 +66,7 @@ private class UTIL_JobProgress_CTRL_TEST {
     }
 
     //test behavior when no batch job is present for whatever reason
-    static testMethod void checkNullBatchJobProgressBehavior(){
+    @IsTest static void checkNullBatchJobProgressBehavior(){
         UTIL_JobProgress_CTRL controller = new UTIL_JobProgress_CTRL();
         System.assertEquals(true, controller.getBatchJobs().isEmpty());
         System.assertEquals(null, controller.bj);

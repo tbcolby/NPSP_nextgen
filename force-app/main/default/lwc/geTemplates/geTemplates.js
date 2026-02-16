@@ -37,8 +37,8 @@ export default class GeTemplates extends NavigationMixin(LightningElement) {
     @track templates;
     // TODO: Move this tracked property to a getter
     @track templatesTableActions = TEMPLATES_TABLE_ACTIONS;
-    @track isAccessible = true;
-    @track isLoading = true;
+    isAccessible = true;
+    isLoading = true;
 
     get formTemplateObjectApiName() {
         return FORM_TEMPLATE_INFO.objectApiName;

@@ -39,14 +39,14 @@ public with sharing class HH_Households_TEST {
     /*********************************************************************************************************
     * @description Tests default constructor
     */
-    static testMethod void Households_Test() {
+    @IsTest static void Households_Test() {
         HH_Households testHouseholds = new HH_Households();
     }
 
     /*********************************************************************************************************
     * @description Tests insert individual with all contacts processor
     */
-    static testMethod void newIndContactAllContactsProcessor() {
+    @IsTest static void newIndContactAllContactsProcessor() {
         //Given
         setHouseholdSettingsToAll();
         setOrgContactSettingsToOneToOne();
@@ -129,7 +129,7 @@ public with sharing class HH_Households_TEST {
     * @description Test insert and update a contact and see household object naming change
     */
     //Todo: replace with instance to validate name
-    static testMethod void testNewAndUpdateContactWithHHNaming() {
+    @IsTest static void testNewAndUpdateContactWithHHNaming() {
 
         setupHouseholdSettings();
         setOrgContactSettingsToOneToOne();
@@ -228,7 +228,7 @@ public with sharing class HH_Households_TEST {
     verify:
         The Contact is created and updated successfully
     **********************************************************************************************************/
-    static testMethod void testContactDmlWhenAutomaticHHNamingIsOff() {
+    @IsTest static void testContactDmlWhenAutomaticHHNamingIsOff() {
         setupContactSettingsOneToOneProcessor();
         turnOffAutomaticHHNamingForAllHouseholdProcessor();
         UTIL_UnitTestData_TEST.setupInvalidHHNamingSettings();
@@ -261,7 +261,7 @@ public with sharing class HH_Households_TEST {
     /*********************************************************************************************************
     * @description Tests insert private individual with all contacts processor
     */
-    static testMethod void newPrivateContactAllContactsProcessor() {
+    @IsTest static void newPrivateContactAllContactsProcessor() {
 
         npo02__Households_Settings__c householdSettingsForTests = UTIL_CustomSettingsFacade.getHouseholdsSettingsForTests(new npo02__Households_Settings__c (npo02__Household_Rules__c = HH_Households.ALL_PROCESSOR));
 
@@ -313,7 +313,7 @@ public with sharing class HH_Households_TEST {
     /*********************************************************************************************************
     * @description Tests insert individual with individuals processor
     */
-    static testMethod void newIndContactIndividualsProcessor() {
+    @IsTest static void newIndContactIndividualsProcessor() {
         //Given
         setHouseholdSettingsToAllIndividuals();
         setOrgContactSettingsToOneToOne();
@@ -365,7 +365,7 @@ public with sharing class HH_Households_TEST {
     /*********************************************************************************************************
     * @description Tests insert individual with no household processor
     */
-    static testMethod void newNoHouseholdProcessor() {
+    @IsTest static void newNoHouseholdProcessor() {
         //Given
         setOrgContactSettingsToOneToOne();
         setHouseholdSettingsToNoContacts();
@@ -432,7 +432,7 @@ public with sharing class HH_Households_TEST {
     /*********************************************************************************************************
     * @description Tests insert org contact with all contacts processor
     */
-    static testMethod void newOrgContactAllContactsProcessor() {
+    @IsTest static void newOrgContactAllContactsProcessor() {
 
         setOrgContactSettingsToOneToOne();
 
@@ -496,7 +496,7 @@ public with sharing class HH_Households_TEST {
     /*********************************************************************************************************
     * @description Tests insert org contact with Individuals processor
     */
-    static testMethod void newOrgContactIndividualsProcessor() {
+    @IsTest static void newOrgContactIndividualsProcessor() {
 
         setOrgContactSettingsToOneToOne();
 
@@ -540,7 +540,7 @@ public with sharing class HH_Households_TEST {
     /*********************************************************************************************************
     * @description Tests delete a contact that has it's own household
     */
-    static testMethod void contactDeleteWithOwnHousehold() {
+    @IsTest static void contactDeleteWithOwnHousehold() {
 
         setOrgContactSettingsToOneToOne();
 
@@ -570,7 +570,7 @@ public with sharing class HH_Households_TEST {
     /*********************************************************************************************************
     * @description Tests delete a contact that has a shared household
     */
-    static testMethod void contactDeleteWithSharedHousehold() {
+    @IsTest static void contactDeleteWithSharedHousehold() {
 
         setOrgContactSettingsToOneToOne();
 
@@ -609,7 +609,7 @@ public with sharing class HH_Households_TEST {
     /*********************************************************************************************************
     * @description Tests moving a contact from one household to another, leaving the old household empty.
     */
-    static testMethod void deleteEmptyHouseholds_test(){
+    @IsTest static void deleteEmptyHouseholds_test(){
 
         npo02__Households_Settings__c householdSettingsForTests = UTIL_CustomSettingsFacade.getHouseholdsSettingsForTests(new npo02__Households_Settings__c (npo02__Household_Rules__c = HH_Households.ALL_PROCESSOR, npo02__Advanced_Household_Naming__c = true));
         setOrgContactSettingsToOneToOne();
@@ -660,7 +660,7 @@ public with sharing class HH_Households_TEST {
     * @description Tests merging a contact into a Household updates rollups on the Household when usin gthe
     * One-to-One Account Model
     */
-    static testMethod void testMergeRollupSupport(){
+    @IsTest static void testMergeRollupSupport(){
         UTIL_CustomSettingsFacade.getContactsSettingsForTests(new npe01__Contacts_and_Orgs_Settings__c (
             npe01__Account_Processor__c = CAO_Constants.ONE_TO_ONE_PROCESSOR,
             npe01__Enable_Opportunity_Contact_Role_Trigger__c = true
@@ -711,7 +711,7 @@ public with sharing class HH_Households_TEST {
     /*********************************************************************************************************
     * @description Tests creating many contacts get a Household object.
     */
-    static testMethod void testBulk() {
+    @IsTest static void testBulk() {
         //skip the test if Advancement is installed - we are getting CPU timeouts
         if(ADV_PackageInfo_SVC.useAdv()) return;
 
@@ -784,7 +784,7 @@ public with sharing class HH_Households_TEST {
     * @description Insert a contact with naming exclusion checkboxes checked. verify multiselect picklist
     * filled. Update MSP. verify checkboxes changed.
     */
-    static testMethod void testHouseholdExclusion() {
+    @IsTest static void testHouseholdExclusion() {
 
         Contact con = new Contact(LastName = CAO_Constants.CONTACT_LASTNAME_FOR_TESTS, Exclude_from_Household_Name__c=true, Exclude_from_Household_Formal_Greeting__c=true);
         insert con;
@@ -809,7 +809,7 @@ public with sharing class HH_Households_TEST {
     /*********************************************************************************************************
     * @description tests that case sensitive name changes on contacts update the Household name and greetings
     */
-    public static testMethod void testCaseChanges() {
+    @IsTest public static void testCaseChanges() {
         //skip the test if Advancement is installed
         if(ADV_PackageInfo_SVC.useAdv()) return;
 

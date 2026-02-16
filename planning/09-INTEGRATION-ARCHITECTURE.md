@@ -15,42 +15,29 @@ This document outlines the integration modernization strategy for NPSP_nextgen, 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
 │                    INTEGRATION INVENTORY                         │
+│              (Updated 2026-02-15 after Phase 0)                 │
 ├─────────────────────────────────────────────────────────────────┤
 │                                                                  │
-│  FILES WITH HTTP CALLOUTS: 47                                    │
+│  FILES WITH HTTP CALLOUTS: ~28 (was 47; Elevate removed)         │
 │  NAMED CREDENTIALS USAGE: 0                                      │
 │  EXTERNAL SERVICES: 0                                            │
 │                                                                  │
 │  INTEGRATION TYPES:                                              │
-│  ├─ Payment Services (Elevate)    ████████░░░░░░  ~40%          │
-│  ├─ Address Validation            ██████░░░░░░░░  ~30%          │
-│  ├─ Metadata API                  ████░░░░░░░░░░  ~15%          │
-│  └─ Other (YouTube, etc.)         ███░░░░░░░░░░░  ~15%          │
+│  ├─ Payment Services (Elevate)    ░░░░░░░░░░░░░░  REMOVED       │
+│  ├─ Address Validation            ██████████░░░░  ~50%          │
+│  ├─ Metadata API                  ██████░░░░░░░░  ~25%          │
+│  └─ Other (YouTube, etc.)         ██████░░░░░░░░  ~25%          │
+│                                                                  │
+│  NOTE: Elevate payment integration (~120 classes, ~19 callout   │
+│  files) was fully removed in Phase 0 (PR #1, 2026-02-14).       │
+│  A generic payment processor interface may replace it later.     │
 │                                                                  │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
 ### 1.2 Current Integration Patterns
 
-**Elevate Payment Services**:
-```apex
-// Current pattern - credentials in custom settings
-public class PS_Request {
-    private static final String ENDPOINT = 'callout:Elevate';
-
-    public HttpResponse send() {
-        HttpRequest req = new HttpRequest();
-        req.setEndpoint(ENDPOINT + '/v1/payments');
-        req.setMethod('POST');
-        req.setHeader('Authorization', 'Bearer ' + getToken());
-        // ...
-    }
-
-    private String getToken() {
-        // Retrieved from custom settings or API call
-    }
-}
-```
+**Elevate Payment Services**: ~~Removed in Phase 0 (PR #1, 2026-02-14).~~ All PS_* classes, Elevate LWC components, and related test classes were deleted. A generic payment processor interface may be implemented in the future.
 
 **Address Validation (SmartyStreets)**:
 ```apex
@@ -116,7 +103,7 @@ public class ADDR_SmartyStreets_Gateway {
 │                              ▼                                   │
 │  ┌─────────────────────────────────────────────────────────┐    │
 │  │                   EXTERNAL SYSTEMS                       │    │
-│  │  Elevate │ SmartyStreets │ Google │ Cicero │ etc.       │    │
+│  │  SmartyStreets │ Google │ Cicero │ Metadata API │ etc.  │    │
 │  └─────────────────────────────────────────────────────────┘    │
 │                                                                  │
 └─────────────────────────────────────────────────────────────────┘
@@ -124,13 +111,13 @@ public class ADDR_SmartyStreets_Gateway {
 
 ### 2.2 Named Credential Strategy
 
-| Integration | Named Credential | Auth Type |
-|-------------|------------------|-----------|
-| Elevate Payment | Elevate_Payment_API | OAuth 2.0 |
-| SmartyStreets | SmartyStreets_Address | API Key |
-| Google Geocoding | Google_Geocoding_API | API Key |
-| Cicero | Cicero_Address | API Key |
-| Metadata API | Salesforce_Metadata | OAuth 2.0 |
+| Integration | Named Credential | Auth Type | Status |
+|-------------|------------------|-----------|--------|
+| ~~Elevate Payment~~ | ~~Elevate_Payment_API~~ | ~~OAuth 2.0~~ | Removed (Phase 0) |
+| SmartyStreets | SmartyStreets_Address | API Key | Planned |
+| Google Geocoding | Google_Geocoding_API | API Key | Planned |
+| Cicero | Cicero_Address | API Key | Planned |
+| Metadata API | Salesforce_Metadata | OAuth 2.0 | Planned |
 
 ---
 
@@ -296,31 +283,32 @@ public abstract inherited sharing class NPSP_IntegrationService {
 }
 ```
 
-### 3.2 Named Credential Implementation
+### 3.2 Named Credential Implementation Example
+
+> **Note**: The original Elevate-specific example has been replaced with a generic pattern.
+> Elevate was removed in Phase 0. Future payment integrations should follow this template.
 
 ```apex
 /**
- * @description Elevate payment service using Named Credentials
+ * @description Address validation service using Named Credentials
  */
-public inherited sharing class ElevatePaymentService
+public inherited sharing class AddressValidationService
     extends NPSP_IntegrationService {
 
-    private static final String NAMED_CREDENTIAL = 'callout:Elevate_Payment_API';
+    private static final String NAMED_CREDENTIAL = 'callout:SmartyStreets_Address';
 
     @Override
     protected String getServiceName() {
-        return 'Elevate_Payment';
+        return 'SmartyStreets_Address';
     }
 
     /**
-     * @description Create a payment commitment
+     * @description Validate a street address
      */
-    public CommitmentResponse createCommitment(CommitmentRequest request) {
+    public ValidationResponse validate(ValidationRequest request) {
         HttpRequest req = new HttpRequest();
-        req.setEndpoint(NAMED_CREDENTIAL + '/v1/commitments');
-        req.setMethod('POST');
-        req.setHeader('Content-Type', 'application/json');
-        req.setBody(JSON.serialize(request));
+        req.setEndpoint(NAMED_CREDENTIAL + '/street-address');
+        req.setMethod('GET');
         req.setTimeout(timeoutMs);
 
         HttpResponse res = executeWithResilience(req);
@@ -329,68 +317,29 @@ public inherited sharing class ElevatePaymentService
             handleErrorResponse(res);
         }
 
-        return (CommitmentResponse) JSON.deserialize(
+        return (ValidationResponse) JSON.deserialize(
             res.getBody(),
-            CommitmentResponse.class
-        );
-    }
-
-    /**
-     * @description Capture a payment
-     */
-    public CaptureResponse capturePayment(String paymentId, Decimal amount) {
-        HttpRequest req = new HttpRequest();
-        req.setEndpoint(NAMED_CREDENTIAL + '/v1/payments/' + paymentId + '/capture');
-        req.setMethod('POST');
-        req.setHeader('Content-Type', 'application/json');
-        req.setBody(JSON.serialize(new Map<String, Object>{
-            'amount' => amount
-        }));
-        req.setTimeout(timeoutMs);
-
-        HttpResponse res = executeWithResilience(req);
-
-        return (CaptureResponse) JSON.deserialize(
-            res.getBody(),
-            CaptureResponse.class
+            ValidationResponse.class
         );
     }
 
     private void handleErrorResponse(HttpResponse res) {
-        ErrorResponse error = (ErrorResponse) JSON.deserialize(
-            res.getBody(),
-            ErrorResponse.class
-        );
-
         throw new IntegrationException(
-            'Elevate API Error: ' + error.message +
-            ' (Code: ' + error.code + ')'
+            'Address validation failed: ' + res.getStatusCode()
         );
     }
 
-    // ============= REQUEST/RESPONSE CLASSES =============
-
-    public class CommitmentRequest {
-        public String donorId;
-        public Decimal amount;
-        public String frequency;
-        public Date startDate;
+    public class ValidationRequest {
+        public String street;
+        public String city;
+        public String state;
+        public String zipCode;
     }
 
-    public class CommitmentResponse {
-        public String commitmentId;
-        public String status;
-    }
-
-    public class CaptureResponse {
-        public String transactionId;
-        public String status;
-        public Decimal capturedAmount;
-    }
-
-    public class ErrorResponse {
-        public String code;
-        public String message;
+    public class ValidationResponse {
+        public String deliveryLine;
+        public String lastLine;
+        public Boolean isValid;
     }
 }
 ```
@@ -398,105 +347,19 @@ public inherited sharing class ElevatePaymentService
 ### 3.3 Named Credential Metadata
 
 ```xml
-<!-- force-app/main/default/namedCredentials/Elevate_Payment_API.namedCredential-meta.xml -->
+<!-- force-app/main/default/namedCredentials/SmartyStreets_Address.namedCredential-meta.xml -->
 <?xml version="1.0" encoding="UTF-8"?>
 <NamedCredential xmlns="http://soap.sforce.com/2006/04/metadata">
-    <fullName>Elevate_Payment_API</fullName>
-    <label>Elevate Payment API</label>
-    <endpoint>https://api.sfdo-elevate.org</endpoint>
+    <fullName>SmartyStreets_Address</fullName>
+    <label>SmartyStreets Address Validation</label>
+    <endpoint>https://us-street.api.smartystreets.com</endpoint>
     <principalType>NamedUser</principalType>
-    <protocol>Oauth</protocol>
-    <oauthScope>api payments</oauthScope>
+    <protocol>Password</protocol>
     <calloutStatus>Enabled</calloutStatus>
-    <generateAuthorizationHeader>true</generateAuthorizationHeader>
+    <generateAuthorizationHeader>false</generateAuthorizationHeader>
     <allowMergeFieldsInBody>false</allowMergeFieldsInBody>
     <allowMergeFieldsInHeader>false</allowMergeFieldsInHeader>
 </NamedCredential>
-```
-
-### 3.4 External Service Definition
-
-```yaml
-# elevate-payment-api.yaml (OpenAPI 3.0)
-openapi: 3.0.0
-info:
-  title: Elevate Payment API
-  version: 1.0.0
-  description: Payment processing API for Elevate
-
-servers:
-  - url: https://api.sfdo-elevate.org/v1
-
-paths:
-  /commitments:
-    post:
-      operationId: createCommitment
-      summary: Create a recurring donation commitment
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CommitmentRequest'
-      responses:
-        '201':
-          description: Commitment created
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CommitmentResponse'
-
-  /payments/{paymentId}/capture:
-    post:
-      operationId: capturePayment
-      summary: Capture a payment
-      parameters:
-        - name: paymentId
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Payment captured
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CaptureResponse'
-
-components:
-  schemas:
-    CommitmentRequest:
-      type: object
-      properties:
-        donorId:
-          type: string
-        amount:
-          type: number
-        frequency:
-          type: string
-          enum: [monthly, quarterly, annually]
-        startDate:
-          type: string
-          format: date
-
-    CommitmentResponse:
-      type: object
-      properties:
-        commitmentId:
-          type: string
-        status:
-          type: string
-
-    CaptureResponse:
-      type: object
-      properties:
-        transactionId:
-          type: string
-        status:
-          type: string
-        capturedAmount:
-          type: number
 ```
 
 ---
@@ -540,16 +403,13 @@ components:
 | Add monitoring utilities | Logging, metrics | 6h |
 | Create Named Credential framework | Templates, docs | 4h |
 
-### Phase 2: Elevate Integration (Sprint 3-4)
+### ~~Phase 2: Elevate Integration~~ (Removed)
 
-| Task | Description | Effort |
-|------|-------------|--------|
-| Create Named Credential | Elevate_Payment_API | 4h |
-| Migrate callout code | PS_* classes | 12h |
-| Add retry/circuit breaker | All endpoints | 8h |
-| Update tests | Mock Named Credentials | 6h |
+> Elevate payment integration was fully removed in Phase 0. This phase is no longer applicable.
+> If a generic payment processor is added in the future, it should follow the Named Credential
+> pattern defined in this document from the start.
 
-### Phase 3: Address Validation (Sprint 5-6)
+### Phase 3: Address Validation (Sprint 3-4, renumbered)
 
 | Task | Description | Effort |
 |------|-------------|--------|
@@ -598,6 +458,6 @@ components:
 
 ---
 
-*Document Version: 1.0*
-*Last Updated: 2026-02-03*
+*Document Version: 1.1*
+*Last Updated: 2026-02-15*
 *Author: NPSP_nextgen Architecture Team*

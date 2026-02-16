@@ -46,7 +46,7 @@ public with sharing class USER_InActiveUser_TDTM_TEST {
     *               for AfterUpdate.
     * @return void
     **********************************************************************************************************/
-    private static testMethod void testHandlingDeactivatedSysAdmin() {
+    @IsTest private static void testHandlingDeactivatedSysAdmin() {
         List<User> newUsers = USER_UserService_TEST.createUsers();
 
         Error_Settings__c errorSettings = UTIL_CustomSettingsFacade.getErrorSettings();

@@ -73,7 +73,7 @@ private class HH_CampaignDedupeBTN_TEST {
     * @description test the Campaign Dedupe controller
     * @return voId
     ********************************************************************************************************/
-    private static testMethod void shouldValidateDuplicateHouseholdCampaignMembers(){
+    @IsTest private static void shouldValidateDuplicateHouseholdCampaignMembers(){
         UTIL_CustomSettingsFacade.getHouseholdsSettingsForTests(new npo02__Households_Settings__c (
             npo02__Household_Rules__c = HH_Households.ALL_PROCESSOR,
             npo02__Always_Rollup_to_Primary_Contact__c = false,

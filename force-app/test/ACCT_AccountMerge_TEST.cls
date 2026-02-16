@@ -64,7 +64,7 @@ private with sharing class ACCT_AccountMerge_TEST {
     *   Soft Credits are recalculated.
     *   Addresses are merged.
     */
-    static testMethod void testMergeTwoHHAccounts() {
+    @IsTest static void testMergeTwoHHAccounts() {
         //skip the test if Advancement is installed
         if(ADV_PackageInfo_SVC.useAdv()) return;
 
@@ -146,7 +146,7 @@ private with sharing class ACCT_AccountMerge_TEST {
     *   - default address correctly pushed to appropriate contacts. 
     */
     /* ==== Commenting out to resolve a flapping build failure ====
-    static testMethod void testMergeThreeHHAccountsManyAddr() {
+    @IsTest static void testMergeThreeHHAccountsManyAddr() {
         //skip the test if Advancement is installed
         if(ADV_PackageInfo_SVC.useAdv()) return;
 
@@ -234,7 +234,7 @@ private with sharing class ACCT_AccountMerge_TEST {
     *   Opps are moved over.
     *   Opp Rollups are recalculated.
     */
-    static testMethod void testMergeTwoOne2OneAccounts() {
+    @IsTest static void testMergeTwoOne2OneAccounts() {
         //skip the test if Advancement is installed
         if(ADV_PackageInfo_SVC.useAdv()) return;
 
@@ -293,7 +293,7 @@ private with sharing class ACCT_AccountMerge_TEST {
     *   - duplicate addresses are removed
     *   - only one default address
     */
-    static testMethod void testMergeThreeOrgAccountsManyAddr() {
+    @IsTest static void testMergeThreeOrgAccountsManyAddr() {
         //skip the test if Advancement is installed
         if(ADV_PackageInfo_SVC.useAdv()) return;
 

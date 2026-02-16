@@ -1,4 +1,4 @@
-import { LightningElement, track, wire } from "lwc";
+import { LightningElement, wire } from "lwc";
 import Resources from "@salesforce/resourceUrl/CumulusStaticResources";
 import getApplicationStatus from "@salesforce/apex/GS_ApplicationStatusController.getApplicationStatus";
 import gsNoApplicationSubmitted from "@salesforce/label/c.gsNoApplicationSubmitted";
@@ -15,12 +15,12 @@ import gsClose from "@salesforce/label/c.commonClose";
 import gsFollowUpApplicationStatus from "@salesforce/label/c.gsFollowUpApplicationStatus";
 
 export default class GsApplicationStatus extends LightningElement {
-    @track errorMessage = "";
-    @track diffInDays = null;
-    @track isApplicationSubmitted = false;
-    @track isLoading = false;
-    @track img = "";
-    @track isActiveInstance = true;
+    errorMessage = "";
+    diffInDays = null;
+    isApplicationSubmitted = false;
+    isLoading = false;
+    img = "";
+    isActiveInstance = true;
     applyForFreeLicensesImg = Resources + "/gsResources/Accept_Tasks_Apply_Card.png";
     checkForStatusImg = Resources + "/gsResources/gift_illustration_2.svg";
 

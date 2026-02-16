@@ -39,7 +39,7 @@ private class ACCT_ViewOverride_TEST {
     /*******************************************************************************************************
     * @description Invoke the Account View Override Controller on an Account
     */ 
-    public static testMethod void accountViewOverride() {
+    @IsTest public static void accountViewOverride() {
         
         UTIL_CustomSettingsFacade.getContactsSettingsForTests(new npe01__Contacts_and_Orgs_Settings__c (npe01__Account_Processor__c = CAO_Constants.ONE_TO_ONE_PROCESSOR));
         
@@ -75,7 +75,7 @@ private class ACCT_ViewOverride_TEST {
     /*******************************************************************************************************
     * @description Invoke the Account View Override Controller without specifying an Account
     */ 
-    public static testMethod void noAccount() {
+    @IsTest public static void noAccount() {
         
         Test.setCurrentPageReference(new PageReference('Page.ACCT_ViewOverride'));
         

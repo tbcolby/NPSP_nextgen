@@ -46,7 +46,7 @@ public with sharing class BDI_PostProcess_TEST {
     *       relationships created between Contact1 and Contact2
     *       duplicate relationships not created when Contact1 and Contact2 appear in multiple DI records
     */
-    static testMethod void testRelCreatedForDIsWithC1AndC2() {
+    @IsTest static void testRelCreatedForDIsWithC1AndC2() {
 
         list<DataImport__c> listDI = new list<DataImport__c>();
         listDI.add(BDI_DataImport_TEST.newDI('c1', 'A', 'c2', 'A'));

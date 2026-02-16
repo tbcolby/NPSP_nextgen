@@ -152,16 +152,16 @@ public class CRLP_RollupSoftCredit_TEST {
 
     }
 
-    static testMethod void test_Rollups_Contact() {
+    @IsTest static void test_Rollups_Contact() {
         testRollupsServices(TestType.testBatchContact);
     }
-    static testMethod void test_Rollups_ContactSkew() {
+    @IsTest static void test_Rollups_ContactSkew() {
         testRollupsServices(TestType.testSkewBatchContact);
     }
-    static testMethod void test_Rollups_Account() {
+    @IsTest static void test_Rollups_Account() {
         testRollupsServices(TestType.testBatchAccount);
     }
-    static testMethod void test_Rollups_AlwaysRollupToPrimaryEnabled() {
+    @IsTest static void test_Rollups_AlwaysRollupToPrimaryEnabled() {
         testRollupsServices(TestType.TestWithAlwaysRollupToPrimary);
     }
 

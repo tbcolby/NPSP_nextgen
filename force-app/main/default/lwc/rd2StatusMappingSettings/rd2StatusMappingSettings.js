@@ -41,14 +41,14 @@ export default class rd2StatusMappingSettings extends LightningElement {
 
     @track records;
 
-    @track isLoading;
-    @track isViewMode = true;
+    isLoading;
+    isViewMode = true;
     @track viewColumns = [];
     @track editColumns = [];
     stateOptions = [];
     fieldLabelStatus;
 
-    @track hasMessage = false;
+    hasMessage = false;
     @track message = {};
 
     _deploymentIds = new Set();

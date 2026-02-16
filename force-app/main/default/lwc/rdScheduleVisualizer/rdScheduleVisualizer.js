@@ -17,7 +17,7 @@ export default class RdScheduleVisualizer extends LightningElement {
     @api recordId;
     @api displayNum;
 
-    @track isLoading = true;
+    isLoading = true;
     @track columns = [];
     @track installments;
     selectedIds = [];
@@ -105,8 +105,7 @@ export default class RdScheduleVisualizer extends LightningElement {
             return error.body.message;
         } else if (error && error.name && error.message) {
             return error.message;
-        } else {
-            return "";
         }
+        return "";
     }
 }

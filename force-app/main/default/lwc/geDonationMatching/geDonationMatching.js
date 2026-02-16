@@ -15,7 +15,7 @@ export default class geDonationMatching extends LightningElement {
     @api receiverComponent;
     @api selectedDonationId;
 
-    @track isLoading = true;
+    isLoading = true;
 
     renderedCallback() {
         if (this.isLoading) {

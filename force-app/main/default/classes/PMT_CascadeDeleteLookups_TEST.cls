@@ -42,7 +42,7 @@ private class PMT_CascadeDeleteLookups_TEST {
     * Verifies results: All the Allocations should be deleted after the Opportunities are deleted.
     * Then the Allocations will be undeleted after the Opportunities are undeleted.
     */
-    static testMethod void testPaymentCascade() {
+    @IsTest static void testPaymentCascade() {
         General_Accounting_Unit__c defaultAccountingUnit = 
           new General_Accounting_Unit__c(Name = 'DEFAULT_GAU');
         insert defaultAccountingUnit;

@@ -1,4 +1,4 @@
-import { LightningElement, api, track } from "lwc";
+import { LightningElement, api } from "lwc";
 
 export default class utilCard extends LightningElement {
     @api title;
@@ -6,7 +6,7 @@ export default class utilCard extends LightningElement {
     @api iconSize;
     @api cssClass;
 
-    @track showFooter = true;
+    showFooter = true;
 
     renderedCallback() {
         if (this.footerSlot) {

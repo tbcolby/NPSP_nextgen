@@ -24,7 +24,8 @@
 ```yaml
 apex_testing:
   test_classes: 336+ (suffix: _TEST, _TEST2)
-  coverage_target: 75% minimum, 85% preferred
+  coverage_target: 85% minimum (org-wide)
+  test_method_annotation: "@IsTest (all 648 legacy testMethod keywords converted in Phase 1)"
 
   patterns:
     test_setup:
@@ -68,7 +69,8 @@ apex_testing:
 
 lwc_testing:
   framework: Jest with @salesforce/sfdx-lwc-jest
-  test_files: 52
+  test_suites: 52
+  test_count: 422 (all passing as of Phase 1)
   location: __tests__/*.test.js
 
   patterns:
@@ -180,7 +182,7 @@ FOR LWC:
 ### Coverage Requirements
 ```yaml
 minimum_coverage:
-  apex_class: 75%
+  apex_org_wide: 85%
   critical_paths: 90%
   new_code: 80%
 

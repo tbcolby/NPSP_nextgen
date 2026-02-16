@@ -40,7 +40,7 @@ private class CON_CascadeDeleteLookups_TEST {
     * @description Deletes contact and verifies it does not cascade delete the Relationships
     * Verifies results.
     */
-    static testMethod void testContactCascadeDelete(){
+    @IsTest static void testContactCascadeDelete(){
         Integer maxRecords = 1;
 
         List<Contact> contacts = CDL_CascadeDeleteLookups_TEST.buildContacts(maxRecords);
@@ -68,7 +68,7 @@ private class CON_CascadeDeleteLookups_TEST {
     /*********************************************************************************************************
     * @description Verifies that the losing contact in a merge operation doesn't get child records cascade deleted.
     */
-    static testMethod void testContactMergeNoCascade(){
+    @IsTest static void testContactMergeNoCascade(){
         List<Contact> contacts = CDL_CascadeDeleteLookups_TEST.buildContacts(2);
         insert contacts;
 

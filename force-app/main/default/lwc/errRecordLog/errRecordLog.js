@@ -43,14 +43,14 @@ export default class errRecordLog extends NavigationMixin(LightningElement) {
 
     @api recordId;
 
-    @track isLoading = true;
+    isLoading = true;
     @track error = {};
     @track hasAccess;
 
     @track recordInfo = {};
     @track columns = [];
     @track data;
-    @track hasData = true;
+    hasData = true;
     @track sortedBy;
     @track sortDirection = DESC;
     fieldDatetime = {};

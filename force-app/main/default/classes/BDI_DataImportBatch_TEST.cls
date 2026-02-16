@@ -44,7 +44,7 @@ public with sharing class BDI_DataImportBatch_TEST {
     * verify:
     *     one batch is scheduled
     */
-    static testMethod void scheduleSingleBatch() {
+    @IsTest static void scheduleSingleBatch() {
         system.assertEquals(1, scheduleNBatches(1));
     }
 
@@ -54,7 +54,7 @@ public with sharing class BDI_DataImportBatch_TEST {
     * verify:
     *     multiple batches are scheduled
     */
-    static testMethod void scheduleMultipleBatches() {
+    @IsTest static void scheduleMultipleBatches() {
         system.assertEquals(3, scheduleNBatches(3));
     }
 
@@ -64,7 +64,7 @@ public with sharing class BDI_DataImportBatch_TEST {
     * verify:
     *     multiple batches are scheduled
     */
-    static testMethod void scheduleMaxMultipleBatches() {
+    @IsTest static void scheduleMaxMultipleBatches() {
         integer maxSOQL = limits.getLimitQueries() - limits.getQueries();
         integer maxAsync = limits.getLimitQueueableJobs() - limits.getQueueableJobs();
         integer nBatches = math.min(maxAsync, maxSOQL);
@@ -78,7 +78,7 @@ public with sharing class BDI_DataImportBatch_TEST {
     * verify:
     *     multiple batches are scheduled, but not all
     */
-    static testMethod void scheduleTooManyMultipleBatches() {
+    @IsTest static void scheduleTooManyMultipleBatches() {
         integer maxSOQL = limits.getLimitQueries() - limits.getQueries();
         integer maxAsync = limits.getLimitQueueableJobs() - limits.getQueueableJobs();
         integer nBatches = math.min(maxAsync, maxSOQL);

@@ -39,7 +39,7 @@ private class UTIL_CurrencyCache_TEST {
     /**
      * @description Validate advanced currency conversion logic using a defined set of effective dates and rates
      */
-    static testMethod void test_AdvancedCurrencyConversion() {
+    @IsTest static void test_AdvancedCurrencyConversion() {
 
         UtilCurrencyCacheMock mockcurrCache = new UtilCurrencyCacheMock();
         mockcurrCache.isOrgCacheAvailableReturn = false;
@@ -72,7 +72,7 @@ private class UTIL_CurrencyCache_TEST {
      * org cache or not so this test is really just validating that the static var cache is storing and retrieving
      * the values as expected
      */
-    static testMethod void test_CurrencyCache_StaticCacheVar() {
+    @IsTest static void test_CurrencyCache_StaticCacheVar() {
         // We won't really know if the client has a cache or not, so don't assume a response
         System.AssertNotEquals(null, UTIL_CurrencyCache.getInstance().isOrgCacheAvailable());
 

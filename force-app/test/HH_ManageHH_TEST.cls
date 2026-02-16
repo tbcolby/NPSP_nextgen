@@ -40,7 +40,7 @@ private class HH_ManageHH_TEST {
     /*********************************************************************************************************
     * @description Tests opening the ManageHouseholdUI page on an existing HH Account
     */
-    public static testMethod void testExistingHHAccount() { 
+    @IsTest public static void testExistingHHAccount() { 
         
         Account hh = new Account(Name = 'test_hh', npe01__SYSTEM_AccountType__c = CAO_Constants.HH_ACCOUNT_TYPE);
         insert hh;
@@ -66,7 +66,7 @@ private class HH_ManageHH_TEST {
     /*********************************************************************************************************
     * @description Tests opening the ManageHouseholdUI page on an existing HH Object
     */
-    public static testMethod void testExistingHHObject() { 
+    @IsTest public static void testExistingHHObject() { 
         
         npo02__Household__c hh = new npo02__Household__c(Name = 'test_hh');
         insert hh;
@@ -92,7 +92,7 @@ private class HH_ManageHH_TEST {
     /*********************************************************************************************************
     * @description Tests opening the ManageHouseholdUI page on an new HH Object
     */
-    public static testMethod void testNewHHObject() { 
+    @IsTest public static void testNewHHObject() { 
         
         Account acc = new Account(Name='some org account');
         insert acc;

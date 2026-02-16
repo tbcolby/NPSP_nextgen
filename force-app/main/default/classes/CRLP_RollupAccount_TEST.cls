@@ -192,19 +192,19 @@ public class CRLP_RollupAccount_TEST {
     }
 
     /** @description Test the asynchronous queuable method of rolling up */
-    static testMethod void test_Rollups_Queueable() {
+    @IsTest static void test_Rollups_Queueable() {
         testRollupsServices(TestType.TestQueueuable);
     }
     /** @description Test the full non-skew batch job method of rolling up */
-    static testMethod void test_Rollups_Batch() {
+    @IsTest static void test_Rollups_Batch() {
         testRollupsServices(TestType.TestBatch);
     }
     /** @description Test the full skew mode batch job method of rolling up */
-    static testMethod void test_Rollups_SkewBatch() {
+    @IsTest static void test_Rollups_SkewBatch() {
         testRollupsServices(TestType.TestSkewBatch);
     }
     /** @description Test the Trigger method of rolling up */
-    static testMethod void test_Rollups_Trigger() {
+    @IsTest static void test_Rollups_Trigger() {
         testRollupsServices(TestType.TestTrigger);
     }
 
@@ -218,7 +218,7 @@ public class CRLP_RollupAccount_TEST {
      * where the batch job was not properly setting the currency code for each target record. This test can only
      * run in a Multicurrency enabled org to allow the currency code values to be set on the Account and related Opp.
      */
-    static testMethod void test_Rollups_MultiCurrencyBatch() {
+    @IsTest static void test_Rollups_MultiCurrencyBatch() {
 
         // Test is only relevant for multi-currency organizations.  If not, skip it
         if (!UserInfo.isMultiCurrencyOrganization()) {

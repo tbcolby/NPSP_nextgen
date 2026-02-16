@@ -109,9 +109,8 @@ export default class RdActiveSchedule extends LightningElement {
             return error.body.message;
         } else if (error && error.name && error.message) {
             return error.message;
-        } else {
-            return "";
         }
+        return "";
     }
 
     get qaLocatorHeader() {

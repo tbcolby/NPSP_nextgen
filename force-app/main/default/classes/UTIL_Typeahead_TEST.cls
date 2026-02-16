@@ -36,7 +36,7 @@
 @isTest
 public with sharing class UTIL_Typeahead_TEST {
 
-    private static testMethod void testQuery() {
+    @IsTest private static void testQuery() {
 	    list<Account> aa = new list<Account>{
 	      new Account(Name='Test Account'),
 	      new Account(Name='Another Account', BillingCity='Test City'),

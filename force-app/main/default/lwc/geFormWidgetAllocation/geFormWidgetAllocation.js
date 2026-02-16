@@ -252,11 +252,10 @@ export default class GeFormWidgetAllocation extends LightningElement {
                 level: "error",
             };
             return false;
-        } else {
-            // if valid, return true and wipe error message
-            this.alertBanner = {};
-            return true;
         }
+        // if valid, return true and wipe error message
+        this.alertBanner = {};
+        return true;
     }
 
     get hasDefaultGAU() {

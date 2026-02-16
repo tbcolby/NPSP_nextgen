@@ -1,5 +1,5 @@
 /* eslint-disable vars-on-top */
-import { LightningElement, api, wire, track } from "lwc";
+import { LightningElement, api, wire } from "lwc";
 import commonAmount from "@salesforce/label/c.commonAmount";
 import RDCL_Frequency from "@salesforce/label/c.RDCL_Frequency";
 import lblStatus from "@salesforce/label/c.lblStatus";
@@ -56,9 +56,9 @@ export default class RecurringDonationTable extends LightningElement {
 
     @api allowACHPaymentMethod;
 
-    @track tdClasses = "hide-td";
-    @track tdClassesNotHidden = "";
-    @track actionClasses = "dv-dynamic-width";
+    tdClasses = "hide-td";
+    tdClassesNotHidden = "";
+    actionClasses = "dv-dynamic-width";
 
     formFactor = FORM_FACTOR;
 

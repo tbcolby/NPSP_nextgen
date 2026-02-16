@@ -41,7 +41,7 @@ private class ACCT_CascadeDeleteLookups_TEST {
     * and relationships.
     * Verifies results. Then undeletes accounts, which undeletes recurring donations allocations and relationships.
     */
-    static testMethod void testAccountCascadeGrandchildren() {
+    @IsTest static void testAccountCascadeGrandchildren() {
         Integer maxRecords = 1;
 
         List<Contact> contacts = CDL_CascadeDeleteLookups_TEST.buildContacts(maxRecords);
@@ -106,7 +106,7 @@ private class ACCT_CascadeDeleteLookups_TEST {
     * @description Tests the merge of 2 Accounts. Deleted Account should not cascade delete the child records
     * Verifies results: The losing account in a merge operation doesn't get child records cascade deleted.
     */
-    static testMethod void testAccountMergeNoCascade() {
+    @IsTest static void testAccountMergeNoCascade() {
         List<Contact> contacts = CDL_CascadeDeleteLookups_TEST.buildContacts(2);
         insert contacts;
 

@@ -39,26 +39,26 @@ private class ACCT_IndividualAccounts_TEST {
     /*********************************************************************************************************
     * @description tests default contructor
     */
-    private static testMethod void ACCT_IndividualAccounts_TEST() {
+    @IsTest private static void ACCT_IndividualAccounts_TEST() {
         ACCT_IndividualAccounts_TDTM testIndividualAccounts = new ACCT_IndividualAccounts_TDTM();
     }
 
     /*********************************************************************************************************
     * @description Test Method for inserting a Contact that should get no account
     */
-    private static testMethod void insertPrivateOneToOne() {
+    @IsTest private static void insertPrivateOneToOne() {
         //skip the test if Advancement is installed
         if(ADV_PackageInfo_SVC.useAdv()) return;
 
         insertPrivateProcessor(CAO_Constants.ONE_TO_ONE_PROCESSOR);
     }
-    private static testMethod void insertPrivateBucket() {
+    @IsTest private static void insertPrivateBucket() {
         //skip the test if Advancement is installed
         if(ADV_PackageInfo_SVC.useAdv()) return;
 
         insertPrivateProcessor(CAO_Constants.BUCKET_PROCESSOR);
     }
-    private static testMethod void insertPrivateHHAccount() {
+    @IsTest private static void insertPrivateHHAccount() {
         //skip the test if Advancement is installed
         if(ADV_PackageInfo_SVC.useAdv()) return;
 
@@ -135,7 +135,7 @@ private class ACCT_IndividualAccounts_TEST {
     /*********************************************************************************************************
     * @description Test changing the account model from one-to-one account to household account.
     */
-    private static testMethod void changeFromOneToOneToHouseholdAccount() {
+    @IsTest private static void changeFromOneToOneToHouseholdAccount() {
         //skip the test if Advancement is installed
         if(ADV_PackageInfo_SVC.useAdv()) return;
 
@@ -173,7 +173,7 @@ private class ACCT_IndividualAccounts_TEST {
     	System.assertEquals(2, numOfAccs);
     }
 
-    private static testMethod void insertHHAccountContactTitleForRename() {
+    @IsTest private static void insertHHAccountContactTitleForRename() {
         //skip the test if Advancement is installed
         if(ADV_PackageInfo_SVC.useAdv()) return;
 
@@ -224,19 +224,19 @@ private class ACCT_IndividualAccounts_TEST {
     /*********************************************************************************************************
     * @description Create a contact, and change it to private, against all three account models.
     */
-    private static testMethod void insertOneToOneChangeToPrivate() {
+    @IsTest private static void insertOneToOneChangeToPrivate() {
         //skip the test if Advancement is installed
         if(ADV_PackageInfo_SVC.useAdv()) return;
 
     	insertChangeToPrivateProcessor(CAO_Constants.ONE_TO_ONE_PROCESSOR);
     }
-    private static testMethod void insertBucketChangeToPrivate() {
+    @IsTest private static void insertBucketChangeToPrivate() {
         //skip the test if Advancement is installed
         if(ADV_PackageInfo_SVC.useAdv()) return;
 
         insertChangeToPrivateProcessor(CAO_Constants.BUCKET_PROCESSOR);
     }
-    private static testMethod void insertHHAccountChangeToPrivate() {
+    @IsTest private static void insertHHAccountChangeToPrivate() {
         //skip the test if Advancement is installed
         if(ADV_PackageInfo_SVC.useAdv()) return;
 
@@ -278,13 +278,13 @@ private class ACCT_IndividualAccounts_TEST {
     /*********************************************************************************************************
     * @description Create a Contact with TDTM triggers off, for both 1:1 and Household account models.
     */
-    private static testMethod void insertOneToOneTriggerOff() {
+    @IsTest private static void insertOneToOneTriggerOff() {
         //skip the test if Advancement is installed
         if(ADV_PackageInfo_SVC.useAdv()) return;
 
     	insertTriggerOffProcessor(CAO_Constants.ONE_TO_ONE_PROCESSOR);
     }
-    private static testMethod void insertHHAccountTriggerOff() {
+    @IsTest private static void insertHHAccountTriggerOff() {
         //skip the test if Advancement is installed
         if(ADV_PackageInfo_SVC.useAdv()) return;
 
@@ -336,7 +336,7 @@ private class ACCT_IndividualAccounts_TEST {
     /*********************************************************************************************************
     * @description Test Method for inserting and updating a Contact in the One-to-One model
     */
-    private static testMethod void insertUpdateOneToOne() {
+    @IsTest private static void insertUpdateOneToOne() {
         //skip the test if Advancement is installed
         if(ADV_PackageInfo_SVC.useAdv()) return;
 
@@ -346,7 +346,7 @@ private class ACCT_IndividualAccounts_TEST {
     /*********************************************************************************************************
     * @description Test Method for inserting and updating a Contact in the Household Account model
     */
-    private static testMethod void insertUpdateOneToOneHouseholds() {
+    @IsTest private static void insertUpdateOneToOneHouseholds() {
         //skip the test if Advancement is installed
         if(ADV_PackageInfo_SVC.useAdv()) return;
 
@@ -424,13 +424,13 @@ private class ACCT_IndividualAccounts_TEST {
     /*********************************************************************************************************
     * @description Test Method for separating a Contact from it's One-to-One account, in 1:1 and Household Account models.
     */
-    private static testMethod void detachOneToOne() {
+    @IsTest private static void detachOneToOne() {
         //skip the test if Advancement is installed
         if(ADV_PackageInfo_SVC.useAdv()) return;
 
     	detachProcessor(CAO_Constants.ONE_TO_ONE_PROCESSOR);
     }
-    private static testMethod void detachHHAccount() {
+    @IsTest private static void detachHHAccount() {
         //skip the test if Advancement is installed
         if(ADV_PackageInfo_SVC.useAdv()) return;
 
@@ -476,13 +476,13 @@ private class ACCT_IndividualAccounts_TEST {
     /*********************************************************************************************************
     * @description Test Method for editing a contact while it is being detached from it's One-to-One Account. This was a bug (#37)
     */
-    private static testMethod void editContactDuringDetachOneToOne() {
+    @IsTest private static void editContactDuringDetachOneToOne() {
         //skip the test if Advancement is installed
         if(ADV_PackageInfo_SVC.useAdv()) return;
 
     	editContactDuringDetachProcessor(CAO_Constants.ONE_TO_ONE_PROCESSOR);
     }
-    private static testMethod void editContactDuringDetachHHAccount() {
+    @IsTest private static void editContactDuringDetachHHAccount() {
         //skip the test if Advancement is installed
         if(ADV_PackageInfo_SVC.useAdv()) return;
 
@@ -566,13 +566,13 @@ private class ACCT_IndividualAccounts_TEST {
     /*********************************************************************************************************
     * @description Test Method for a new Contact in the Bucket Individual model
     */
-    private static testMethod void attachToIndividualAccount() {
+    @IsTest private static void attachToIndividualAccount() {
         //skip the test if Advancement is installed
         if(ADV_PackageInfo_SVC.useAdv()) return;
 
     	attachToProcessor(CAO_Constants.BUCKET_PROCESSOR);
     }
-    private static testMethod void attachToHHAccount() {
+    @IsTest private static void attachToHHAccount() {
         //skip the test if Advancement is installed
         if(ADV_PackageInfo_SVC.useAdv()) return;
 
@@ -612,7 +612,7 @@ private class ACCT_IndividualAccounts_TEST {
     /*********************************************************************************************************
     * @description Test Method for detaching a Contact from the bucket individual account
     */
-    private static testMethod void detachIndividualAccount() {
+    @IsTest private static void detachIndividualAccount() {
         //skip the test if Advancement is installed
         if(ADV_PackageInfo_SVC.useAdv()) return;
 
@@ -620,7 +620,7 @@ private class ACCT_IndividualAccounts_TEST {
 
         detachAccountProcessor(CAO_Constants.BUCKET_PROCESSOR);
     }
-    private static testMethod void detachHHAccount2() {
+    @IsTest private static void detachHHAccount2() {
         //skip the test if Advancement is installed
         if(ADV_PackageInfo_SVC.useAdv()) return;
 
@@ -670,7 +670,7 @@ private class ACCT_IndividualAccounts_TEST {
     /*********************************************************************************************************
     * @description Test Method for detaching a Contact from a normal account. It should land in the bucket account.
     */
-    private static testMethod void detachFromNormalAccountToBucket() {
+    @IsTest private static void detachFromNormalAccountToBucket() {
         //skip the test if Advancement is installed
         if(ADV_PackageInfo_SVC.useAdv()) return;
 
@@ -680,7 +680,7 @@ private class ACCT_IndividualAccounts_TEST {
     /*********************************************************************************************************
     * @description Test Method for detaching a Contact from a normal account. It should land in the bucket account.
     */
-    private static testMethod void detachFromNormalAccountToBucketAccountProcessor() {
+    @IsTest private static void detachFromNormalAccountToBucketAccountProcessor() {
         //skip the test if Advancement is installed
         if(ADV_PackageInfo_SVC.useAdv()) return;
 
@@ -735,13 +735,13 @@ private class ACCT_IndividualAccounts_TEST {
     /*********************************************************************************************************
     * @description Add a contact to an existing 1:1 or Household Account
     */
-    private static testMethod void contactAddedToExistingOneToOne() {
+    @IsTest private static void contactAddedToExistingOneToOne() {
         //skip the test if Advancement is installed
         if(ADV_PackageInfo_SVC.useAdv()) return;
 
     	contactAddedToExistingProcessor(CAO_Constants.ONE_TO_ONE_PROCESSOR);
     }
-    private static testMethod void contactAddedToExistingHHAccount() {
+    @IsTest private static void contactAddedToExistingHHAccount() {
         contactAddedToExistingProcessor(CAO_Constants.HH_ACCOUNT_PROCESSOR);
     }
     private static void contactAddedToExistingProcessor(string strProcessor) {
@@ -782,14 +782,14 @@ private class ACCT_IndividualAccounts_TEST {
     * @description Update a contact to an existing 1:1 or Household Account
     */
 
-    private static testMethod void contactUpdatedToExistingOneToOne() {
+    @IsTest private static void contactUpdatedToExistingOneToOne() {
         //skip the test if Advancement is installed
         if(ADV_PackageInfo_SVC.useAdv()) return;
 
     	contactUpdatedToExistingOneToOneProcessor(CAO_Constants.ONE_TO_ONE_PROCESSOR);
     }
 
-    private static testMethod void contactUpdatedToExistingOneToOneHH() {
+    @IsTest private static void contactUpdatedToExistingOneToOneHH() {
         contactUpdatedToExistingOneToOneProcessor(CAO_Constants.HH_ACCOUNT_PROCESSOR);
     }
 
@@ -833,13 +833,13 @@ private class ACCT_IndividualAccounts_TEST {
     /*********************************************************************************************************
     * @description Update a contact's Lastname in the 1:1 and Household Account models
     */
-    private static testMethod void contactInNormalOrgNameChangeOneToOne() {
+    @IsTest private static void contactInNormalOrgNameChangeOneToOne() {
         //skip the test if Advancement is installed
         if(ADV_PackageInfo_SVC.useAdv()) return;
 
     	contactInNormalOrgNameChangeProcessor(CAO_Constants.ONE_TO_ONE_PROCESSOR);
     }
-    private static testMethod void contactInNormalOrgNameChangeHHAccount() {
+    @IsTest private static void contactInNormalOrgNameChangeHHAccount() {
         //skip the test if Advancement is installed
         if(ADV_PackageInfo_SVC.useAdv()) return;
 
@@ -887,7 +887,7 @@ private class ACCT_IndividualAccounts_TEST {
     /*********************************************************************************************************
     * @description Test Method for detaching a Contact from an org account. It should land in a one-to-one account.
     */
-    private static testMethod void detachFromNormalAccountToOneToOne() {
+    @IsTest private static void detachFromNormalAccountToOneToOne() {
         //skip the test if Advancement is installed
         if(ADV_PackageInfo_SVC.useAdv()) return;
 
@@ -897,7 +897,7 @@ private class ACCT_IndividualAccounts_TEST {
     /*********************************************************************************************************
     * @description Test Method for detaching a Contact from an org account. It should land in Household account.
     */
-    private static testMethod void detachFromNormalAccountToOneToOneHousehold() {
+    @IsTest private static void detachFromNormalAccountToOneToOneHousehold() {
         //skip the test if Advancement is installed
         if(ADV_PackageInfo_SVC.useAdv()) return;
 
@@ -952,10 +952,10 @@ private class ACCT_IndividualAccounts_TEST {
     /*********************************************************************************************************
     * @description Delete a Contact and verify its One-to-One or Household Account is not deleted.
     */
-     public static testMethod void deleteContactNoOppOneToOne() {
+     @IsTest public static void deleteContactNoOppOneToOne() {
      	deleteContactNoOppProcessor(CAO_Constants.ONE_TO_ONE_PROCESSOR);
      }
-     public static testMethod void deleteContactNoOppHHAccount() {
+     @IsTest public static void deleteContactNoOppHHAccount() {
         deleteContactNoOppProcessor(CAO_Constants.HH_ACCOUNT_PROCESSOR);
      }
      public static void deleteContactNoOppProcessor(string strProcessor) {
@@ -997,10 +997,10 @@ private class ACCT_IndividualAccounts_TEST {
     /*********************************************************************************************************
     * @description Delete a Contact with Opps and verify its One-to-One or Household Account is not deleted.
     */
-    public static testMethod void deleteContactWithOppOneToOne() {
+    @IsTest public static void deleteContactWithOppOneToOne() {
     	deleteContactWithOppProcessor(CAO_Constants.ONE_TO_ONE_PROCESSOR);
     }
-    public static testMethod void deleteContactWithOppHHAccount() {
+    @IsTest public static void deleteContactWithOppHHAccount() {
         deleteContactWithOppProcessor(CAO_Constants.HH_ACCOUNT_PROCESSOR);
     }
     public static void deleteContactWithOppProcessor(string strProcessor) {
@@ -1049,14 +1049,14 @@ private class ACCT_IndividualAccounts_TEST {
     /*********************************************************************************************************
     * @description Delete a Contact from an Org Account and make sure the Account is not deleted.
     */
-    public static testMethod void deleteContactNormalAccountOneToOne() {
+    @IsTest public static void deleteContactNormalAccountOneToOne() {
     	deleteContactNormalAccountProcessor(CAO_Constants.ONE_TO_ONE_PROCESSOR);
     }
 
     /*********************************************************************************************************
     * @description Delete a Contact from an Org Account and make sure the Account is not deleted.
     */
-    public static testMethod void deleteContactNormalAccountHouseholdAcc() {
+    @IsTest public static void deleteContactNormalAccountHouseholdAcc() {
         deleteContactNormalAccountProcessor(CAO_Constants.HH_ACCOUNT_PROCESSOR);
     }
 
@@ -1101,7 +1101,7 @@ private class ACCT_IndividualAccounts_TEST {
     /*********************************************************************************************************
     * @description Rename a Contact's firstname to null and make sure the 1:1 Account's name gets updated
     */
-    private static testMethod void ghIssue16a(){
+    @IsTest private static void ghIssue16a(){
         //skip the test if Advancement is installed
         if(ADV_PackageInfo_SVC.useAdv()) return;
 
@@ -1111,7 +1111,7 @@ private class ACCT_IndividualAccounts_TEST {
     /*********************************************************************************************************
     * @description Rename a Contact's firstname to null and make sure the Household Account's name gets updated
     */
-    private static testMethod void ghIssue16b(){
+    @IsTest private static void ghIssue16b(){
         //skip the test if Advancement is installed
         if(ADV_PackageInfo_SVC.useAdv()) return;
 
@@ -1158,7 +1158,7 @@ private class ACCT_IndividualAccounts_TEST {
     /*********************************************************************************************************
     * @description Undelete a contact back to an existing Household Account
     */
-    private static testMethod void undeleteContactToExistingHH() {
+    @IsTest private static void undeleteContactToExistingHH() {
         //skip the test if Advancement is installed
         if(ADV_PackageInfo_SVC.useAdv()) return;
 
@@ -1221,7 +1221,7 @@ private class ACCT_IndividualAccounts_TEST {
     /*********************************************************************************************************
     * @description Delete a HH Contact without Opps and verify it can be undeleted.
     */
-    public static testMethod void undeleteHHContactNoOpp() {
+    @IsTest public static void undeleteHHContactNoOpp() {
 
         npe01__Contacts_and_Orgs_Settings__c contactSettingsForTests = UTIL_CustomSettingsFacade.getContactsSettingsForTests(
             new npe01__Contacts_and_Orgs_Settings__c (npe01__Account_Processor__c = CAO_Constants.HH_ACCOUNT_PROCESSOR));
@@ -1250,7 +1250,7 @@ private class ACCT_IndividualAccounts_TEST {
     /*********************************************************************************************************
     * @description Delete a HH Contact with opps and verify account name is updated after undelete.
     */
-    public static testMethod void undeleteHHContactWithOpp() {
+    @IsTest public static void undeleteHHContactWithOpp() {
         //skip the test if Advancement is installed
         if(ADV_PackageInfo_SVC.useAdv()) return;
 
@@ -1320,7 +1320,7 @@ private class ACCT_IndividualAccounts_TEST {
     verify:
         The specific system fields should not be set.
     **********************************************************************************************************/
-    public static testMethod void updateHHAccountRecType() {
+    @IsTest public static void updateHHAccountRecType() {
         //skip the test if Advancement is installed
         if(ADV_PackageInfo_SVC.useAdv()) return;
 
@@ -1376,7 +1376,7 @@ private class ACCT_IndividualAccounts_TEST {
     /*********************************************************************************************************
     * @description Update a 1-1 contact's first name and ownerid, verify no "duplicate id in list" exception.
     */
-    public static testMethod void regressionDuplicateIdInList() {
+    @IsTest public static void regressionDuplicateIdInList() {
         //skip the test if Advancement is installed
         if(ADV_PackageInfo_SVC.useAdv()) return;
 
@@ -1419,7 +1419,7 @@ private class ACCT_IndividualAccounts_TEST {
     verify:
         The Contact is created and updated successfully
     **********************************************************************************************************/
-    private static testMethod void testContactDmlWhenHHNamingSettingsIsInvalidAndAutomaticHHNamingIsOff() {
+    @IsTest private static void testContactDmlWhenHHNamingSettingsIsInvalidAndAutomaticHHNamingIsOff() {
         UTIL_UnitTestData_TEST.turnOffAutomaticHHNaming();
         UTIL_UnitTestData_TEST.setupInvalidHHNamingSettings();
 
@@ -1450,7 +1450,7 @@ private class ACCT_IndividualAccounts_TEST {
         The SOQL contains no duplicate field.
         The SOQL contains Household Naming fields.
     **********************************************************************************************************/
-    private static testMethod void testContactSoqlReturnsQueryForSpecifiedContacts() {
+    @IsTest private static void testContactSoqlReturnsQueryForSpecifiedContacts() {
         UTIL_UnitTestData_TEST.turnOnAutomaticHHNaming();
         UTIL_UnitTestData_TEST.setupHHNamingSettings(
             'The {!lastname}, {!{!FIRSTname}} Family',
@@ -1489,7 +1489,7 @@ private class ACCT_IndividualAccounts_TEST {
      * @description Validate that when inserting a new Account for a Contact, it uses the same OwnerId as the
      * Contact that was inserted (especially if the Contact.OwnerId is set to a value other than the current user).
      */
-    private static testMethod void test_insertAsOtherUser() {
+    @IsTest private static void test_insertAsOtherUser() {
 
         // Create a single new User
         User tempUser = UTIL_UnitTestData_TEST.createUserWithoutInsert(UTIL_Profile.SYSTEM_ADMINISTRATOR);

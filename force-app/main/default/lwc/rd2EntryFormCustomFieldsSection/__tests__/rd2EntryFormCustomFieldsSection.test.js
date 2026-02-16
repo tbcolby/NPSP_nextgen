@@ -66,8 +66,8 @@ describe("creating a new record", () => {
         });
 
         const returnValues = element.returnValues();
-        expect(returnValues["Custom1__c"]).toBe(1);
-        expect(returnValues["SomeField__c"]).toBe(2);
+        expect(returnValues.Custom1__c).toBe(1);
+        expect(returnValues.SomeField__c).toBe(2);
     });
 
     it("resets field values", () => {
@@ -79,14 +79,14 @@ describe("creating a new record", () => {
         inputField.value = "1";
 
         const returnValues = element.returnValues();
-        expect(returnValues["Custom1__c"]).toBe("1");
-        expect(returnValues["SomeField__c"]).toBeFalsy();
+        expect(returnValues.Custom1__c).toBe("1");
+        expect(returnValues.SomeField__c).toBeFalsy();
 
         element.resetValues();
 
         const resetReturnValues = element.returnValues();
-        expect(resetReturnValues["Custom1__c"]).toBe(undefined);
-        expect(resetReturnValues["SomeField__c"]).toBe(undefined);
+        expect(resetReturnValues.Custom1__c).toBe(undefined);
+        expect(resetReturnValues.SomeField__c).toBe(undefined);
     });
 
     it("fires change events when field values are changed", () => {

@@ -40,7 +40,7 @@ private class CAM_CascadeDeleteLookups_TEST {
     * @description Deletes the Campaigns which deletes the related Allocations. Verifies results.
     * Then undeletes the Campaigns, which undeletes the Allocations. Verifies results.
     */
-    static testMethod void testCampaignCascadeDelete(){
+    @IsTest static void testCampaignCascadeDelete(){
         Integer maxRecords = 1;
 
         List<Campaign> campaigns = CDL_CascadeDeleteLookups_TEST.buildCampaigns(maxRecords);

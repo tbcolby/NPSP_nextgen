@@ -31,7 +31,7 @@ export default class BatchProgress extends LightningElement {
     @api className;
 
     @track batchJob;
-    @track hasSummary;
+    hasSummary;
     prevBatchJob;
 
     pollingTimeout = 10000;

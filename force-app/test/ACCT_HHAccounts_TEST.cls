@@ -46,7 +46,7 @@ private with sharing class ACCT_HHAccounts_TEST {
 	*	accounts' name and naming fields set
 	*	hh accounts' primary contact set to new contact
     **********************************************************************************************************/
-    static testMethod void NewContactsNoAccounts() {
+    @IsTest static void NewContactsNoAccounts() {
         //skip the test if Advancement is installed
         if(ADV_PackageInfo_SVC.useAdv()) return;
 
@@ -91,7 +91,7 @@ private with sharing class ACCT_HHAccounts_TEST {
     *    accounts' name and naming fields updated
     *    hh accounts' primary contact updated to contact
     **********************************************************************************************************/
-    static testMethod void NewContactsEmptyHHAccounts() {
+    @IsTest static void NewContactsEmptyHHAccounts() {
         //skip the test if Advancement is installed
         if(ADV_PackageInfo_SVC.useAdv()) return;
 
@@ -175,7 +175,7 @@ private with sharing class ACCT_HHAccounts_TEST {
     *    accounts' name and naming fields updated
     *    hh accounts' primary contact not updated
     **********************************************************************************************************/
-    static testMethod void NewContactsNonEmptyHHAccounts() {
+    @IsTest static void NewContactsNonEmptyHHAccounts() {
         //skip the test if Advancement is installed
         if(ADV_PackageInfo_SVC.useAdv()) return;
 
@@ -255,7 +255,7 @@ private with sharing class ACCT_HHAccounts_TEST {
     *    accounts' name and naming fields set
     *    hh accounts' primary contact set to new contact
     **********************************************************************************************************/
-    static testMethod void NewContactsNoAccountsWithHHObj() {
+    @IsTest static void NewContactsNoAccountsWithHHObj() {
         //skip the test if Advancement is installed
         if(ADV_PackageInfo_SVC.useAdv()) return;
 
@@ -313,7 +313,7 @@ private with sharing class ACCT_HHAccounts_TEST {
     *    accounts' name and naming fields set
     *    hh accounts' primary contact set to one of the HH contacts
     **********************************************************************************************************/
-     static testMethod void UpdateContactsMergeHHAccounts() {
+     @IsTest static void UpdateContactsMergeHHAccounts() {
         //skip the test if Advancement is installed
         if(ADV_PackageInfo_SVC.useAdv()) return;
 
@@ -405,7 +405,7 @@ private with sharing class ACCT_HHAccounts_TEST {
     *    accounts' name and naming fields set
     *    hh accounts' primary contact set to one of the HH contacts
     **********************************************************************************************************/
-     static testMethod void UpdateContactsSplitHHAccounts() {
+     @IsTest static void UpdateContactsSplitHHAccounts() {
         //skip the test if Advancement is installed
         if(ADV_PackageInfo_SVC.useAdv()) return;
 
@@ -506,7 +506,7 @@ private with sharing class ACCT_HHAccounts_TEST {
     *    accounts' name and naming fields set
     *    hh accounts' primary contact set to one of the HH contacts
     **********************************************************************************************************/
-     static testMethod void DeleteContactsFromHHAccounts() {
+     @IsTest static void DeleteContactsFromHHAccounts() {
         //skip the test if Advancement is installed
         if(ADV_PackageInfo_SVC.useAdv()) return;
 
@@ -576,7 +576,7 @@ private with sharing class ACCT_HHAccounts_TEST {
     *    accounts' name and naming fields updated
     *     hh accounts' primary contact valid
     **********************************************************************************************************/
-    static testMethod void UndeleteContactsFromHHAccounts() {
+    @IsTest static void UndeleteContactsFromHHAccounts() {
         //skip the test if Advancement is installed
         if(ADV_PackageInfo_SVC.useAdv()) return;
 
@@ -748,7 +748,7 @@ private with sharing class ACCT_HHAccounts_TEST {
     *    no change for HH accounts with multiple contacts
     *    no change for any other type of account
     **********************************************************************************************************/
-    static testMethod void changeContactOwners() {
+    @IsTest static void changeContactOwners() {
         //skip the test if Advancement is installed
         if(ADV_PackageInfo_SVC.useAdv()) return;
 
@@ -825,7 +825,7 @@ private with sharing class ACCT_HHAccounts_TEST {
     *    closed opps stay with old HH accounts
     *    open opps move to new HH accounts
     **********************************************************************************************************/
-    static testMethod void changeContactsCheckOpps() {
+    @IsTest static void changeContactsCheckOpps() {
        npe01__Contacts_and_Orgs_Settings__c contactSettingsForTests = UTIL_CustomSettingsFacade.getContactsSettingsForTests(new npe01__Contacts_and_Orgs_Settings__c (
             npe01__Account_Processor__c = CAO_Constants.HH_ACCOUNT_PROCESSOR,
             npe01__Enable_Opportunity_Contact_Role_Trigger__c = true,
@@ -894,7 +894,7 @@ private with sharing class ACCT_HHAccounts_TEST {
     * verify:
     *    the Account's Primary Contact doesn't change
     **********************************************************************************************************/
-    static testMethod void addContactCheckAccountPrimaryContact() {
+    @IsTest static void addContactCheckAccountPrimaryContact() {
        npe01__Contacts_and_Orgs_Settings__c contactSettingsForTests = UTIL_CustomSettingsFacade.getContactsSettingsForTests(new npe01__Contacts_and_Orgs_Settings__c (
             npe01__Account_Processor__c = CAO_Constants.HH_ACCOUNT_PROCESSOR,
             npe01__Enable_Opportunity_Contact_Role_Trigger__c = true,
@@ -930,7 +930,7 @@ private with sharing class ACCT_HHAccounts_TEST {
     * verify:
     *    the system fields on the account are set correctly
     **********************************************************************************************************/
-    static testMethod void newHHAccountWithRecordTypeOnly() {
+    @IsTest static void newHHAccountWithRecordTypeOnly() {
         //skip the test if Advancement is installed
         if(ADV_PackageInfo_SVC.useAdv()) return;
 
@@ -952,7 +952,7 @@ private with sharing class ACCT_HHAccounts_TEST {
     * verify:
     *    the system fields on the account are set correctly
     **********************************************************************************************************/
-    static testMethod void updateAccountToHHRecordType() {
+    @IsTest static void updateAccountToHHRecordType() {
         //skip the test if Advancement is installed
         if(ADV_PackageInfo_SVC.useAdv()) return;
 
@@ -981,7 +981,7 @@ private with sharing class ACCT_HHAccounts_TEST {
     * verify:
     *    the Account's Number of Household Members is still updated
     **********************************************************************************************************/
-    static testMethod void addContactCheckNumberHHMembers() {
+    @IsTest static void addContactCheckNumberHHMembers() {
         //skip the test if Advancement is installed
         if(ADV_PackageInfo_SVC.useAdv()) return;
 

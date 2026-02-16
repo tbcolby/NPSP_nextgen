@@ -84,7 +84,7 @@ private class CRLP_DefaultConfigBuilder_TEST {
      * @description Test creating the default rollup configuration where there the legacy rollup settings are the same
      * for the Account and Contact rollups
      */
-    static testMethod void test_createDefaults_simple() {
+    @IsTest static void test_createDefaults_simple() {
         setupLegacySettings();
         Test.startTest();
         new CRLP_DefaultConfigBuilder_SVC().convertLegacyRollupsIntoCustomizableRollups();
@@ -112,7 +112,7 @@ private class CRLP_DefaultConfigBuilder_TEST {
      * @description Validates that "Memberships: Won" filter group and associated rollups is not created when
      * the Membership record type does not exist
      */
-    static testMethod void test_createMembershipDefaults_MembershipRecordTypeDoesNotExist() {
+    @IsTest static void test_createMembershipDefaults_MembershipRecordTypeDoesNotExist() {
         UTIL_CustomSettingsFacade.getHouseholdsSettingsForTests(new npo02__Households_Settings__c (
             npo02__Membership_Record_Types__c = UTIL_UnitTestData_TEST.mockId(RecordType.getSObjectType())
         ));
@@ -159,7 +159,7 @@ private class CRLP_DefaultConfigBuilder_TEST {
     /**
      * @description Validates that exclusion filter rules are not created if record type does not exist for Id in setting
      */
-    static testMethod void test_excludedRecordTypes_RecordTypeDoesNotExist() {
+    @IsTest static void test_excludedRecordTypes_RecordTypeDoesNotExist() {
         UTIL_CustomSettingsFacade.getAllocationsSettingsForTests(new Allocations_Settings__c(
             Use_Fiscal_Year_for_Rollups__c = true,
             Excluded_Opp_Types__c = 'foo;bar',
@@ -213,7 +213,7 @@ private class CRLP_DefaultConfigBuilder_TEST {
      * @description Test creating the default rollup configuration where there the legacy rollup settings are different
      * for the Account and Contact rollups; and the 'Enable Soft Credit Rollups' field is unchecked.
      */
-    static testMethod void test_createDefaults_diffContact() {
+    @IsTest static void test_createDefaults_diffContact() {
         setupLegacySettings();
         UTIL_CustomSettingsFacade.getHouseholdsSettingsForTests(new npo02__Households_Settings__c (
                 npo02__Household_Rules__c = HH_Households.ALL_PROCESSOR,

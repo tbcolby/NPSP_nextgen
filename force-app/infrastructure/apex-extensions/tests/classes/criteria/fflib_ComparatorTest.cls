@@ -189,46 +189,46 @@ private with sharing class fflib_ComparatorTest
 		System.assertEquals(expected, fflib_Comparator.compare(s1, s2));
 	}
 
-	private static testMethod void assertContainsNull()
+	@IsTest private static void assertContainsNull()
 	{
 		System.assert(fflib_Comparator.contains(null, null));
 	}
 
-	private static testMethod void assertContainsSourceNull()
+	@IsTest private static void assertContainsSourceNull()
 	{
 		System.assert(!fflib_Comparator.contains(null, 0));
 	}
 
-	private static testMethod void assertContainsSearchNull()
+	@IsTest private static void assertContainsSearchNull()
 	{
 		System.assert(!fflib_Comparator.contains(new Set<String>(), null));
 	}
 
-	private static testMethod void assertContainsDate()
+	@IsTest private static void assertContainsDate()
 	{
 		Date myDate = Date.newInstance(1976, 6, 1);
 		System.assert(fflib_Comparator.contains(new Set<Date> {myDate}, myDate));
 	}
 
-	private static testMethod void assertContainsDateTime()
+	@IsTest private static void assertContainsDateTime()
 	{
 		Datetime myDateTime = DateTime.newInstance(1976, 6, 1, 11, 55, 0);
 		System.assert(fflib_Comparator.contains(new Set<Datetime> {myDateTime}, myDateTime));
 	}
 
-	private static testMethod void assertContainsDouble()
+	@IsTest private static void assertContainsDouble()
 	{
 		Double myDouble = Double.valueOf(123);
 		System.assert(fflib_Comparator.contains(new Set<Double> {myDouble}, myDouble));
 	}
 
-	private static testMethod void assertContainsId()
+	@IsTest private static void assertContainsId()
 	{
 		Id id = fflib_IDGenerator.generate(Account.SObjectType);
 		System.assert(fflib_Comparator.contains(new Set<Id> {id}, id));
 	}
 
-	private static testMethod void assertContainsInteger()
+	@IsTest private static void assertContainsInteger()
 	{
 		Set<Integer> integerSet = new Set<Integer>
 		{
@@ -242,30 +242,30 @@ private with sharing class fflib_ComparatorTest
 		System.assertEquals(true, (object) acc.get('NumberOfEmployees') instanceof integer);
 	}
 
-	private static testMethod void assertContainsLong()
+	@IsTest private static void assertContainsLong()
 	{
 		Long myLong = Long.valueOf('3123');
 		System.assert(fflib_Comparator.contains(new Set<Long> {myLong}, myLong));
 	}
 
-	private static testMethod void assertContainsObject()
+	@IsTest private static void assertContainsObject()
 	{
 		Object obj = (Object) '134';
 		System.assert(fflib_Comparator.contains(new Set<Object>{obj}, obj));
 	}
 
-	private static testMethod void assertContainsTime()
+	@IsTest private static void assertContainsTime()
 	{
 		Time myTime = Time.newInstance(11, 55, 0, 0);
 		System.assert(fflib_Comparator.contains(new Set<Time> {myTime}, myTime));
 	}
 
-	private static testMethod void assertContainsString()
+	@IsTest private static void assertContainsString()
 	{
 		System.assert(fflib_Comparator.contains(new Set<String> {'Test'}, 'Test'));
 	}
 
-	private static testMethod void assertContainsSObject()
+	@IsTest private static void assertContainsSObject()
 	{
 		Account myAccount = new Account();
 		Boolean exceptionThrown = false;

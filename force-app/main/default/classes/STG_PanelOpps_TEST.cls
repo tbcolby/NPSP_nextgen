@@ -39,7 +39,7 @@ public with sharing class STG_PanelOpps_TEST {
      * user in the Payments panel for opportunity stage to use when
      * auto-closing contains at least the 'no selection' option.
      */
-    public static testMethod void testGetOpportunityStageSelectOptionsContainsAtLeastEmptySelection() {
+    @IsTest public static void testGetOpportunityStageSelectOptionsContainsAtLeastEmptySelection() {
         STG_PanelOpps_CTRL poc = new STG_PanelOpps_CTRL();
 
         List<SelectOption> opportunityStageOptions = poc.getOpportunityClosedWonStages();

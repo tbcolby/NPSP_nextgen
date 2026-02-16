@@ -45,15 +45,15 @@ export default class Rd2PauseForm extends LightningElement {
     @api recordId;
     recordName;
 
-    @track isLoading = true;
+    isLoading = true;
     @track permissions = {
         hasAccess: false,
         isBlocked: false,
         blockedReason: "",
     };
     @track isSaveDisplayed;
-    @track isSaveDisabled = false;
-    @track pageHeader = "";
+    isSaveDisabled = false;
+    pageHeader = "";
     @track pausedReason = {};
     scheduleId;
 
@@ -64,9 +64,9 @@ export default class Rd2PauseForm extends LightningElement {
     maxRowDisplay = 12;
     maxRowSelection = 12;
     selectedIds = [];
-    @track selectedRowsSummary = null;
+    selectedRowsSummary = null;
     firstDonationDateBoundary = null;
-    @track firstDonationDateMessage = null;
+    firstDonationDateMessage = null;
 
     @track error = {};
 

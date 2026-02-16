@@ -26,7 +26,7 @@ export default class geTemplateBuilderBatchHeader extends LightningElement {
     @api availableBatchTableColumnOptions;
     @api selectedBatchTableColumnOptions;
 
-    @track isLoading = true;
+    isLoading = true;
     @track hasErrors;
 
     _isInitialized = false;
