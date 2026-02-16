@@ -188,7 +188,7 @@ public inherited sharing class ContactMergeService {
 
         UTIL_Debug.debug('loserAccountsToBeDeleted: ' + loserAccountsToBeDeleted);
         if (loserAccountsToBeDeleted.size() > 0) {
-            delete loserAccountsToBeDeleted;
+            Database.delete(loserAccountsToBeDeleted, true);
         }
 
         SfdoInstrumentationService.getInstance().log(

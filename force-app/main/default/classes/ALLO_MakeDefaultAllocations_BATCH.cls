@@ -135,10 +135,10 @@ public inherited sharing class ALLO_MakeDefaultAllocations_BATCH implements Data
         //process status in the UI.
         TDTM_ProcessControl.setRecursionFlag(TDTM_ProcessControl.flag.ALLOC, true);
         if (!listAlloForInsert.isEmpty()) {
-            insert listAlloForInsert;
+            UTIL_DMLService.insertRecords(listAlloForInsert);
         }
         if (!listAlloForUpdate.isEmpty()) {
-            update listAlloForUpdate;
+            UTIL_DMLService.updateRecords(listAlloForUpdate);
         }
         TDTM_ProcessControl.setRecursionFlag(TDTM_ProcessControl.flag.ALLOC, false);
     }

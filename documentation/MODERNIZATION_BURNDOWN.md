@@ -13,7 +13,7 @@ This document tracks backwards-compatible modernization items across multiple re
 |----------|-------------|-----------|-------------|-----------|
 | Phase 0: Packaging & Setup | 4 | 4 | 0 | 0 |
 | Phase 1: Foundation | 8 | 6 | 0 | 2 |
-| Phase 2: Security | 12 | 3 | 2 | 7 |
+| Phase 2: Security | 12 | 4 | 1 | 7 |
 | Phase 3: Async Modernization | 15 | 0 | 0 | 15 |
 | Phase 4: Performance | 18 | 0 | 0 | 18 |
 | Phase 5: Code Quality | 14 | 0 | 0 | 14 |
@@ -22,7 +22,7 @@ This document tracks backwards-compatible modernization items across multiple re
 | Phase 8: Accessibility | 10 | 0 | 0 | 10 |
 | Phase 9: Integration | 8 | 0 | 0 | 8 |
 | Phase 10: Long-term | 20 | 0 | 0 | 20 |
-| **TOTAL** | **158** | **13** | **2** | **143** |
+| **TOTAL** | **158** | **14** | **1** | **143** |
 
 **Estimated Total Effort**: 800-1200 hours across 8 quarterly releases
 
@@ -250,17 +250,20 @@ Fixed 6 LWC test suites broken by Elevate removal. Fixed pre-existing rd2EntryFo
 ---
 
 ### 2.3 Add Database Operation Error Handling
-**Status**: 🔄 In Progress
+**Status**: ✅ Complete
 **Effort**: 8-10 hours | **Risk**: Very Low | **Priority**: P1
 
-**Phase 2c**: Converted 31 bare DML statements in 11 controller files to Database.*/UTIL_DMLService with explicit allOrNone parameter.
+All non-Custom-Settings bare DML in production code wrapped with Database.*/UTIL_DMLService with explicit allOrNone parameter. ~69 Custom Settings upserts (idiomatic) and 3 merge operations (no Database.merge with allOrNone) excluded.
 
 | Category | Files | Bare DML Converted | Status |
 |----------|-------|--------------------|--------|
-| @AuraEnabled controllers (P0) | GE_GiftEntryController, BGE_ConfigurationWizard_CTRL, BGE_DataImportBatchEntry_CTRL | 8 | ✅ |
-| VF controllers (P1) | EP_ManageEPTemplate_CTRL, OPP_SendAcknowledgmentBTN_CTRL | 6 | ✅ |
-| Controllers with existing CRUD (P2) | ALLO_ManageAllocations_CTRL, MTCH_FindGifts_CTRL, BDI_DataImportDeleteBTN_CTRL, LVL_LevelEdit_CTRL, CON_DeleteContactOverride_CTRL, RD2_ETableController | 17 | ✅ |
-| Services, batch, TDTM (deferred) | ~30 files | ~143 | ⬜ |
+| @AuraEnabled controllers (P0) | GE_GiftEntryController, BGE_ConfigurationWizard_CTRL, BGE_DataImportBatchEntry_CTRL | 8 | ✅ (Phase 2c) |
+| VF controllers (P1) | EP_ManageEPTemplate_CTRL, OPP_SendAcknowledgmentBTN_CTRL | 6 | ✅ (Phase 2c) |
+| Controllers with existing CRUD (P2) | ALLO_ManageAllocations_CTRL, MTCH_FindGifts_CTRL, BDI_DataImportDeleteBTN_CTRL, LVL_LevelEdit_CTRL, CON_DeleteContactOverride_CTRL, RD2_ETableController | 17 | ✅ (Phase 2c) |
+| Services | AN_AutoNumberService, RD_RecurringDonations, RD2_ScheduleService, RD2_QueueableService, ERR_Notifier, ContactMergeService, Gift, Gifts | 24 | ✅ (Phase 2d) |
+| TDTM handlers | OPP_OpportunityContactRoles_TDTM, AFFL_Affiliations_TDTM, PSC_PartialSoftCredit_TDTM, BDI_DataImportBatchStatus_TDTM, OPP_PrimaryContactRoleMerge | 10 | ✅ (Phase 2d) |
+| Batch classes | LVL_LevelAssign_BATCH, ALLO_MakeDefaultAllocations_BATCH, CRLP_Batch_Base, CRLP_RollupQueueable, UTIL_AbstractRollup_BATCH, RLLP_OppRollup | 8 | ✅ (Phase 2d) |
+| Remaining controllers & utilities | PMT_PaymentWizard_CTRL, LD_LeadConvertOverride_CTRL, OPP_OpportunityNamingBTN_CTRL, GE_Template, GS_ChecklistSetup, ERR_AsyncErrors, BDI_GAUAllocationsUtil, UTIL_PerfLogger | 10 | ✅ (Phase 2d) |
 
 ---
 

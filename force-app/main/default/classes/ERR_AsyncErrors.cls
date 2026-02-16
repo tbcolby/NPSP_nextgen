@@ -149,7 +149,7 @@ public virtual inherited sharing class ERR_AsyncErrors implements Queueable {
      */
     @TestVisible
     private virtual void insertErrors(List<Error__c> errors) {
-        insert errors;
+        UTIL_DMLService.insertRecords(errors);
     }
 
     /**

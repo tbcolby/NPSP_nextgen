@@ -459,7 +459,7 @@ public abstract inherited sharing class UTIL_AbstractRollup_BATCH implements dat
 
             // update the rollups
             if (!objMap.isEmpty()) {
-                update objMap.values();
+                UTIL_DMLService.updateRecords(objMap.values());
             }
         }
     }

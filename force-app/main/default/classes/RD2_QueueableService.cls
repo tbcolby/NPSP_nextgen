@@ -274,7 +274,7 @@ public inherited sharing class RD2_QueueableService {
             }
 
             TDTM_ProcessControl.toggleTriggerState('Opportunity', 'RD2_RecurringDonationsOpp_TDTM', false);
-            update renamedOpps;
+            UTIL_DMLService.updateRecords(renamedOpps);
         }
     }
 }

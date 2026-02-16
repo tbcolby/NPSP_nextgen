@@ -58,7 +58,7 @@ public with sharing class OPP_OpportunityNamingBTN_CTRL {
                     throw new UTIL_Permissions.InsufficientPermissionException(System.Label.commonAccessErrorMessage);
                 }
                 OPP_OpportunityNaming.refreshOppNames(thisOpp);
-                update thisOpp;
+                UTIL_DMLService.updateRecords(thisOpp);
                 redirect = true;
             } catch (Exception ex) {
                 ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, ex.getMessage()));

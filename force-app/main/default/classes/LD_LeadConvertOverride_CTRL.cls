@@ -834,7 +834,7 @@ public with sharing class LD_LeadConvertOverride_CTRL {
         }
 
         private void deleteRecords() {
-            delete records;
+            Database.delete(records, true);
         }
     }
 

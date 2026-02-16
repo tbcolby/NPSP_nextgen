@@ -136,7 +136,7 @@ public with sharing class Gifts {
     }
 
     public void updateRecords() {
-        update giftsToUpdate.values();
+        UTIL_DMLService.updateRecords(giftsToUpdate.values());
         giftsToUpdate.clear();
     }
 

@@ -855,7 +855,7 @@ public without sharing class RLLP_OppRollup {
     public void rollupAll(){
 
         //clear the error queue from any previous runs
-        delete [select id from Error__c where Context_Type__c = 'RLLP'];
+        Database.delete([select id from Error__c where Context_Type__c = 'RLLP'], true);
 
         rollupAllAccounts();
         rollupAllContacts();

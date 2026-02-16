@@ -213,7 +213,7 @@ public inherited sharing class ERR_Notifier {
             } catch (Exception ex) {
                 // Swallow any errors generating the email
             }
-            update errors;
+            UTIL_DMLService.updateRecords(errors);
         }
     }
 
@@ -300,12 +300,12 @@ public inherited sharing class ERR_Notifier {
             }
 
             try {
-                insert postsToInsert;
+                UTIL_DMLService.insertRecords(postsToInsert);
             } catch (Exception ex) {
                 // swallow any errors posting the errors to chatter
             }
 
-            update errors; //we don't want to post the same errors again
+            UTIL_DMLService.updateRecords(errors); //we don't want to post the same errors again
         }
     }
 

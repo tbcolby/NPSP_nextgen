@@ -183,7 +183,7 @@ public inherited sharing class CRLP_RollupQueueable implements System.Queueable 
                                 'updatedRecords Count: ' + (updatedRecords != null ? updatedRecords.size() : 0) + '\n' +
                                 'Rollups State:\n' + CRLP_Debug_UTIL.getCurrentRollupState()).left(32768)
                 );
-                insert logEntry;
+                UTIL_DMLService.insertRecord(logEntry);
             }
         }
     }
