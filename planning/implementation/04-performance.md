@@ -2,208 +2,154 @@
 
 **Phase**: 2 (Core Modernization)
 **Primary Agent**: `apex_agent`
-**Supporting Agents**: `testing_agent`, `security_agent`
 **Planning Doc**: [04-PERFORMANCE-OPTIMIZATION.md](../04-PERFORMANCE-OPTIMIZATION.md)
-**Depends on**: WS-01 (Foundation), WS-02 (Security)
+**Dependencies**: WS-01 ✅, WS-02 ✅ — **Ready to start**
 
 ---
 
 ## Objective
 
-Eliminate SOQL/DML in loops, implement Platform Cache for hot paths, establish governor limit monitoring, and ensure all trigger handlers are bulk-safe for 200+ records.
+Fix critical governor limit violations (SOQL-in-loops, nested loops), cache schema describe calls, and establish performance monitoring patterns.
 
 ---
 
 ## Sprint Breakdown
 
-### Sprint 1-2: Performance Audit & Hotspot Identification
+### Sprint 1: SOQL-in-Loop Fixes (~12-16h)
 
-**Agent**: `apex_agent`
-**Tasks**:
-1. Run PMD `AvoidDmlStatementsInLoops` and `AvoidSoqlInLoops` scans
-2. Identify top performance hotspots by domain:
-   - CRLP rollup calculation paths
-   - BDI batch processing paths
-   - RD2 schedule calculation paths
-   - Trigger handler chains (TDTM cascade)
-3. Profile governor limit usage for key operations:
-   - Contact insert with household creation
-   - Opportunity insert with rollup + allocation
-   - Recurring Donation schedule evaluation
-   - Batch Data Import processing
-4. Identify candidates for Platform Cache:
-   - Custom Settings reads (frequent, rarely changed)
-   - Trigger Handler configuration
-   - Schema describe calls
-   - RecordType mappings
+**Known violations** (7 files, audit complete):
 
-**Agent**: `testing_agent`
-**Tasks**:
-1. Create performance test framework:
-   ```apex
-   @IsTest
-   static void shouldHandleBulkInsertWithinGovernorLimits() {
-       Integer queriesBefore = Limits.getQueries();
-       Integer dmlBefore = Limits.getDmlStatements();
+| File | Issue | Impact | Fix Pattern |
+|------|-------|--------|-------------|
+| OPP_OpportunityContactRoles_TDTM | 3 SOQL-in-loop | **CRITICAL** — every Opp insert/update | Collect IDs → single query → Map lookup |
+| RD_RecurringDonations | 1 SOQL-in-loop | HIGH — RD evaluation | Pre-query + Map |
+| GE_LookupController | 2 SOQL-in-loop | MEDIUM — Gift Entry UI | Pre-query + Map |
+| BGE_DataImportBatchEntry_CTRL | 1 SOQL-in-loop | MEDIUM — Batch Gift Entry | Pre-query + Map |
+| PSC_Opportunity_TDTM | 2 SOQL-in-loop | MEDIUM — Partial Soft Credit | Pre-query + Map |
 
-       Test.startTest();
-       insert createTestRecords(200);
-       Test.stopTest();
+**Standard fix pattern**:
+```apex
+// BEFORE (SOQL in loop):
+for (Opportunity opp : opps) {
+    Contact c = [SELECT Name FROM Contact WHERE Id = :opp.ContactId];
+}
 
-       Integer queriesUsed = Limits.getQueries() - queriesBefore;
-       Integer dmlUsed = Limits.getDmlStatements() - dmlBefore;
+// AFTER (bulk query + map):
+Set<Id> contactIds = new Set<Id>();
+for (Opportunity opp : opps) {
+    contactIds.add(opp.ContactId);
+}
+Map<Id, Contact> contactMap = new Map<Id, Contact>(
+    [SELECT Name FROM Contact WHERE Id IN :contactIds]
+);
+for (Opportunity opp : opps) {
+    Contact c = contactMap.get(opp.ContactId);
+}
+```
 
-       System.assert(queriesUsed < 50, 'SOQL usage: ' + queriesUsed);
-       System.assert(dmlUsed < 20, 'DML usage: ' + dmlUsed);
-   }
-   ```
-2. Run baseline performance tests for all trigger handlers
+**Priority**: Start with OPP_OpportunityContactRoles_TDTM — it fires on every Opportunity save and has 3 violations + the worst nested loop problems (Sprint 2).
 
-**Deliverables**:
-- Performance audit report with hotspot rankings
-- Governor limit baseline per key operation
-- Performance test framework
+### Sprint 2: Nested Loop & Collection Fixes (~8-12h)
 
-### Sprint 3-4: SOQL/DML-in-Loop Elimination
+**Known violations** (4 files):
 
-**Agent**: `apex_agent`
-**Tasks**:
-1. Fix all SOQL-in-loop violations:
-   - Collect IDs in sets, query once outside loop
-   - Use selector pattern for bulk queries
-   - Replace inline queries with selector class methods
-2. Fix all DML-in-loop violations:
-   - Collect records in lists, perform single DML outside loop
-   - Use Unit of Work pattern for complex DML sequences
-3. Priority order:
-   - **Critical**: Trigger handlers (affect every DML on object)
-   - **High**: Batch execute methods (called per batch of 200)
-   - **Medium**: Service methods called from UI
-   - **Low**: Utility/helper methods called infrequently
+| File | Issue | Fix |
+|------|-------|-----|
+| OPP_OpportunityContactRoles_TDTM | Triple nested loop + O(n²) `List.contains()` | Flatten to 2 levels, replace List with Set |
+| OPP_OpportunityContactRoles_TDTM | 3-level nesting with string operations | Extract to helper method, pre-compute Maps |
+| BGE_BatchGiftEntry_UTIL | Triple nested loop with getDescribe() | Cache describe results, flatten loops |
+| GE_Template | Nested loops with map operations | Pre-compute lookup maps |
 
-**Agent**: `testing_agent`
-**Tasks**:
-1. Run performance tests after each fix batch
-2. Verify governor limit improvement
-3. Add bulk tests where missing (200+ records)
+**OPP_OpportunityContactRoles_TDTM** is the #1 priority file — it has 12 combined governor issues. Fixing this one file has the highest impact of any single change in the modernization.
 
-**Deliverables**:
-- Zero SOQL-in-loop violations (PMD clean)
-- Zero DML-in-loop violations (PMD clean)
-- Performance test results showing improvement
+**Collection optimization pattern**:
+```apex
+// BEFORE (O(n²) with List.contains):
+for (Contact c : contacts) {
+    if (existingList.contains(c.Id)) { ... }
+}
 
-### Sprint 5-6: Platform Cache Implementation
+// AFTER (O(n) with Set):
+Set<Id> existingSet = new Set<Id>(existingList);
+for (Contact c : contacts) {
+    if (existingSet.contains(c.Id)) { ... }
+}
+```
 
-**Agent**: `apex_agent`
-**Tasks**:
-1. Design cache architecture:
-   ```
-   Platform Cache (Org partition: "npsp")
-   ├── TriggerHandlerConfig (TTL: 1 hour)
-   ├── RecordTypeMappings (TTL: 1 hour)
-   ├── CustomSettings (TTL: 30 min)
-   ├── SchemaDescribe (TTL: 2 hours)
-   └── UserPermissions (TTL: 15 min)
-   ```
-2. Create cache service:
-   ```apex
-   public class NPSP_CacheService {
-       private static final String PARTITION = 'local.npsp';
+### Sprint 3: Schema Describe Caching (~6-10h)
 
-       public static Object get(String key) {
-           return Cache.Org.getPartition(PARTITION).get(key);
-       }
+**Known violations** (3 files):
 
-       public static void put(String key, Object value, Integer ttlSeconds) {
-           Cache.Org.getPartition(PARTITION).put(key, value, ttlSeconds);
-       }
+| File | Issue | Fix |
+|------|-------|-----|
+| BGE_BatchGiftEntry_UTIL | getDescribe() in loop | Cache in static variable |
+| BDI_ManageAdvancedMappingCtrl | Multiple getGlobalDescribe() calls | Single call, reuse result |
+| ADV_PackageInfo_SVC | describeSObjects() in loop | Batch describe, cache results |
 
-       public static void invalidate(String key) {
-           Cache.Org.getPartition(PARTITION).remove(key);
-       }
-   }
-   ```
-3. Implement caching for hot paths:
-   - TDTM trigger handler configuration (most impactful — read every trigger)
-   - RecordType mappings
-   - Custom Settings facade (add cache layer before getInstance())
-   - Schema describe results
-4. Add cache invalidation triggers (when config changes, invalidate cache)
+**Caching pattern** (use existing UTIL_Describe where possible):
+```apex
+// UTIL_Describe already provides cached describe:
+DescribeFieldResult dfr = UTIL_Describe.getFieldDescribe(
+    UTIL_Namespace.StrTokenNSPrefix('Opportunity'),
+    UTIL_Namespace.StrTokenNSPrefix('Amount__c')
+);
+```
 
-**Agent**: `devops_agent`
-**Tasks**:
-1. Create Platform Cache partition metadata
-2. Configure cache allocation in scratch org definitions
-3. Add cache monitoring to CI
+Where UTIL_Describe doesn't cover the use case, add static variable caching:
+```apex
+private static Map<String, Schema.SObjectType> cachedGlobalDescribe;
+private static Map<String, Schema.SObjectType> getGlobalDescribe() {
+    if (cachedGlobalDescribe == null) {
+        cachedGlobalDescribe = Schema.getGlobalDescribe();
+    }
+    return cachedGlobalDescribe;
+}
+```
 
-**Deliverables**:
-- `NPSP_CacheService` utility
-- Platform Cache partition configured
-- 4+ hot paths cached
-- Cache invalidation on config changes
+### Sprint 4: Platform Cache (Conditional, ~15-20h)
 
-### Sprint 7-8: Trigger Bulkification & LDV Safety
+**Only implement if Sprints 1-3 show remaining performance bottlenecks.** Platform Cache adds complexity (partition management, TTL tuning, cache invalidation) that may not be justified.
 
-**Agent**: `apex_agent`
-**Tasks**:
-1. Audit all TDTM trigger handlers for bulk safety:
-   - Verify each handles `Trigger.new` of 200+ records
-   - Verify no per-record SOQL/DML
-   - Verify efficient collection handling (maps vs nested loops)
-2. Implement skew detection for rollup batches:
-   - Large account detection (>10K opps)
-   - Separate processing path for skew accounts
-   - Align with CRLP_Batch_Base_Skew pattern
-3. Add governor limit monitoring utility:
-   ```apex
-   public class NPSP_LimitsMonitor {
-       public static void checkAndWarn(String context) {
-           if (Limits.getQueries() > Limits.getLimitQueries() * 0.8) {
-               System.debug(LoggingLevel.WARN, context + ': SOQL at 80%');
-           }
-           // Similar for DML, heap, CPU
-       }
-   }
-   ```
+If needed:
+- Cache TDTM trigger handler configuration (most impactful — read every trigger)
+- Cache Custom Settings facade results
+- Use Org cache partition `local.npsp` with 1-hour TTL
+- Add cache invalidation when config changes
 
-**Agent**: `testing_agent`
-**Tasks**:
-1. Create LDV test suite:
-   - Test with 200 records per trigger (standard bulk)
-   - Test with skew accounts (1000+ children)
-   - Verify governor limits stay within 80% thresholds
-2. Add performance regression tests to CI
+**Decision point**: After Sprints 1-3, measure governor limit usage on key operations. If within budget, skip Platform Cache.
 
-**Deliverables**:
-- All trigger handlers verified bulk-safe
-- Skew detection and handling for rollups
-- Governor limit monitoring utility
-- LDV test suite in CI
+---
+
+## NOT Doing (Deferred)
+
+- `NPSP_CacheService` utility class — if caching is needed, use Platform Cache directly
+- `NPSP_LimitsMonitor` utility — System.debug monitoring is not production-viable; use standard Salesforce Event Monitoring
+- LDV test suite — add performance assertions to existing tests instead of separate suite
+- Skew detection enhancements — CRLP_Batch_Base_Skew already handles this
 
 ---
 
 ## Quality Gates
 
-| Gate | Criteria | Enforced By |
-|------|----------|-------------|
-| No loops | Zero SOQL/DML in loops (PMD) | `devops_agent` (CI) |
-| Bulk safe | All triggers handle 200+ records | `testing_agent` |
-| Cache | Hot paths use Platform Cache | `apex_agent` review |
-| Limits | Key operations stay under 80% governor limits | `testing_agent` |
+| Gate | Criteria |
+|------|----------|
+| No SOQL-in-loops | PMD `AvoidSoqlInLoops` clean |
+| No DML-in-loops | PMD `AvoidDmlStatementsInLoops` clean |
+| Bulk safe | All trigger handlers tested with 200+ records |
+| No regression | All existing tests pass after optimization |
 
 ---
 
 ## Success Metrics
 
-| Metric | Start | Sprint 4 | Sprint 6 | Sprint 8 |
+| Metric | Start | Sprint 2 | Sprint 3 | Sprint 4 |
 |--------|-------|----------|----------|----------|
-| SOQL-in-loop violations | TBD | 0 | 0 | 0 |
-| DML-in-loop violations | TBD | 0 | 0 | 0 |
-| Platform Cache items | 0 | 0 | 4+ | 6+ |
-| Trigger bulk tests | Partial | 80% | 100% | 100% |
-| Avg SOQL per Contact insert | TBD | -20% | -40% | -50%+ |
+| SOQL-in-loop files | 7+ | 0 | 0 | 0 |
+| Nested loop violations | 4 | 0 | 0 | 0 |
+| Uncached describe calls | 3+ | 3+ | 0 | 0 |
+| OPP_OpportunityContactRoles issues | 12 | 0 | 0 | 0 |
 
 ---
 
-*Subplan Version: 1.0*
-*Last Updated: 2026-02-09*
+*Subplan Version: 2.0*
+*Last Updated: 2026-02-16*
